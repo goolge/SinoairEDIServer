@@ -15,21 +15,21 @@ import java.net.URL;
  */
 public class SftpConnection {
     public static Connection getSFTPConnection(String hostname,String username,String fileName){
-       /* System.out.println("hostname = " + hostname);
-        System.out.println("username = " + username);
-        System.out.println("fileName = " + fileName);*/
+       /* BaseLogger.info("hostname = " + hostname);
+        BaseLogger.info("username = " + username);
+        BaseLogger.info("fileName = " + fileName);*/
         Connection conn=null;
         try{
           if(fileName==null || "".equals(fileName)){
             return null;
           }
 
-//            System.out.println("---------------------------keyFile.getAbsolutePath() = " + keyFile.getAbsolutePath());
+//            BaseLogger.info("---------------------------keyFile.getAbsolutePath() = " + keyFile.getAbsolutePath());
             URL url = SftpConnection.class.getResource("/"+fileName);
             String path = url.getPath();
-           /* System.out.println("path = " + path);*/
+           /* BaseLogger.info("path = " + path);*/
             File keyFile = new File(path);
-            /*System.out.println("keyFile.getAbsolutePath() = " + keyFile.getAbsolutePath());*/
+            /*BaseLogger.info("keyFile.getAbsolutePath() = " + keyFile.getAbsolutePath());*/
            conn = new Connection(hostname);
           conn.connect();
           boolean isAuthenticated = conn.authenticateWithPublicKey(username, keyFile, "");

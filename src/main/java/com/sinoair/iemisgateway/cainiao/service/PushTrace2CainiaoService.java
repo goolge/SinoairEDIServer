@@ -1,9 +1,10 @@
 package com.sinoair.iemisgateway.cainiao.service;
 
 import com.sinoair.iemisgateway.cainiao.domain.TraceRequest2Cainiao;
+import com.sinoair.iemisgateway.util.BaseLogger;
 import com.sinoair.iemisgateway.util.ConnectionFactory;
-import com.sinoair.iemisgateway.util.PropertiesUtil;
 import com.sinoair.iemisgateway.util.HttpRequestUtil;
+import com.sinoair.iemisgateway.util.PropertiesUtil;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.UnsupportedEncodingException;
@@ -55,11 +56,11 @@ public class PushTrace2CainiaoService {
                     failedRow++;
                 }
                 String updateSql = "update expressbusinessactivity set QA='" + QA + "' where eba_syscode='" + eba_syscode + "'";
-                System.out.println("updateSql = " + updateSql);
+                BaseLogger.info("updateSql = " + updateSql);
                 statement4Update.executeUpdate(updateSql);
 
             }
-            System.out.println(new Date().toString() + "---------------------共给菜鸟发送条" + (successRow + failedRow) + "轨迹;发送成功" + successRow + "条;发送失败" + failedRow + "条------------------------");
+            BaseLogger.info(new Date().toString() + "---------------------共给菜鸟发送条" + (successRow + failedRow) + "轨迹;发送成功" + successRow + "条;发送失败" + failedRow + "条------------------------");
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
@@ -131,7 +132,7 @@ public class PushTrace2CainiaoService {
                 "OR east_code IN ('ASS','ASF','CP','CLRD','CUSN','SI','RM','DEF') )" +
                 " and ep.eawb_so_code ='00060491'" +
                 " AND ep.eawb_handletime>SYSDATE-60";//todo 为了提高查询效率，只查找最近两个月处理的单子
-        System.out.println(new Date().toString() + "查询最近两个月所有的需要发给菜鸟的轨迹:" + sql);
+        BaseLogger.info(new Date().toString() + "查询最近两个月所有的需要发给菜鸟的轨迹:" + sql);
         ResultSet resultSet = statement.executeQuery(sql);
         return resultSet;
     }
@@ -222,10 +223,10 @@ public class PushTrace2CainiaoService {
 //            requestUrl = "http://pac.tbsandbox.com/gateway/pac_message_receiver.do"; //todo 联调平台
 //            session_type = "&session_type=debug";//todo 联调平台
         requestUrl2CainiaoTraces = PropertiesUtil.readProperty("cainiao", "requestUrl2CainiaoTraces");
-        System.out.println("requestUrl2CainiaoTraces = " + requestUrl2CainiaoTraces);
+        BaseLogger.info("requestUrl2CainiaoTraces = " + requestUrl2CainiaoTraces);
         String msg_type = "TRACEPUSH"; //消息类型默认是TRACEPUSH
         String signKey = PropertiesUtil.readProperty("cainiao", "signKey");//秘钥
-        System.out.println("signKey = " + signKey+"---");
+        BaseLogger.info("signKey = " + signKey + "---");
         String data_digest = doSign(logistics_interface, signKey); //消息正文的摘要（签名）
         String requestParam = "logistics_interface=" + URLEncoder.encode(logistics_interface, "utf-8") +
                 "&logistic_provider_id=" + logistic_provider_id +

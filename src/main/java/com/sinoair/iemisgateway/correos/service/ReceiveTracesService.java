@@ -66,7 +66,7 @@ public class ReceiveTracesService {
             String SAC_ID = "SNR";
             String EBA_SAC_CODE = "GACN";
             String EBA_OCCURTIME = field7.substring(0, 4) + "-" + field7.substring(4, 6) + "-" + field7.substring(6) + " " + field8;
-            /*System.out.println(EBA_OCCURTIME);*/
+            /*BaseLogger.info(EBA_OCCURTIME);*/
             String EBA_SOURCE = "CORREOS";
             String EBA_OCCURPLACE = "";
             try {

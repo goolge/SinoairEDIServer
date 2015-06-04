@@ -1,6 +1,7 @@
 package com.sinoair.iemisgateway.cainiao.service;
 
 import com.sinoair.iemisgateway.cainiao.domain.TraceRequest2Cainiao;
+import com.sinoair.iemisgateway.util.BaseLogger;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -57,8 +58,8 @@ public class PushTrace2CainiaoServiceTest {
 //        String resultExcepted = "<response><logisticProviderID /><responseItems><response><success>true</success><mailNos>120150513131100</mailNos><txLogisticID>LP20150513131100</txLogisticID><reason /></response></responseItems></response>";
         String resultExcepted = "<responses>  <logisticProviderID>DISTRIBUTOR_902950</logisticProviderID>  <responseItems>    <response>      <mailNos>RA100001009FI</mailNos>      <txLogisticID>LP00012015280275</txLogisticID>      <success>true</success>    </response>  </responseItems></responses>";
         String resultActual = PushTrace2CainiaoService.pushTrace2Cainiao(traceRequest2Cainiao.combiteTraceXml4Cainiao(), traceRequest2Cainiao.getLogistic_provider_id());
-        System.out.println("resultActual = " + resultActual);
-        System.out.println("resultExcepted = " + resultExcepted);
+        BaseLogger.info("resultActual = " + resultActual);
+        BaseLogger.info("resultExcepted = " + resultExcepted);
         Assert.assertEquals(resultExcepted, resultActual);
     }
 
@@ -71,8 +72,8 @@ public class PushTrace2CainiaoServiceTest {
 
         String resultExcepted = "54pNwgW8AZj/KHFY8q0mrQ==";
         String resultActual = PushTrace2CainiaoService.doSign(content, keys);
-        System.out.println("resultExcepted = " + resultExcepted);
-        System.out.println("resultActual = " + resultActual);
+        BaseLogger.info("resultExcepted = " + resultExcepted);
+        BaseLogger.info("resultActual = " + resultActual);
         Assert.assertEquals(resultExcepted, resultActual);
     }
 }

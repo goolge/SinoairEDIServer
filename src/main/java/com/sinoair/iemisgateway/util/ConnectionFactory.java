@@ -29,12 +29,12 @@ public class ConnectionFactory {
             String eba_occurplace = resultSet.getString("eba_occurplace");
             String ead_code = resultSet.getString("ead_code");
             String east_code = resultSet.getString("east_code");
-            System.out.println("eawb_printcode = " + eawb_printcode);
-            System.out.println("eba_occurtime = " + eba_occurtime);
-            System.out.println("eba_remark = " + eba_remark);
-            System.out.println("eba_occurplace = " + eba_occurplace);
-            System.out.println("ead_code = " + ead_code);
-            System.out.println("east_code = " + east_code);
+            BaseLogger.info("eawb_printcode = " + eawb_printcode);
+            BaseLogger.info("eba_occurtime = " + eba_occurtime);
+            BaseLogger.info("eba_remark = " + eba_remark);
+            BaseLogger.info("eba_occurplace = " + eba_occurplace);
+            BaseLogger.info("ead_code = " + ead_code);
+            BaseLogger.info("east_code = " + east_code);
         }
     }
 
@@ -50,7 +50,7 @@ public class ConnectionFactory {
         String connectionURL = PropertiesUtil.readProperty("db","database.jdbc.connectionURL");
         String username = PropertiesUtil.readProperty("db","database.jdbc.username");
         String password = PropertiesUtil.readProperty("db", "database.jdbc.password");
-        System.out.println("connectionURL = " + connectionURL);
+        BaseLogger.info("connectionURL = " + connectionURL);
         return getConnection(connectionURL, username, password);
     }
 

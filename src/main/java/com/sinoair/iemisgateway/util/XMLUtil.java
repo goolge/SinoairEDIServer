@@ -34,7 +34,7 @@ public class XMLUtil {
         Node nodePassword = document.selectSingleNode("//password");
         String username = nodeUsername.getText();
         String password = nodePassword.getText();
-        System.out.println("username:" + username + "   password:" + password);
+        BaseLogger.info("username:" + username + "   password:" + password);
         return validateNameAndPWD(username, password);
     }
  public static boolean xmlValiadationCainiao(Document document) {
@@ -42,7 +42,7 @@ public class XMLUtil {
 //        Node nodePassword = document.selectSingleNode("//password");
 //        String username = nodeUsername.getText();
 //        String password = nodePassword.getText();
-//        System.out.println("username:" + username + "   password:" + password);
+//        BaseLogger.info("username:" + username + "   password:" + password);
      //todo 校验菜鸟身份
         return true;
     }
@@ -64,7 +64,7 @@ public class XMLUtil {
         try {
             document = DocumentHelper.parseText(xml);
         } catch (DocumentException e) {
-            System.out.println("e = " + e);
+            BaseLogger.info("e = " + e);
 //            e.printStackTrace();
             return null;
         }
@@ -105,7 +105,7 @@ public class XMLUtil {
     public static void writeFile(String xml, String FilePath) {
         try {
             File xmlFile = new File(FilePath);
-            System.out.println(xmlFile.getAbsolutePath());
+            BaseLogger.info(xmlFile.getAbsolutePath());
             xmlFile.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(xmlFile);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");

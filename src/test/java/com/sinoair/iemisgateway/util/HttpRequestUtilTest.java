@@ -31,16 +31,16 @@ public class HttpRequestUtilTest {
         String rawStr = logistics_interface + signKey;
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         data_digest = new String(Base64.encode(md5.digest(rawStr.getBytes("utf-8"))));
-        System.out.println("data_digest = " + data_digest);
+        BaseLogger.info("data_digest = " + data_digest);
         String session_type = "debug";//todo 联调平台
         requestParam = "logistics_interface=" + URLEncoder.encode(logistics_interface, "utf-8") +
                 "&logistic_provider_id=" + logistic_provider_id +
                 "&msg_type=" + msg_type +
                 "&session_type=" + session_type +
                 "&data_digest=" + URLEncoder.encode(data_digest, "utf-8");
-        System.out.println("requestUrl = " + requestUrl);
-        System.out.println("requestParam = " + requestParam);
-        System.out.println("requestUrl?requestParam = " + requestUrl + "?" + requestParam);
+        BaseLogger.info("requestUrl = " + requestUrl);
+        BaseLogger.info("requestParam = " + requestParam);
+        BaseLogger.info("requestUrl?requestParam = " + requestUrl + "?" + requestParam);
     }
 
     @After
@@ -52,8 +52,8 @@ public class HttpRequestUtilTest {
         //发送 GET 请求
         String resultExcepted = "<response><success>false</success><errorCode>NULL_VALUE</errorCode><errorMsg>没有要执行回传的任务用例</errorMsg></response>";
                 String resultActual = HttpRequestUtil.sendGet(requestUrl, requestParam);
-                System.out.println("resultExcepted = " + resultExcepted);
-                System.out.println("resultActual = " + resultActual);
+                BaseLogger.info("resultExcepted = " + resultExcepted);
+                BaseLogger.info("resultActual = " + resultActual);
                 Assert.assertEquals(resultExcepted, resultActual);
     }
     @Test
@@ -61,8 +61,8 @@ public class HttpRequestUtilTest {
         //发送 POST 请求
          String resultExcepted = "<response><success>false</success><errorCode>NULL_VALUE</errorCode><errorMsg>没有要执行回传的任务用例</errorMsg></response>";
                 String resultActual = HttpRequestUtil.sendPost(requestUrl, requestParam);
-                System.out.println("resultExcepted = " + resultExcepted);
-                System.out.println("resultActual = " + resultActual);
+                BaseLogger.info("resultExcepted = " + resultExcepted);
+                BaseLogger.info("resultActual = " + resultActual);
                 Assert.assertEquals(resultExcepted, resultActual);
     }
 }

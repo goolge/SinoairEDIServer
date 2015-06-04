@@ -14,9 +14,9 @@ public class TestCaseTemplate {
         String environmentName = PropertiesUtil.readProperty("common", "environment.name");
         String environmentDesc = PropertiesUtil.readProperty("common", "environment.desc");
         String historyRootPath = PropertiesUtil.readProperty("common", "historyRootPath");
-        System.out.println("environmentName = " + environmentName);
-        System.out.println("environmentDesc = " + environmentDesc);
-        System.out.println("historyRootPath = " + historyRootPath);
+        BaseLogger.info("environmentName = " + environmentName);
+        BaseLogger.info("environmentDesc = " + environmentDesc);
+        BaseLogger.info("historyRootPath = " + historyRootPath);
     }
 
 }

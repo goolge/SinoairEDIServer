@@ -63,7 +63,7 @@ public class FileUtil {
      * strFilePath:文件路径和文件名称;
      */
     public static boolean generateFile(String strData, String strFilePath) throws Exception {
-        //System.out.println(strData);
+        //BaseLogger.info(strData);
         File file = new File(strFilePath);
        /* if (file.exists()) {
             file.delete();
@@ -93,7 +93,7 @@ public class FileUtil {
     public static void deleteFile(File s){
         if(s.isFile() && s.exists()){
             boolean a=s.delete();
-            //System.out.println("文件删除："+a);
+            //BaseLogger.info("文件删除："+a);
         }
     }
 
@@ -137,7 +137,7 @@ public class FileUtil {
            List<String> arrayList=realFileTxt(file);
            if(arrayList!=null && arrayList.size()>0){
                for(int i=0;i<arrayList.size();i++){
-                   System.out.println(arrayList.get(i));
+                   BaseLogger.info(arrayList.get(i));
                }
            }
            deleteFile(file);

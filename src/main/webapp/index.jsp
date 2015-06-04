@@ -11,7 +11,7 @@
     String environmentName = PropertiesUtil.readProperty("common", "environment.name");
     String environmentDesc = PropertiesUtil.readProperty("common", "environment.desc");
     String historyRootPath = PropertiesUtil.readProperty("common", "historyRootPath");
-    System.out.println("historyRootPath = " + historyRootPath);
+    BaseLogger.info("historyRootPath = " + historyRootPath);
 %>
 <html>
 <head><title>sinoair</title></head>

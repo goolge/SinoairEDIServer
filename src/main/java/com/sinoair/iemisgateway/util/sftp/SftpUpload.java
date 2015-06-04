@@ -39,7 +39,7 @@ public class SftpUpload {
                 int n;
                 int length = 0;
                 while ((n = fis.read(b)) != -1) {
-                   // System.out.println("b:"+b.length);
+                   // BaseLogger.info("b:"+b.length);
                     sftPv3Client.write(SFTPFILEHandle, length, b, 0, n);
                      length += n;
                 }

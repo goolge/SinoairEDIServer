@@ -53,7 +53,7 @@ public class SendManifestService {
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
-        // System.out.println("aaaa:"+sql);
+        // BaseLogger.info("aaaa:"+sql);
         return arrayList;
     }
 
@@ -99,7 +99,7 @@ public class SendManifestService {
         for (int i = 0; i < arrData.size(); i++) {
             StringBuffer sb = new StringBuffer();
             HashMap map = (HashMap) arrData.get(i);
-            //System.out.println("map:"+map);
+            //BaseLogger.info("map:"+map);
             //第一行，同时不是list的最后一个
             if (lineNum == 1 && i != (arrData.size() - 1)) {
                 sb.append("C");

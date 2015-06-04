@@ -27,8 +27,8 @@ public class HttpRequestUtil {
      * @return URL 所代表远程资源的响应结果
      */
     public static String sendGet(String url, String param) {
-        System.out.println("HttpRequestUtil.sendGet");
-        System.out.println(url + "?" + param);
+        BaseLogger.info("HttpRequestUtil.sendGet");
+        BaseLogger.info(url + "?" + param);
         String result = "";
         BufferedReader in = null;
         try {
@@ -47,7 +47,7 @@ public class HttpRequestUtil {
             Map<String, List<String>> map = connection.getHeaderFields();
             // 遍历所有的响应头字段
             for (String key : map.keySet()) {
-                System.out.println(key + "--->" + map.get(key));
+                BaseLogger.info(key + "--->" + map.get(key));
             }
             // 定义 BufferedReader输入流来读取URL的响应
             in = new BufferedReader(new InputStreamReader(
@@ -57,7 +57,7 @@ public class HttpRequestUtil {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送GET请求出现异常！" + e);
+            BaseLogger.info("发送GET请求出现异常！" + e);
             e.printStackTrace();
         }
         // 使用finally块来关闭输入流
@@ -81,8 +81,8 @@ public class HttpRequestUtil {
      * @return 所代表远程资源的响应结果
      */
     public static String sendPost(String url, String param) {
-         System.out.println("HttpRequestUtil.sendPost");
-        System.out.println(url + "?" + param);PrintWriter out = null;
+         BaseLogger.info("HttpRequestUtil.sendPost");
+        BaseLogger.info(url + "?" + param);PrintWriter out = null;
         BufferedReader in = null;
         String result = "";
         try {
@@ -111,7 +111,7 @@ public class HttpRequestUtil {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！" + e);
+            BaseLogger.info("发送 POST 请求出现异常！" + e);
             e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流

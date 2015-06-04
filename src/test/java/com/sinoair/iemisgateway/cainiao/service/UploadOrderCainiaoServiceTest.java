@@ -1,5 +1,6 @@
 package com.sinoair.iemisgateway.cainiao.service;
 
+import com.sinoair.iemisgateway.util.BaseLogger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -114,8 +115,8 @@ public class UploadOrderCainiaoServiceTest extends TestCaseTemplate{
                 "\t\t</response>\n" +
                 "\t</responseItems>\n" +
                 "</responses>";
-        System.out.println("xml = " + xml);
-        System.out.println("xml shorten" + xml.replace("\n", "").replace("\t", ""));
+        BaseLogger.info("xml = " + xml);
+        BaseLogger.info("xml shorten" + xml.replace("\n", "").replace("\t", ""));
         resultActual = uploadOrderCainiaoService.uploadOrderCainiao(xml);
         Assert.assertEquals(resultExpected, resultActual);
         //todo 待用connection取到iemis的的插入数据
