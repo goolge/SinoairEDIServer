@@ -1,12 +1,14 @@
 package com.sinoair.iemisgateway.correos.service;
 
-import com.sinoair.iemisgateway.util.ExeSQL;
-import com.sinoair.iemisgateway.util.ConnectionFactory;
-import com.sinoair.iemisgateway.util.FileUtil;
-import com.sinoair.iemisgateway.util.PropertiesUtil;
+import ch.ethz.ssh2.SFTPv3Client;
+import com.sinoair.iemisgateway.util.*;
+import com.sinoair.iemisgateway.util.sftp.SftpConnection;
+import com.sinoair.iemisgateway.util.sftp.SftpUpload;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +22,13 @@ import java.util.HashMap;
  * To change this template use File | Settings | File Templates.
  */
 public class SendManifestService {
+    /**
+     * 获取需要发送预报的数据集合
+     *
+     * @param conn
+     * @return
+     * @throws Exception
+     */
     public ArrayList getInfoList(Connection conn) throws Exception {
         String sql = "select eawb.EAWB_CONSIGNEE_ACCOUNTNAME," + //1
                 "eawb.EAWB_DELIVER_ADDRESS," +//2
@@ -43,40 +52,48 @@ public class SendManifestService {
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
-       // System.out.println("aaaa:"+sql);
+        // System.out.println("aaaa:"+sql);
         return arrayList;
     }
 
+    /**
+     * 根据数据集合，在本地生成报文
+     *
+     * @param arrData
+     * @param app_dir
+     * @return
+     * @throws Exception
+     */
     public boolean generateInfoCorreos(ArrayList arrData, String app_dir) throws Exception {
         int maxLine = 1000;//一个文档最多存放1000行数据，0代表没有限制
         int lineNum = 1;
         int txtNum = 1;
-        boolean newFile=false;
+        boolean newFile = false;
         StringBuffer sbOne = new StringBuffer();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         String time = df.format(new Date());
-        String productCode3 =PropertiesUtil.readProperty("corroes", "productCode3");
-        String labellerCode5 =PropertiesUtil.readProperty("corroes", "labellerCode5");
-        String contractNumber6 =PropertiesUtil.readProperty("corroes", "contractNumber6");
-        String clientNumber7 =PropertiesUtil.readProperty("corroes", "clientNumber7");
-        Double rate= Double.parseDouble(PropertiesUtil.readProperty("corroes", "exchangeRate"));
-        String verversion2=PropertiesUtil.readProperty("corroes", "verversion2");
-        String frankingType4=PropertiesUtil.readProperty("corroes", "frankingType4");
-        String totalPackages14=PropertiesUtil.readProperty("corroes", "totalPackages14");
-        String packageNumber15=PropertiesUtil.readProperty("corroes", "packageNumber15");
-        String deliveryMode44=PropertiesUtil.readProperty("corroes", "deliveryMode44");
-        String insurance49=PropertiesUtil.readProperty("corroes", "insurance49");
-        String shipmentType85=PropertiesUtil.readProperty("corroes", "shipmentType85");
-        String name110=PropertiesUtil.readProperty("corroes", "name110");
-        String company114=PropertiesUtil.readProperty("corroes", "company114");
-        String streetName117=PropertiesUtil.readProperty("corroes", "streetName117");
-         String town124=PropertiesUtil.readProperty("corroes", "town124");
-         String province125=PropertiesUtil.readProperty("corroes", "province125");
-         String PC126=PropertiesUtil.readProperty("corroes", "PC126");
-         String senderTelephoneNumber127=PropertiesUtil.readProperty("corroes", "senderTelephoneNumber127");
-         String endOfRegistration131=PropertiesUtil.readProperty("corroes", "endOfRegistration131");
-         String MD16=PropertiesUtil.readProperty("corroes", "MD16");
-         String Num16=PropertiesUtil.readProperty("corroes", "Num16");
+        String productCode3 = PropertiesUtil.readProperty("correos", "productCode3");
+        String labellerCode5 = PropertiesUtil.readProperty("correos", "labellerCode5");
+        String contractNumber6 = PropertiesUtil.readProperty("correos", "contractNumber6");
+        String clientNumber7 = PropertiesUtil.readProperty("correos", "clientNumber7");
+        Double rate = Double.parseDouble(PropertiesUtil.readProperty("correos", "exchangeRate"));
+        String verversion2 = PropertiesUtil.readProperty("correos", "verversion2");
+        String frankingType4 = PropertiesUtil.readProperty("correos", "frankingType4");
+        String totalPackages14 = PropertiesUtil.readProperty("correos", "totalPackages14");
+        String packageNumber15 = PropertiesUtil.readProperty("correos", "packageNumber15");
+        String deliveryMode44 = PropertiesUtil.readProperty("correos", "deliveryMode44");
+        String insurance49 = PropertiesUtil.readProperty("correos", "insurance49");
+        String shipmentType85 = PropertiesUtil.readProperty("correos", "shipmentType85");
+        String name110 = PropertiesUtil.readProperty("correos", "name110");
+        String company114 = PropertiesUtil.readProperty("correos", "company114");
+        String streetName117 = PropertiesUtil.readProperty("correos", "streetName117");
+        String town124 = PropertiesUtil.readProperty("correos", "town124");
+        String province125 = PropertiesUtil.readProperty("correos", "province125");
+        String PC126 = PropertiesUtil.readProperty("correos", "PC126");
+        String senderTelephoneNumber127 = PropertiesUtil.readProperty("correos", "senderTelephoneNumber127");
+        String endOfRegistration131 = PropertiesUtil.readProperty("correos", "endOfRegistration131");
+        String MD16 = PropertiesUtil.readProperty("correos", "MD16");
+        String Num16 = PropertiesUtil.readProperty("correos", "Num16");
         for (int i = 0; i < arrData.size(); i++) {
             StringBuffer sb = new StringBuffer();
             HashMap map = (HashMap) arrData.get(i);
@@ -149,8 +166,8 @@ public class SendManifestService {
             sb.append(getStrCorreos(0, "", "", false, true));//第47
             sb.append(getStrCorreos(0, "", "", false, true));//第48
             sb.append(getStrCorreos(1, insurance49, "", false, true));//第49
-            int money=(int)Math.rint(Double.parseDouble(map.get("EAWB_DECLAREVALUE").toString())*rate*100);
-            sb.append(getStrCorreos(6,GetIntFormString(6, money), "", false, true));//第50   申报价值，转化成欧分
+            int money = (int) Math.rint(Double.parseDouble(map.get("EAWB_DECLAREVALUE").toString()) * rate * 100);
+            sb.append(getStrCorreos(6, GetIntFormString(6, money), "", false, true));//第50   申报价值，转化成欧分
             sb.append(getStrCorreos(0, "", "", false, true));//第51
             sb.append(getStrCorreos(0, "", "", false, true));//第52
             sb.append(getStrCorreos(0, "", "", false, true));//第53
@@ -235,7 +252,7 @@ public class SendManifestService {
             sb.append("\n");
             sbOne.append(sb.toString());
             if (sb.substring(0, 1).equals("U") || sb.substring(0, 1).equals("F")) {
-                newFile=true;
+                newFile = true;
                 //System.out.println("---------------------------------------------------------------");
                 String strFilePath = "";
                 strFilePath = app_dir + "FD" + labellerCode5 + time + ".txt";
@@ -253,9 +270,10 @@ public class SendManifestService {
      * 格式话取得西邮报文字符串
      *
      * @param length 字符长度
-     * @param
+     * @param str    字段
      * @param reStr  如果字符长度不够，用什么字符来替补
      * @param flag   字符是否定长
+     * @param ifTab  是否添加制表符
      * @return
      */
     private String getStrCorreos(int length, String str, String reStr, boolean flag, boolean ifTab) {
@@ -279,6 +297,13 @@ public class SendManifestService {
         return returnStr;
     }
 
+    /**
+     * 根据mailNo截取获得ShipmentCode
+     *
+     * @param mailNo
+     * @param divisor
+     * @return
+     */
     private String getShipmentCode(String mailNo, int divisor) {
         String aa = mailNo;
         char[] cs = aa.toCharArray();
@@ -291,6 +316,12 @@ public class SendManifestService {
         return aa + getBarcode(remainder);
     }
 
+    /**
+     * 获取 ShipmentCode 最后一位生成规则
+     *
+     * @param remainder
+     * @return
+     */
     private String getBarcode(int remainder) {
         String code = "";
         if (0 == remainder) {
@@ -372,6 +403,13 @@ public class SendManifestService {
         return str;
     }
 
+    /**
+     * 批量更新报文数据状态为、Success
+     *
+     * @param arrData
+     * @param conn
+     * @throws Exception
+     */
     public void updateSuccess(ArrayList arrData, Connection conn) throws Exception {
 
         PreparedStatement updateStatus = conn.prepareStatement(" update express_correos_manifest ecm set ecm.ecm_status='SUCCESS',ecm.ecm_errorcode='',ecm.ecm_errorfileName='',ecm.ecm_comments='',ecm.ECM_HANDLETIME=sysdate  where ecm.eawb_printcode=? ");
@@ -389,13 +427,16 @@ public class SendManifestService {
 
     }
 
-    public static void main(String[] args) throws Exception {
+    public void sendManifest() throws Exception, SQLException {
+        //组织西邮报文数据，在本地存一份备份，然后放到西邮服务器，同时更新运单状态为发送成功
+        ArrayList arrayList = null;
         Connection conn = ConnectionFactory.get194Connection();
         try {
-            SendManifestService generateInfo = new SendManifestService();
-            ArrayList arrayList = generateInfo.getInfoList(conn);
-            generateInfo.updateSuccess(arrayList, conn);
-            generateInfo.generateInfoCorreos(arrayList, "C:\\ftp\\correos\\out\\");
+
+            //1.获取需要发送预报的运单数据；
+            arrayList = getInfoList(conn);
+            //2.更新数据状态为已发送
+            updateSuccess(arrayList, conn);
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception e) {
@@ -403,6 +444,30 @@ public class SendManifestService {
             e.printStackTrace();
         }
         ConnectionFactory.closeConnection(conn);
+        //3.在本地生成西邮报文
+        int sendNum = arrayList == null ? 0 : arrayList.size();
+        LogUtil.log(" 发送报文-获取发预报的数据条数：" + sendNum);
+        generateInfoCorreos(arrayList, PropertiesUtil.readProperty("correos", "localpfileDir"));
+        //4.向西邮发送预报,同时备份本地文件
+        File[] files = FileUtil.getFiles(PropertiesUtil.readProperty("correos", "localpfileDir"));
+        if (files != null && files.length > 0) {
+            ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnection(PropertiesUtil.readProperty("correos", "correosUrl"), PropertiesUtil.readProperty("correos", "pfUsername"), PropertiesUtil.readProperty("correos", "keyFileManifest"));
+            if (connsft != null) {
+                LogUtil.log(" 发送报文-连接西邮服务器成功");
+                SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
+                SftpUpload.upload(PropertiesUtil.readProperty("correos", "localpfileDir"), PropertiesUtil.readProperty("correos", "correospfDir"), sftPv3Client, PropertiesUtil.readProperty("correos", "localpfileDirCopy"));
+                sftPv3Client.close();
+                connsft.close();
+                LogUtil.log(" 发送报文-上传西邮服务器报文成功！");
+            }
+
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        SendManifestService generateInfo = new SendManifestService();
+        generateInfo.sendManifest();
 
     }
 }

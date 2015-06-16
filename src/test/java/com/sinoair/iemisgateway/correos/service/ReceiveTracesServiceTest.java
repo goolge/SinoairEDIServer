@@ -47,7 +47,7 @@ public class ReceiveTracesServiceTest {
                    "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?)");
            PreparedStatement selectPstm=conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=?");
             try {
-           InputStream in = Object.class.getResourceAsStream("/corroes.properties");
+           InputStream in = Object.class.getResourceAsStream("/correos.properties");
            Properties p = new Properties();
            p.load(in);
                 for (File file : fileList) {

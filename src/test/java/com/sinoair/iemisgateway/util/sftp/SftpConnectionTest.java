@@ -29,10 +29,12 @@ public class SftpConnectionTest {
 
     @Test
     public void testGetSFTPConnection() throws Exception {
-        String hostname = PropertiesUtil.readProperty("corroes", "corroesUrl");
-        String username = PropertiesUtil.readProperty("corroes", "pfUsername");
-        String fileName = PropertiesUtil.readProperty("corroes", "keyFileManifest");
+        String hostname = PropertiesUtil.readProperty("correos", "correosUrl");
+        String username = PropertiesUtil.readProperty("correos", "pfUsername");
+        String fileName = PropertiesUtil.readProperty("correos", "keyFileManifest");
         Connection connection = sftpConnection.getSFTPConnection(hostname, username, fileName);
         Assert.assertEquals(false, connection == null);
+
+
     }
 }
