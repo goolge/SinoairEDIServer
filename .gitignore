@@ -1,7 +1,11 @@
+#maven
 target/
+pom.xml
+#idea
 .idea/
 *.iml
 log/
+#project
 sinoairEDIServerXML/*
 #configure file
 src/main/resources/db.properties
