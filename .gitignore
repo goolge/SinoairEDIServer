@@ -10,6 +10,6 @@ sinoairEDIServerXML/*
 #configure file
 src/main/resources/db.properties
 src/main/resources/cainiao.properties
-src/main/resources/corroes.properties
+src/main/resources/correos.properties
  
 
