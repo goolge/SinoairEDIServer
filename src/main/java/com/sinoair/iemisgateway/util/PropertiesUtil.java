@@ -13,7 +13,7 @@ import java.util.Properties;
  * To change this template use File | Settings | File Templates.
  */
 public class PropertiesUtil {
-    public static void main(String[] args) throws IOException {
+ /*   public static void main(String[] args) throws IOException {
         Properties prop = new Properties();
         InputStream in = PropertiesUtil.class.getResourceAsStream("/db.properties");
         prop.load(in);     ///加载属性列表
@@ -23,7 +23,7 @@ public class PropertiesUtil {
             System.out.println(key + ":" + prop.getProperty(key));
         }
         in.close();
-    }
+    }*/
 
     public static String readProperty(String fileName, String key)  {
 //        String value = "";
