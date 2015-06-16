@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ns="http://webService.service.operation.iemis.sinoair.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://webService.service.operation.iemis.sinoair.com">
+    <wsdl:documentation>UploadOrderCainiaoService</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://webService.service.operation.iemis.sinoair.com">
+            <xs:element name="uploadOrderCainiaoService">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="xml" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="uploadOrderCainiaoResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="uploadOrderCainiaoRequest">
+        <wsdl:part name="parameters" element="ns:uploadOrderCainiaoService"/>
+    </wsdl:message>
+    <wsdl:message name="uploadOrderCainiaoResponse">
+        <wsdl:part name="parameters" element="ns:uploadOrderCainiaoResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="UploadOrderCainiaoServicePortType">
+        <wsdl:operation name="uploadOrderCainiaoService">
+            <wsdl:input message="ns:uploadOrderCainiaoRequest" wsaw:Action="urn:uploadOrderCainiaoService"/>
+            <wsdl:output message="ns:uploadOrderCainiaoResponse" wsaw:Action="urn:uploadOrderCainiaoResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="UploadOrderCainiaoServiceSoap11Binding" type="ns:UploadOrderCainiaoServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="uploadOrderCainiaoService">
+            <soap:operation soapAction="urn:uploadOrderCainiaoService" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="UploadOrderCainiaoServiceSoap12Binding" type="ns:UploadOrderCainiaoServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="uploadOrderCainiaoService">
+            <soap12:operation soapAction="urn:uploadOrderCainiaoService" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="UploadOrderCainiaoServiceHttpBinding" type="ns:UploadOrderCainiaoServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="uploadOrderCainiaoService">
+            <http:operation location="uploadOrderCainiaoService"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="UploadOrderCainiaoService">
+        <wsdl:port name="UploadOrderCainiaoServiceHttpSoap11Endpoint" binding="ns:UploadOrderCainiaoServiceSoap11Binding">
+            <soap:address location="http://172.17.0.229:7001/services/UploadOrderCainiaoService.UploadOrderCainiaoServiceHttpSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="UploadOrderCainiaoServiceHttpSoap12Endpoint" binding="ns:UploadOrderCainiaoServiceSoap12Binding">
+            <soap12:address location="http://172.17.0.229:7001/services/UploadOrderCainiaoService.UploadOrderCainiaoServiceHttpSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="UploadOrderCainiaoServiceHttpEndpoint" binding="ns:UploadOrderCainiaoServiceHttpBinding">
+            <http:address location="http://172.17.0.229:7001/services/UploadOrderCainiaoService.UploadOrderCainiaoServiceHttpEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

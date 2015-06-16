@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="WSGET" type="WSGETType"/>
+    <xs:complexType name="WSGETType">
+        <xs:sequence>
+            <xs:element type="AccessRequestType" name="AccessRequest"/>
+            <xs:element type="OrdersType" name="Orders"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AccessRequestType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="username"/>
+            <xs:element type="xs:string" name="password"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrdersType">
+        <xs:sequence>
+            <xs:element type="OrderType" name="Order" maxOccurs="50" minOccurs="1">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrderType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="SinoairNO">
+                <xs:annotation>
+                    <xs:documentation>中外运单号</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="OrderNo">
+                <xs:annotation>
+                    <xs:documentation>jolly number</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:decimal" name="actualWeight" >
+                <xs:annotation>
+                    <xs:documentation>预报实重</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:decimal" name="cubWeight" default="0">
+                <xs:annotation>
+                    <xs:documentation>预报体积重</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:decimal" name="declareValue">
+                <xs:annotation>
+                    <xs:documentation>海关申报价值</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="productNameEN">
+                <xs:annotation>
+                    <xs:documentation>品名 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="productNameCN" nillable="false" >
+                <xs:annotation>
+                    <xs:documentation>品名 中文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:int" name="pieces">
+                <xs:annotation>
+                    <xs:documentation>件数</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:int" name="quantity">
+                <xs:annotation>
+                    <xs:documentation>数量</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

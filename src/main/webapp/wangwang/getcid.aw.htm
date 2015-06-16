@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title></title></head>
+<body>
+<script src="website.js"></script>
+
+<script language="javascript">
+     function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r!=null) return (r[2]); return null;
+ }
+    var wangwangID=GetQueryString("uid")
+//     alert(wangwangID);
+    function windowClose() {
+    window.opener = null;
+    window.open('', '_top');
+    window.top.close();
+}
+sendClientMsg('', '', 'cntaobao', wangwangID, 1, '');
+setTimeout('windowClose()', 1000);</script>
+</body>
+</html>
