@@ -24,7 +24,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 public class PushTrace2CainiaoService {
-    public  void push() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public  void push() {
         Connection connection = null;
         Statement statement = null;
         Statement statement4Update = null;
@@ -75,6 +75,10 @@ public class PushTrace2CainiaoService {
             } catch (SQLException e1) {
                 e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } finally {
             try {
                 if (resultSet != null) {
@@ -100,6 +104,7 @@ public class PushTrace2CainiaoService {
         traceRequest2Cainiao.setFacilityType(facilityType);
         traceRequest2Cainiao.setFacilityNo(facilityNo);
         traceRequest2Cainiao.setFacilityName(facilityName);
+
         String logistic_provider_id = resultSet.getString("eawb_servicetype"); //CP编号CPCode（菜鸟会提供）
         String mailNos = resultSet.getString("eawb_reference1");
         String txLogisticID = resultSet.getString("eawb_reference2");
@@ -111,6 +116,7 @@ public class PushTrace2CainiaoService {
         traceRequest2Cainiao.setTxLogisticID(txLogisticID);
         traceRequest2Cainiao.setTime(time);
         traceRequest2Cainiao.setCity(city);
+
         traceRequest2Cainiao = translateAction2Cainiao(resultSet.getString("ead_code"), resultSet.getString("east_code"), desc, traceRequest2Cainiao);
         return traceRequest2Cainiao;
     }
@@ -147,6 +153,14 @@ public class PushTrace2CainiaoService {
         }
     }
 
+    /**
+     * 翻译菜鸟的环节，而后装饰TraceRequest2
+     * @param ead_code
+     * @param east_code
+     * @param desc
+     * @param traceRequest2Cainiao
+     * @return
+     */
     private static TraceRequest2Cainiao translateAction2Cainiao(String ead_code, String east_code, String desc, TraceRequest2Cainiao traceRequest2Cainiao) {//todo
         String action = "";
         //todo 得判断不能为空或者null或者“null”，否则菜鸟不显示轨迹
@@ -177,6 +191,13 @@ public class PushTrace2CainiaoService {
         return traceRequest2Cainiao;
     }
 
+    /**
+     *
+     * @param traceRequest2Cainiao pojo
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     */
 
     public String pushTrace2Cainiao(TraceRequest2Cainiao traceRequest2Cainiao) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String logistics_interface = traceRequest2Cainiao.combiteTraceXml4Cainiao();
@@ -199,7 +220,6 @@ public class PushTrace2CainiaoService {
         String msg_type = "TRACEPUSH"; //消息类型默认是TRACEPUSH
         String signKey = PropertiesUtil.readProperty("cainiao", "signKey");//秘钥
         System.out.println("signKey = " + signKey+"---");
-        System.out.println("signKey = " + "v6lfQ5XH677s5I4835tgecOOBmZ9u7T9---");
         String data_digest = doSign(logistics_interface, signKey); //消息正文的摘要（签名）
         String requestParam = "logistics_interface=" + URLEncoder.encode(logistics_interface, "utf-8") +
                 "&logistic_provider_id=" + logistic_provider_id +
@@ -217,7 +237,7 @@ public class PushTrace2CainiaoService {
      * @param keys
      * @return
      */
-    public static String doSign(String content, String keys) {
+    public  String doSign(String content, String keys) {
         String sign = "";
         content = content + keys;
         try {

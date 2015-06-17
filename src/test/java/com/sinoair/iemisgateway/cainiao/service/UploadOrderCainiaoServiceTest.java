@@ -15,10 +15,10 @@ import org.junit.Test;
 public class UploadOrderCainiaoServiceTest {
     UploadOrderCainiaoService uploadOrderCainiaoService;
     String xml;
-    String mailNo = "LPwxx05286666006";
-    String orderCode = "LPwxx05286666006";
-    String packageCode = "YWES20150528wxx5";
-    String packageWeight = "3331";
+    String mailNo = "LPwxx06176666006";
+    String orderCode = "LPwxx06176666006";
+    String packageCode = "YWES2015617wxx1";
+    String packageWeight = "1232";
     String ordersInPackage = "1";
     String resultExpected;
     private String resultActual;
@@ -113,7 +113,8 @@ public class UploadOrderCainiaoServiceTest {
                 "\t\t</response>\n" +
                 "\t</responseItems>\n" +
                 "</responses>";
-
+        System.out.println("xml = " + xml);
+        System.out.println("xml shorten" + xml.replace("\n", "").replace("\t", ""));
         resultActual = uploadOrderCainiaoService.uploadOrderCainiao(xml);
         Assert.assertEquals(resultExpected, resultActual);
         //todo 待用connection取到iemis的的插入数据
