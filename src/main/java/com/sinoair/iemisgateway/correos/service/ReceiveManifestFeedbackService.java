@@ -31,7 +31,7 @@ public class ReceiveManifestFeedbackService {
             i = i + 1;
             if (i == 1) {
                 //如果没有ERRORES标识，以下数据不读取
-                if (line.indexOf("ERRORES") == -1) {
+                if (line.indexOf("ERROR") == -1) {
                     break;
                 } else {
                     //如果有错误，第一行不是数据内容，跳过
@@ -65,11 +65,10 @@ public class ReceiveManifestFeedbackService {
         fileReader.close();
     }
 
-    public void analysisData(String path, String backUpPath) throws Exception {
+    public void analysisData(Connection conn,String path, String backUpPath) throws Exception {
         File dir = new File(path);
         if (dir.exists()) {
             File[] fileList = dir.listFiles();
-            Connection conn = ConnectionFactory.get194Connection();
             conn.setAutoCommit(false);
             PreparedStatement updatePstm = conn.prepareStatement("update express_correos_manifest ecm" +
                     " set ecm.ecm_status     = 'ERROR'," +
@@ -103,19 +102,21 @@ public class ReceiveManifestFeedbackService {
         }
     }
 
-    public void ReceiveManifestFeedback() throws Exception {
+    public void ReceiveManifestFeedback(Connection conn,String historyRootPath) throws Exception {
         //1.从西邮服务器上下载到本地，同时删除西邮服务器上的报文反馈文件，文件格式为zip
         ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnection(PropertiesUtil.readProperty("correos", "correosUrl"), PropertiesUtil.readProperty("correos", "pfUsername"), PropertiesUtil.readProperty("correos", "keyFileManifest"));
+         String  localPfFeedbackDir = historyRootPath+"/correos/in/manifestFeedback/";
+         String  localPfFeedbackDirCopy = historyRootPath+"/correos/bak/in/manifestFeedback/";
         if (connsft != null) {
             LogUtil.log("下载报文反馈-连接西邮服务器成功！");
             SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
-            SftpDownload.download(PropertiesUtil.readProperty("correos", "localPfFeedbackDir"), PropertiesUtil.readProperty("correos", "correosPfFeedbackDir"), sftPv3Client);
+            SftpDownload.download(localPfFeedbackDir, PropertiesUtil.readProperty("correos", "correosPfFeedbackDir"), sftPv3Client);
             sftPv3Client.close();
             connsft.close();
             LogUtil.log("下载报文反馈-下载报文反馈成功！");
         }
         //2.解压文件zip，解压完成后，删除文件
-        String zipPath = PropertiesUtil.readProperty("correos", "localPfFeedbackDir");
+        String zipPath = localPfFeedbackDir;
         File[] files = FileUtil.getFiles(zipPath);
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
@@ -128,13 +129,15 @@ public class ReceiveManifestFeedbackService {
             }
         }
         //2.在本地解析预报反馈，更新运单状态为ERROR,备份预报反馈
-        analysisData(PropertiesUtil.readProperty("correos", "localPfFeedbackDir"), PropertiesUtil.readProperty("correos", "localPfFeedbackDirCopy"));
+        analysisData(conn,localPfFeedbackDir, localPfFeedbackDirCopy);
         LogUtil.log("下载报文反馈-解析报文反馈报文、本地备份成功！");
     }
 
     public static void main(String[] args) throws Exception {
+        Connection conn = ConnectionFactory.get200Connection();
+        String historyRootPath="D:/express/SinoairEDIServerHistory";
         ReceiveManifestFeedbackService receiveManifestFeedbackService = new ReceiveManifestFeedbackService();
-        receiveManifestFeedbackService.ReceiveManifestFeedback();
+        receiveManifestFeedbackService.ReceiveManifestFeedback(conn,historyRootPath);
     }
 
 }

@@ -2,14 +2,12 @@ package com.sinoair.iemisgateway.correos.action;
 
 import ch.ethz.ssh2.SFTPv3Client;
 import com.sinoair.iemisgateway.correos.service.ReceiveManifestFeedbackService;
-import com.sinoair.iemisgateway.util.FileUtil;
-import com.sinoair.iemisgateway.util.LogUtil;
-import com.sinoair.iemisgateway.util.PropertiesUtil;
-import com.sinoair.iemisgateway.util.ZipUtil;
+import com.sinoair.iemisgateway.util.*;
 import com.sinoair.iemisgateway.util.sftp.SftpConnection;
 import com.sinoair.iemisgateway.util.sftp.SftpDownload;
 
 import java.io.File;
+import java.sql.Connection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,7 +18,7 @@ import java.io.File;
  */
 public class ReceiveManifestFeedbackAction {
     public static void main(String[] args) throws Exception{
-      ReceiveManifestFeedbackService receiveManifestFeedbackService=new ReceiveManifestFeedbackService();
-           receiveManifestFeedbackService.ReceiveManifestFeedback();
+        ReceiveManifestFeedbackService receiveManifestFeedbackService = new ReceiveManifestFeedbackService();
+        receiveManifestFeedbackService.ReceiveManifestFeedback(ConnectionFactory.getConnectionInProperties(),PropertiesUtil.readProperty("common", "historyRootPath"));
     }
 }
