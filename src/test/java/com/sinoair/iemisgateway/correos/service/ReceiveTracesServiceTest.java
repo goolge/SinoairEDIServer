@@ -33,6 +33,7 @@ public class ReceiveTracesServiceTest {
 
     @Test
     public void testDBinsert() throws Exception {
+        ReceiveTracesService receiveTracesService=new ReceiveTracesService();
         String path = "C:/ftp/correos/trace";
         String backUpPath = "C:/ftp/correos/bak/trace";
        /* String name = "cmis";//todo-wxx-n 生产
@@ -51,7 +52,7 @@ public class ReceiveTracesServiceTest {
            Properties p = new Properties();
            p.load(in);
                 for (File file : fileList) {
-                    ReceiveTracesService.DBinsert(file, insertPstm, selectPstm,p);
+                    receiveTracesService.DBinsert(file, insertPstm, selectPstm,p);
                     //文件备份删除操作
                     FileUtil.copyFile(file, backUpPath);
                     FileUtil.deleteFile(file);
