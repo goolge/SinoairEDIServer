@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class SendManifestAction {
     public static void main(String[] args) throws Exception{
-       SendManifestService generateInfo = new SendManifestService();
-       generateInfo.sendManifest();
+        SendManifestService generateInfo = new SendManifestService();
+        generateInfo.sendManifest(ConnectionFactory.getConnectionInProperties(),PropertiesUtil.readProperty("common", "historyRootPath"));
        }
     }

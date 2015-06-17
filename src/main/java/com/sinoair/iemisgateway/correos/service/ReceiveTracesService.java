@@ -105,11 +105,10 @@ public class ReceiveTracesService {
 
     }
 
-    public void analysisData(String path, String backUpPath) throws Exception {
+    public void analysisData(Connection conn,String path, String backUpPath) throws Exception {
         File dir = new File(path);
         if (dir.exists()) {
             File[] fileList = dir.listFiles();
-            Connection conn = ConnectionFactory.get194Connection();
             conn.setAutoCommit(false);
             PreparedStatement insertPstm = conn.prepareStatement("insert into expressbusinessactivity(EBA_SYSCODE,EAWB_PRINTCODE,EAD_CODE,EAST_CODE,EBA_E_ID_HANDLER,EBA_HANDLETIME,EBA_REMARK,SAC_ID,EBA_SAC_CODE,EBA_OCCURTIME,EBA_SOURCE,EBA_OCCURPLACE,FLAG,QA) values(" +
                     "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?)");
@@ -136,18 +135,20 @@ public class ReceiveTracesService {
         }
     }
 
-    public void ReceiveTraces() throws Exception {
+    public void ReceiveTraces(Connection conn,String historyRootPath) throws Exception {
         ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnection(PropertiesUtil.readProperty("correos", "correosUrl"), PropertiesUtil.readProperty("correos", "pfUsernameTrace"), PropertiesUtil.readProperty("correos", "keyFileTrace"));
+        String  localTraceDir = historyRootPath+"/correos/in/traces/";
+        String  localTraceDirCopy = historyRootPath+"/correos/bak/in/traces/";
         if (connsft != null) {
             LogUtil.log("下载轨迹反馈-连接西邮服务器成功！");
             SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
             //1.从西邮服务器上下载到本地，同时删除西邮服务器上的报文反馈文件，文件格式为zip
-            SftpDownload.download(PropertiesUtil.readProperty("correos", "localTraceDir"), PropertiesUtil.readProperty("correos", "correosTraceDir"), sftPv3Client);
+            SftpDownload.download(localTraceDir, PropertiesUtil.readProperty("correos", "correosTraceDir"), sftPv3Client);
             sftPv3Client.close();
             connsft.close();
             LogUtil.log("下载轨迹反馈-下载轨迹反馈成功！");
         }
-        String zipPath = PropertiesUtil.readProperty("correos", "localTraceDir");
+        String zipPath = localTraceDir;
         File[] files = FileUtil.getFiles(zipPath);
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
@@ -160,14 +161,15 @@ public class ReceiveTracesService {
             }
         }
         //在本地解析轨迹，插入轨迹信息，备份轨迹，删除本地轨迹
-        analysisData(PropertiesUtil.readProperty("correos", "localTraceDir"), PropertiesUtil.readProperty("correos", "localTraceDirCopy"));
+        analysisData(conn,localTraceDir, localTraceDirCopy);
         LogUtil.log("下载轨迹反馈-解析轨迹反馈报文、本地备份成功！");
-
     }
 
     public static void main(String[] args) throws Exception {
+        Connection conn = ConnectionFactory.get200Connection();
+        String historyRootPath="D:/express/SinoairEDIServerHistory";
         ReceiveTracesService receiveTracesService = new ReceiveTracesService();
-        receiveTracesService.ReceiveTraces();
+        receiveTracesService.ReceiveTraces(conn,historyRootPath);
     }
 
 }

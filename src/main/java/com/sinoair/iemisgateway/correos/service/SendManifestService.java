@@ -427,10 +427,9 @@ public class SendManifestService {
 
     }
 
-    public void sendManifest() throws Exception, SQLException {
+    public void sendManifest(Connection conn,String historyRootPath) throws Exception, SQLException {
         //组织西邮报文数据，在本地存一份备份，然后放到西邮服务器，同时更新运单状态为发送成功
         ArrayList arrayList = null;
-        Connection conn = ConnectionFactory.get194Connection();
         try {
 
             //1.获取需要发送预报的运单数据；
@@ -447,15 +446,17 @@ public class SendManifestService {
         //3.在本地生成西邮报文
         int sendNum = arrayList == null ? 0 : arrayList.size();
         LogUtil.log(" 发送报文-获取发预报的数据条数：" + sendNum);
-        generateInfoCorreos(arrayList, PropertiesUtil.readProperty("correos", "localpfileDir"));
+        String  localpfileDir = historyRootPath+"/correos/out/manifest/";
+        String  localpfileDirCopy =historyRootPath+"/correos/bak/out/manifest/";
+        generateInfoCorreos(arrayList, localpfileDir);
         //4.向西邮发送预报,同时备份本地文件
-        File[] files = FileUtil.getFiles(PropertiesUtil.readProperty("correos", "localpfileDir"));
+        File[] files = FileUtil.getFiles(localpfileDir);
         if (files != null && files.length > 0) {
             ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnection(PropertiesUtil.readProperty("correos", "correosUrl"), PropertiesUtil.readProperty("correos", "pfUsername"), PropertiesUtil.readProperty("correos", "keyFileManifest"));
             if (connsft != null) {
                 LogUtil.log(" 发送报文-连接西邮服务器成功");
                 SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
-                SftpUpload.upload(PropertiesUtil.readProperty("correos", "localpfileDir"), PropertiesUtil.readProperty("correos", "correospfDir"), sftPv3Client, PropertiesUtil.readProperty("correos", "localpfileDirCopy"));
+                SftpUpload.upload(localpfileDir, PropertiesUtil.readProperty("correos", "correospfDir"), sftPv3Client, localpfileDirCopy);
                 sftPv3Client.close();
                 connsft.close();
                 LogUtil.log(" 发送报文-上传西邮服务器报文成功！");
@@ -465,9 +466,10 @@ public class SendManifestService {
     }
 
     public static void main(String[] args) throws Exception {
-
+        Connection conn = ConnectionFactory.get200Connection();
+        String historyRootPath="D:/express/SinoairEDIServerHistory";
         SendManifestService generateInfo = new SendManifestService();
-        generateInfo.sendManifest();
+        generateInfo.sendManifest(conn,historyRootPath);
 
     }
 }
