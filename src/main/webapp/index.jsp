@@ -8,17 +8,17 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String environmentName=PropertiesUtil.readProperty("common","environment.name");
-    String environmentDesc=PropertiesUtil.readProperty("common","environment.desc");
-    String historyRootPath=PropertiesUtil.readProperty("common","historyRootPath");
+    String environmentName = PropertiesUtil.readProperty("common", "environment.name");
+    String environmentDesc = PropertiesUtil.readProperty("common", "environment.desc");
+    String historyRootPath = PropertiesUtil.readProperty("common", "historyRootPath");
     System.out.println("historyRootPath = " + historyRootPath);
 %>
 <html>
-  <head><title>sinoair</title></head>
-  <body>
-  Welcome to Sinoair.<br/>
-  environmentName:<%=environmentName%>    <br/>
-  environmentDesc:<%=environmentDesc%>    <br/>
-  historyRootPath:<%=historyRootPath%>    <br/>
-  </body>
+<head><title>sinoair</title></head>
+<body>
+Welcome to Sinoair.<br/>
+environmentName:<%=environmentName%><br/>
+environmentDesc:<%=environmentDesc%><br/>
+historyRootPath:<%=historyRootPath%><br/>
+</body>
 </html>
