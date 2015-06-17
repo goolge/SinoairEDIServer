@@ -1,6 +1,7 @@
 package com.sinoair.iemisgateway.cainiao.service;
 
 import com.sinoair.iemisgateway.util.DateUtil;
+import com.sinoair.iemisgateway.util.PropertiesUtil;
 import com.sinoair.iemisgateway.util.XMLUtil;
 import com.sinoair.iemisgateway.util.iemisWSClient.uploadOrderCainiao.UploadOrderCainiaoClient;
 import org.dom4j.Document;
@@ -18,7 +19,7 @@ public class UploadOrderCainiaoService {
 
     public String uploadOrderCainiao(String xmlStr) {
         System.out.println("----菜鸟请求报文 = --" + xmlStr + "----");
-        String xmlPath = "sinoairEDIServerXML" + File.separator + "Cainiao" + File.separator + "uploadOrderCainiao" + DateUtil.getDateWith() + ".xml";
+        String xmlPath = PropertiesUtil.readProperty("common","historyRootPath") + File.separator + "Cainiao" + File.separator + "uploadOrderCainiao" + DateUtil.getDateWith() + ".xml";
 //        String xsdPath = (Thread.currentThread().getContextClassLoader().getResource("/") + "com\\sinoair\\iemisgateway").replace("file:/", "") + File.separator + "XMLAndXSD" + File.separator + "upload" + File.separator + "Webservice-call1xsd.xml";
         XMLUtil.writeFile(xmlStr, xmlPath);
         Document document = XMLUtil.xmlVerification(xmlStr);
