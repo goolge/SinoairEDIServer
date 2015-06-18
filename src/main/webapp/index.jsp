@@ -1,3 +1,4 @@
+<%@ page import="com.sinoair.iemisgateway.util.PropertiesUtil" %>
 <%--
   Created by IntelliJ IDEA.
   User: WangXX4
@@ -6,7 +7,18 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String environmentName = PropertiesUtil.readProperty("common", "environment.name");
+    String environmentDesc = PropertiesUtil.readProperty("common", "environment.desc");
+    String historyRootPath = PropertiesUtil.readProperty("common", "historyRootPath");
+    System.out.println("historyRootPath = " + historyRootPath);
+%>
 <html>
-  <head><title>sinoair</title></head>
-  <body>Welcome to Sinoair.</body>
+<head><title>sinoair</title></head>
+<body>
+Welcome to Sinoair.<br/>
+environmentName:<%=environmentName%><br/>
+environmentDesc:<%=environmentDesc%><br/>
+historyRootPath:<%=historyRootPath%><br/>
+</body>
 </html>
