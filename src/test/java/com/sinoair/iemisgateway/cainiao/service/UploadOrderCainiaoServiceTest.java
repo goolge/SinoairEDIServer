@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import testUtil.TestCaseTemplate;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,12 +13,12 @@ import org.junit.Test;
  * Time: 上午9:05
  * To change this template use File | Settings | File Templates.
  */
-public class UploadOrderCainiaoServiceTest {
+public class UploadOrderCainiaoServiceTest extends TestCaseTemplate{
     UploadOrderCainiaoService uploadOrderCainiaoService;
     String xml;
-    String mailNo = "LPwxx06176666006";
-    String orderCode = "LPwxx06176666006";
-    String packageCode = "YWES2015617wxx1";
+    String mailNo = "LPwxx06176666007";
+    String orderCode = "LPwxx06176666007";
+    String packageCode = "YWES2015617wxx2";
     String packageWeight = "1232";
     String ordersInPackage = "1";
     String resultExpected;
@@ -122,6 +123,7 @@ public class UploadOrderCainiaoServiceTest {
 
     @Before
     public void setUp() throws Exception {
+        showEnvironment();
         uploadOrderCainiaoService = new UploadOrderCainiaoService();
 
     }
