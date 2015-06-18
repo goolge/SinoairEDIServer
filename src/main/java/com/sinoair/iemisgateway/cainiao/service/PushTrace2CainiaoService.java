@@ -127,8 +127,8 @@ public class PushTrace2CainiaoService {
                 " where ep.eawb_printcode = eba.eawb_printcode" +
                 " AND (EBA.QA IS NULL OR EBA.QA <> 's')" +
                 "AND " +
-                "(ead_code IN ('FC_INBOUND','FC_INBOUND') " +
-                "OR east_code IN ('ASS','ASF','CP','CLRD','CUSN','SI','RM') )" +
+                "(ead_code IN ('FC_INBOUND','DELIVERY') " +
+                "OR east_code IN ('ASS','ASF','CP','CLRD','CUSN','SI','RM','DEF') )" +
                 " and ep.eawb_so_code ='00060491'" +
                 " AND ep.eawb_handletime>SYSDATE-60";//todo 为了提高查询效率，只查找最近两个月处理的单子
         System.out.println(new Date().toString() + "查询最近两个月所有的需要发给菜鸟的轨迹:" + sql);
@@ -184,6 +184,12 @@ public class PushTrace2CainiaoService {
             desc = (desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "" : desc;
         } else if ("RM".equals(east_code)) {
             action = "CAI_AE_ARRIVED";
+            desc = (desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "" : desc;
+        }else if ("DELIVERY".equals(ead_code)) {
+            action = "CAI_SIGN_IN";
+            desc = (desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "" : desc;
+        }else if ("DEF".equals(east_code)) {
+            action = "CAI_SIGN_IN_FAIL";
             desc = (desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "" : desc;
         }
         traceRequest2Cainiao.setAction(action);
