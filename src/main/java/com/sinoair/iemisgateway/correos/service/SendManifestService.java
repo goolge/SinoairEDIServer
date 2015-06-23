@@ -162,7 +162,8 @@ public class SendManifestService {
             sb.append(getStrCorreos(0, "", "", false, true));//第43
             sb.append(getStrCorreos(2, deliveryMode44, "", false, true));//第44
             Double weight = Double.parseDouble(map.get("EAWB_DECLAREGROSSWEIGHT").toString())*1000; //单位是kg ,要转换成g
-            sb.append(getStrCorreos(5, weight+"", "", false, true));//第45
+           java.text.DecimalFormat decimalFormat = new java.text.DecimalFormat("#");
+            sb.append(getStrCorreos(5, decimalFormat.format(weight), "", false, true));//第45
             sb.append(getStrCorreos(0, "", "", false, true));//第46
             sb.append(getStrCorreos(0, "", "", false, true));//第47
             sb.append(getStrCorreos(0, "", "", false, true));//第48
@@ -467,7 +468,7 @@ public class SendManifestService {
     }
 
     public static void main(String[] args) throws Exception {
-        Connection conn = ConnectionFactory.get200Connection();
+        Connection conn = ConnectionFactory.get194Connection();
         String historyRootPath="D:/express/SinoairEDIServerHistory";
         SendManifestService generateInfo = new SendManifestService();
         generateInfo.sendManifest(conn,historyRootPath);
