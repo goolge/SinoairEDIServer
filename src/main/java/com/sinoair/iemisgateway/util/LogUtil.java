@@ -14,7 +14,7 @@ import java.io.PrintWriter;
  */
 public class LogUtil {
     public static void log(String msg,String strDirectory) {
-		System.out.println(msg);
+
 		if(strDirectory==null||"".equals(strDirectory))
 		strDirectory="log/";
 		File f_dir = new File(strDirectory);
@@ -29,7 +29,7 @@ public class LogUtil {
 			java.util.Date date = new java.util.Date();
 			String datestr = df.format(new java.util.Date());
 			String datelog = dflog.format(new java.util.Date());
-
+            System.out.println(datestr + " " + msg);
 			// 按日期每天生成一个日志文件
 			FileWriter fwl = new FileWriter(strDirectory + datelog
 					+ ".log", true);
