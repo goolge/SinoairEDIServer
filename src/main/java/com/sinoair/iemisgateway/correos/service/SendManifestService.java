@@ -161,7 +161,8 @@ public class SendManifestService {
             sb.append(getStrCorreos(0, "", "", false, true));//第42
             sb.append(getStrCorreos(0, "", "", false, true));//第43
             sb.append(getStrCorreos(2, deliveryMode44, "", false, true));//第44
-            sb.append(getStrCorreos(5, map.get("EAWB_DECLAREGROSSWEIGHT").toString(), "", false, true));//第45
+            Double weight = Double.parseDouble(map.get("EAWB_DECLAREGROSSWEIGHT").toString())*1000; //单位是kg ,要转换成g
+            sb.append(getStrCorreos(5, weight+"", "", false, true));//第45
             sb.append(getStrCorreos(0, "", "", false, true));//第46
             sb.append(getStrCorreos(0, "", "", false, true));//第47
             sb.append(getStrCorreos(0, "", "", false, true));//第48
