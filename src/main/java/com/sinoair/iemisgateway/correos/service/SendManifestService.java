@@ -85,11 +85,11 @@ public class SendManifestService {
         String insurance49 = PropertiesUtil.readProperty("correos", "insurance49");
         String shipmentType85 = PropertiesUtil.readProperty("correos", "shipmentType85");
         //String name110 = PropertiesUtil.readProperty("correos", "name110");
-       // String company114 = PropertiesUtil.readProperty("correos", "company114");
-       // String streetName117 = PropertiesUtil.readProperty("correos", "streetName117");
-        //String town124 = PropertiesUtil.readProperty("correos", "town124");
+        String company114 = PropertiesUtil.readProperty("correos", "company114");
+        String streetName117 = PropertiesUtil.readProperty("correos", "streetName117");
+        String town124 = PropertiesUtil.readProperty("correos", "town124");
        // String province125 = PropertiesUtil.readProperty("correos", "province125");
-       // String PC126 = PropertiesUtil.readProperty("correos", "PC126");
+        String PC126 = PropertiesUtil.readProperty("correos", "PC126");
         //String senderTelephoneNumber127 = PropertiesUtil.readProperty("correos", "senderTelephoneNumber127");
         String endOfRegistration131 = PropertiesUtil.readProperty("correos", "endOfRegistration131");
         String MD16 = PropertiesUtil.readProperty("correos", "MD16");
@@ -169,7 +169,10 @@ public class SendManifestService {
             sb.append(getStrCorreos(0, "", "", false, true));//第48
             sb.append(getStrCorreos(1, insurance49, "", false, true));//第49
             int money = (int) Math.rint(Double.parseDouble(map.get("EAWB_DECLAREVALUE").toString()) * rate * 100);
-            sb.append(getStrCorreos(6, GetIntFormString(6, money), "", false, true));//第50   申报价值，转化成欧分
+            if(money<60){
+              money=60;
+            }
+            sb.append(getStrCorreos(6, GetIntFormString(6, money), "", false, true));//第50   申报价值，转化成欧分 最小值为60欧分
             sb.append(getStrCorreos(0, "", "", false, true));//第51
             sb.append(getStrCorreos(0, "", "", false, true));//第52
             sb.append(getStrCorreos(0, "", "", false, true));//第53
@@ -233,20 +236,20 @@ public class SendManifestService {
             sb.append(getStrCorreos(0, "", "", false, true));//第111
             sb.append(getStrCorreos(0, "", "", false, true));//第112
             sb.append(getStrCorreos(0, "", "", false, true));//第113
-            sb.append(getStrCorreos(50, "", "", false, true));//第114   company114
+            sb.append(getStrCorreos(50, company114, "", false, true));//第114   company114
             sb.append(getStrCorreos(0, "", "", false, true));//第115
             sb.append(getStrCorreos(0, "", "", false, true));//第116
-            sb.append(getStrCorreos(50, map.get("EAWB_PICKUP_ADDRESS").toString(), "", false, true));//第117   streetName117
+            sb.append(getStrCorreos(50,streetName117, "", false, true));//第117   streetName117        map.get("EAWB_PICKUP_ADDRESS").toString()
             sb.append(getStrCorreos(0, "", "", false, true));//第118
             sb.append(getStrCorreos(0, "", "", false, true));//第119
             sb.append(getStrCorreos(0, "", "", false, true));//第120
             sb.append(getStrCorreos(0, "", "", false, true));//第121
             sb.append(getStrCorreos(0, "", "", false, true));//第122
             sb.append(getStrCorreos(0, "", "", false, true));//第123
-            sb.append(getStrCorreos(25, map.get("EAWB_DEPARTCITY").toString(), "", false, true));//第124      town124
-            sb.append(getStrCorreos(40, map.get("EAWB_DEPARTSTATE").toString(), "", false, true));//第125     province125
-            sb.append(getStrCorreos(5, map.get("EAWB_PICKUP_POSTCODE").toString(), "", false, true));//第126    PC126
-            sb.append(getStrCorreos(12, getNumLength(map.get("EAWB_PICKUP_PHONE"),12), "", false, true));//第127    senderTelephoneNumber127
+            sb.append(getStrCorreos(25, town124, "", false, true));//第124      town124      map.get("EAWB_DEPARTCITY").toString()
+            sb.append(getStrCorreos(40,"" , "", false, true));//第125     province125   map.get("EAWB_DEPARTSTATE").toString()
+            sb.append(getStrCorreos(5, PC126, "", false, true));//第126    PC126    map.get("EAWB_PICKUP_POSTCODE").toString()
+            sb.append(getStrCorreos(12, "", "", false, true));//第127    senderTelephoneNumber127  getNumLength(map.get("EAWB_PICKUP_PHONE"),12)
             sb.append(getStrCorreos(0, "", "", false, true));//第128
             sb.append(getStrCorreos(0, "", "", false, true));//第129
             sb.append(getStrCorreos(0, "", "", false, true));//第130

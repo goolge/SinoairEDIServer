@@ -53,7 +53,7 @@ public class FileUtil {
      * @return
      */
     public static File newFile(String targetPath,String fileName){
-        String filePath=targetPath+"\\"+fileName;
+        String filePath=targetPath+fileName;
         File t=new File(filePath);
         return t;
     }

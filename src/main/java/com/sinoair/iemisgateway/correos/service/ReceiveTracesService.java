@@ -151,6 +151,7 @@ public class ReceiveTracesService {
         String zipPath = localTraceDir;
         File[] files = FileUtil.getFiles(zipPath);
         if (files != null && files.length > 0) {
+            zipPath=zipPath.substring(0,zipPath.length()-1);
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
                 if (file.getName().endsWith(".zip")) {
