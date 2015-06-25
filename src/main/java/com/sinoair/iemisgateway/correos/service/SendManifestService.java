@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -71,7 +72,8 @@ public class SendManifestService {
         boolean newFile = false;
         StringBuffer sbOne = new StringBuffer();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-        String time = df.format(new Date());
+        Date date=new Date();
+        String time = df.format(date);
         String productCode3 = PropertiesUtil.readProperty("correos", "productCode3");
         String labellerCode5 = PropertiesUtil.readProperty("correos", "labellerCode5");
         String contractNumber6 = PropertiesUtil.readProperty("correos", "contractNumber6");
@@ -103,8 +105,8 @@ public class SendManifestService {
                 sb.append("C");
                 lineNum += 1;
             } else
-                //最后一行，或者是list的最后一个
-                if (lineNum == maxLine || i == (arrData.size() - 1)) {
+                //最后一行，或者是list的最后一个,且list只有一个
+                if ( (lineNum == maxLine  || (i == (arrData.size() - 1) && arrData.size()!=1) ) && lineNum!=1 ) {
                     sb.append("F");
                     lineNum = 1;
                 } else
@@ -258,17 +260,24 @@ public class SendManifestService {
             sbOne.append(sb.toString());
             if (sb.substring(0, 1).equals("U") || sb.substring(0, 1).equals("F")) {
                 newFile = true;
-                //System.out.println("---------------------------------------------------------------");
                 String strFilePath = "";
                 strFilePath = app_dir + "FD" + labellerCode5 + time + ".txt";
                 FileUtil.generateFile(sbOne.toString(), strFilePath);
-                txtNum += txtNum;
-                time = df.format(new Date());
+
+                time = df.format(addOneSecond(date,txtNum));
+                txtNum += 1;
                 sbOne = new StringBuffer();
             }
 
         }
         return newFile;
+    }
+    public Date addOneSecond(Date date,int num) {
+        Calendar calendar = Calendar
+                .getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.SECOND, num);
+        return calendar.getTime();
     }
 
     /**
@@ -471,7 +480,7 @@ public class SendManifestService {
     }
 
     public static void main(String[] args) throws Exception {
-        Connection conn = ConnectionFactory.get194Connection();
+        Connection conn = ConnectionFactory.get200Connection();
         String historyRootPath="D:/express/SinoairEDIServerHistory";
         SendManifestService generateInfo = new SendManifestService();
         generateInfo.sendManifest(conn,historyRootPath);
