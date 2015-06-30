@@ -122,7 +122,7 @@ public class ReceiveManifestFeedbackService {
             zipPath=zipPath.substring(0,zipPath.length()-1);
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
-                if (file.getName().endsWith(".zip")) {
+                if (file.getName().endsWith(".zip") || file.getName().endsWith(".ZIP")) {
                     ZipUtil.unzipFile(zipPath, file.getName(), zipPath);
                     FileUtil.deleteFile(file);
                 }
