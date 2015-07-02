@@ -1,5 +1,6 @@
 package testUtil;
 
+import com.sinoair.iemisgateway.util.BaseLogger;
 import com.sinoair.iemisgateway.util.PropertiesUtil;
 
 /**

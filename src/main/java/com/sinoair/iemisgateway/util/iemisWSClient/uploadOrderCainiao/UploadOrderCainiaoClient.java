@@ -1,6 +1,7 @@
 package com.sinoair.iemisgateway.util.iemisWSClient.uploadOrderCainiao;
 
 
+import com.sinoair.iemisgateway.util.BaseLogger;
 import com.sinoair.iemisgateway.util.PropertiesUtil;
 
 import javax.xml.rpc.ServiceException;
