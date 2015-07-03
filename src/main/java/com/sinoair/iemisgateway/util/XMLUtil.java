@@ -93,10 +93,10 @@ public class XMLUtil {
             // 开始验证，成功输出success!!!，失败输出fail
             validator.validate(source);
         } catch (SAXException e) {
-            e.printStackTrace();
+            BaseLogger.error("xsd 检验未通过");
             return false;
         } catch (IOException e) {
-            e.printStackTrace();
+            BaseLogger.error(e.getMessage());
             return false;
         }
         return true;

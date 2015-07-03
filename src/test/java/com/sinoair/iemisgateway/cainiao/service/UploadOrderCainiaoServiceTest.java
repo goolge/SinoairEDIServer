@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import testUtil.TestCaseTemplate;
+import testUtil.CommonTestCaseTemplate;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +14,7 @@ import testUtil.TestCaseTemplate;
  * Time: 上午9:05
  * To change this template use File | Settings | File Templates.
  */
-public class UploadOrderCainiaoServiceTest extends TestCaseTemplate{
+public class UploadOrderCainiaoServiceTest extends CommonTestCaseTemplate {
     UploadOrderCainiaoService uploadOrderCainiaoService;
     String xml;
     String mailNo = "LPwxx06176666007";
@@ -27,7 +27,7 @@ public class UploadOrderCainiaoServiceTest extends TestCaseTemplate{
 
 
     //xml格式异常情况
-    @Test
+//    @Test
     public void testUploadOrderCainiaoInvalidXml() throws Exception {
         xml = "<logisticsEventsRequest>\n";
         resultExpected = "<responses>\n" +
@@ -115,7 +115,7 @@ public class UploadOrderCainiaoServiceTest extends TestCaseTemplate{
                 "\t\t</response>\n" +
                 "\t</responseItems>\n" +
                 "</responses>";
-        BaseLogger.info("xml = " + xml);
+        BaseLogger.debug("xml = " + xml);
         BaseLogger.info("xml shorten" + xml.replace("\n", "").replace("\t", ""));
         resultActual = uploadOrderCainiaoService.uploadOrderCainiao(xml);
         Assert.assertEquals(resultExpected, resultActual);

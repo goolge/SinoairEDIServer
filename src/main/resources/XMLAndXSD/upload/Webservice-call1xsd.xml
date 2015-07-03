@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="WSGET" type="WSGETType"/>
+    <xs:complexType name="WSGETType">
+        <xs:sequence>
+            <xs:element type="AccessRequestType" name="AccessRequest"/>
+            <xs:element type="OrdersType" name="Orders"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AccessRequestType">
+        <xs:annotation>
+            <xs:documentation>身份验证</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element type="xs:string" name="username"/>
+            <xs:element type="xs:string" name="password"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrdersType">
+        <xs:sequence>
+            <xs:element type="OrderType" name="Order" maxOccurs="50" minOccurs="1">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrderType">
+        <xs:annotation>
+            <xs:documentation>运单详情</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element type="xs:string" name="OrderNo">
+                <xs:annotation>
+                    <xs:documentation>执御的订单号</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="desCity">
+                <xs:annotation>
+                    <xs:documentation>目的地城市名</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="agent">
+                <xs:annotation>
+                    <xs:documentation>发运渠道</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="desCountry">
+                <xs:annotation>
+                    <xs:documentation>目的国家二字码</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="customerNo">
+                <xs:annotation>
+                    <xs:documentation>客户编码 266</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="sac_id">
+                <xs:annotation>
+                    <xs:documentation>口岸口岸</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="shipperEN">
+                <xs:annotation>
+                    <xs:documentation>发件人 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="shippingCompanyEN">
+                <xs:annotation>
+                    <xs:documentation>发件公司 英文发件公司 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="shippingCompanyCN">
+                <xs:annotation>
+                    <xs:documentation>发件公司 中文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="shipperAddressEN">
+                <xs:annotation>
+                    <xs:documentation>发件人地址 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="depCity">
+                <xs:annotation>
+                    <xs:documentation>始发城市 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="depState">
+                <xs:annotation>
+                    <xs:documentation>始发省 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="shipperPhone">
+                <xs:annotation>
+                    <xs:documentation>发件人电话</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="receiveCompanyEN">
+                <xs:annotation>
+                    <xs:documentation>收件公司 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="receiverEN">
+                <xs:annotation>
+                    <xs:documentation>收件人 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="receiverAddressEN">
+                <xs:annotation>
+                    <xs:documentation>收件人地址 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="receiverPost">
+                <xs:annotation>
+                    <xs:documentation>邮编</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="receiverPhone">
+                <xs:annotation>
+                    <xs:documentation>收件人电话</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="productNameEN">
+                <xs:annotation>
+                    <xs:documentation>品名 英文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="productNameCN">
+                <xs:annotation>
+                    <xs:documentation>品名 中文</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="cargoType">
+                <xs:annotation>
+                    <xs:documentation>货物类型</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:float" name="declareValue" default="0">
+                <xs:annotation>
+                    <xs:documentation>海关申报价值</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:int" name="quantity" default="0">
+                <xs:annotation>
+                    <xs:documentation>数量</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="HScode">
+                <xs:annotation>
+                    <xs:documentation>HS编码</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:float" name="actualWeight" default="0">
+                <xs:annotation>
+                    <xs:documentation>预报实重</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:float" name="cubWeight" default="0">
+                <xs:annotation>
+                    <xs:documentation>预报体积重</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="unit">
+                <xs:annotation>
+                    <xs:documentation>计量单位</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:int" name="pieces" default="0">
+                <xs:annotation>
+                    <xs:documentation>件数</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="desCity3C" nillable="true"/>
+            <xs:element type="xs:string" name="packageType"/>
+            <xs:element type="xs:string" name="isEcommerce"/>
+            <xs:element type="xs:string" name="allInOne"/>
+            <xs:element type="xs:string" name="serviceType"/>
+            <xs:element type="xs:string" name="email"/>
+            <xs:element type="xs:string" name="referenceNO"/>
+            <xs:element type="xs:string" name="pickUpProvince"/>
+            <xs:element type="xs:string" name="receiverState"/>
+            <xs:element type="xs:string" name="taxCode"/>
+            <xs:element type="xs:string" name="freightPrice"/>
+            <xs:element type="xs:string" name="airwaybill"/>
+            <xs:element type="xs:string" name="shipperAddressCN"/>
+            <xs:element type="xs:string" name="netWeight"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

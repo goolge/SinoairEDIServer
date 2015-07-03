@@ -1,0 +1,97 @@
+﻿<?xml version='1.0' encoding='UTF-8' ?>
+<WSGET>
+	<AccessRequest>
+		<username>jolly</username>
+		<password>jolly</password>
+	</AccessRequest>
+	<Orders>
+		<Order>
+			<OrderNo>VIP2014081517175369wxx</OrderNo>
+			<desCity>Darwin</desCity>
+			<agent>AUDTDC</agent>
+			<desCountry>AU</desCountry>
+			<customerNo>266</customerNo>
+			<sac_id>HGH</sac_id>
+			<shipperEN>ZHAO FENG</shipperEN>
+			<shippingCompanyEN>ZHEJIANG JOLLY IT CO LTD</shippingCompanyEN>
+			<shippingCompanyCN>浙江执御信息技术有限公司</shippingCompanyCN>
+			<shipperAddressEN>3F NO 1 BLDG 2 XIANGMAO RD GONGSHU DISTRICT</shipperAddressEN>
+			<depCity>HANGZHOU</depCity>
+			<depState>ZHEJIANG</depState>
+			<shipperPhone>13396541508</shipperPhone>
+			<receiveCompanyEN>first last</receiveCompanyEN>
+			<receiverEN>first last</receiverEN>
+			<receiverAddressEN>Street Address, Company Name</receiverAddressEN>
+			<receiverPost>1247</receiverPost>
+			<receiverPhone>88355579</receiverPhone>
+			<productNameEN></productNameEN>
+			<productNameCN></productNameCN>
+			<cargoType>ND</cargoType>
+			<declareValue></declareValue>
+			<quantity>1</quantity>
+			<HScode></HScode>
+			<actualWeight></actualWeight>
+			<cubWeight></cubWeight>
+			<unit>件</unit>
+			<pieces>1</pieces>
+			<desCity3C></desCity3C>
+			<packageType></packageType>
+			<isEcommerce></isEcommerce>
+			<allInOne></allInOne>
+			<serviceType></serviceType>
+			<email></email>
+			<referenceNO></referenceNO>
+			<pickUpProvince></pickUpProvince>
+			<receiverState></receiverState>
+			<taxCode></taxCode>
+			<freightPrice></freightPrice>
+			<airwaybill></airwaybill>
+			<shipperAddressCN></shipperAddressCN>
+			<netWeight></netWeight>
+		</Order>
+		<Order>
+			<OrderNo>VIP2014081811285433wxx2</OrderNo>
+			<desCity>Humpty Doo-McMinns Lagoon</desCity>
+			<agent>AUDTDC</agent>
+			<desCountry>AU</desCountry>
+			<customerNo>266</customerNo>
+			<sac_id>HGH</sac_id>
+			<shipperEN>ZHAO FENG</shipperEN>
+			<shippingCompanyEN>ZHEJIANG JOLLY IT CO LTD</shippingCompanyEN>
+			<shippingCompanyCN>浙江执御信息技术有限公司</shippingCompanyCN>
+			<shipperAddressEN>3F NO 1 BLDG 2 XIANGMAO RD GONGSHU DISTRICT</shipperAddressEN>
+			<depCity>HANGZHOU</depCity>
+			<depState>ZHEJIANG</depState>
+			<shipperPhone>13396541508</shipperPhone>
+			<receiveCompanyEN>Majedah Abdulrasoul chgdgt</receiveCompanyEN>
+			<receiverEN>Majedah Abdulrasoul chgdgt</receiverEN>
+			<receiverAddressEN>4015 Edouard - Montpetit Blvd</receiverAddressEN>
+			<receiverPost>5108</receiverPost>
+			<receiverPhone>88355579</receiverPhone>
+			<productNameEN></productNameEN>
+			<productNameCN></productNameCN>
+			<cargoType>ND</cargoType>
+			<declareValue></declareValue>
+			<quantity>1</quantity>
+			<HScode></HScode>
+			<actualWeight></actualWeight>
+			<cubWeight></cubWeight>
+			<unit>件</unit>
+			<pieces>1</pieces>
+			<desCity3C></desCity3C>
+			<packageType></packageType>
+			<isEcommerce></isEcommerce>
+			<allInOne></allInOne>
+			<serviceType></serviceType>
+			<email></email>
+			<referenceNO></referenceNO>
+			<pickUpProvince></pickUpProvince>
+			<receiverState></receiverState>
+			<taxCode></taxCode>
+			<freightPrice></freightPrice>
+			<airwaybill></airwaybill>
+			<shipperAddressCN></shipperAddressCN>
+			<netWeight></netWeight>
+		</Order>
+	</Orders>
+</WSGET>
