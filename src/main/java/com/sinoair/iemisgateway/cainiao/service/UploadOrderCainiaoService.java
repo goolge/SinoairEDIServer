@@ -21,7 +21,11 @@ public class UploadOrderCainiaoService {
     public String uploadOrderCainiao(String xmlStr) {
         BaseLogger.info("----cainiao batch message = --" + xmlStr + "----");
         String xmlPath = PropertiesUtil.readProperty("common", "historyRootPath") + File.separator + "Cainiao" + File.separator + "uploadOrderCainiao" + DateUtil.getDateWith() + ".xml";
-        String xsdPath = UploadOrderCainiaoService.class.getResource("/XMLAndXSD/cainiao/uploadOrderCainiao.xsd").getPath().substring(1);
+        String xsdPath = UploadOrderCainiaoService.class.getResource("/XMLAndXSD/cainiao/uploadOrderCainiao.xsd").getPath();
+        BaseLogger.info("--------------"+File.separator+"---------------------------");
+        if("\\".equals(File.separator)){
+             xsdPath = xsdPath.substring(1);
+}
         BaseLogger.info("---xsdPath---"+xsdPath);
         XMLUtil.writeFile(xmlStr, xmlPath);
         Document document = XMLUtil.xmlVerification(xmlStr);

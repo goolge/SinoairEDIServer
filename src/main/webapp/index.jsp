@@ -1,3 +1,4 @@
+<%@ page import="com.sinoair.iemisgateway.util.BaseLogger" %>
 <%@ page import="com.sinoair.iemisgateway.util.PropertiesUtil" %>
 <%--
   Created by IntelliJ IDEA.

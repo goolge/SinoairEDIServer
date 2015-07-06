@@ -1,7 +1,7 @@
 package com.sinoair.iemisgateway.util;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import testUtil.CommonTestCaseTemplate;
 
@@ -15,11 +15,11 @@ import testUtil.CommonTestCaseTemplate;
 public class XMLUtilTest extends CommonTestCaseTemplate {
 
     String xmlPath;
-    String xsdPath;
+    static String xsdPath;
 
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUp() throws Exception {
         xsdPath = getMainRootPath()+"XMLAndXSD/cainiao/uploadOrderCainiao.xsd";
     }
 
