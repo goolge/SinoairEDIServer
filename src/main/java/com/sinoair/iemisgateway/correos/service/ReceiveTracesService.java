@@ -57,7 +57,7 @@ public class ReceiveTracesService {
             String EBA_REMARK = field5;
             //从第九个字段开始，把后面字段拼接起来，作为轨迹的备注字段
             for (int f = 8; f < traceArray.length; f++) {
-                EBA_REMARK += traceArray[f] + "|";
+                EBA_REMARK += "|"+traceArray[f] ;
             }
             //状态发生的日期  如：20140415
             String field7 = traceArray[6];
