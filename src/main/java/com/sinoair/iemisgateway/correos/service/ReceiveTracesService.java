@@ -54,7 +54,7 @@ public class ReceiveTracesService {
             //String EAST_CODE=traceArray[5];
             String EAST_CODE = p.getProperty(field5); //todo-wxx-u
             String EBA_E_ID_HANDLER = "1";
-            String EBA_REMARK = "";
+            String EBA_REMARK = field5;
             //从第九个字段开始，把后面字段拼接起来，作为轨迹的备注字段
             for (int f = 8; f < traceArray.length; f++) {
                 EBA_REMARK += traceArray[f] + "|";
