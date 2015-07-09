@@ -41,7 +41,7 @@ public class ExeSQL {
 
 
     public HashMap execSqltoHash(String sql, int maxRowCount) {
-        System.out.println("ExecSQL : " + sql);
+        BaseLogger.info("ExecSQL : " + sql);
 
         HashMap rowset = new HashMap();
         Statement stmt = null;
@@ -76,10 +76,10 @@ public class ExeSQL {
             rset.close();
             stmt.close();
 
-//            System.out.println("successful");
+//            BaseLogger.info("successful");
         } catch (SQLException e) {
 
-            System.out.println("### Error ExeSQL at OneValue: " + sql);
+            BaseLogger.info("### Error ExeSQL at OneValue: " + sql);
             //设置返回值
             rowset = null;
             try {
@@ -161,10 +161,10 @@ public class ExeSQL {
             rset.close();
             stmt.close();
 
-            // System.out.println("successful");
+            // BaseLogger.info("successful");
         } catch (SQLException e) {
 
-            System.out.println("### Error ExeSQL at OneValue: " + sql);
+            BaseLogger.info("### Error ExeSQL at OneValue: " + sql);
             // 设置返回值
             rowset = null;
             try {
@@ -225,10 +225,10 @@ public class ExeSQL {
             rset.close();
             stmt.close();
 
-            // System.out.println("successful");
+            // BaseLogger.info("successful");
         } catch (SQLException e) {
 
-            System.out.println("### Error ExeSQL at OneValue: " + sql);
+            BaseLogger.info("### Error ExeSQL at OneValue: " + sql);
             // 设置返回值
             rowset = null;
             try {

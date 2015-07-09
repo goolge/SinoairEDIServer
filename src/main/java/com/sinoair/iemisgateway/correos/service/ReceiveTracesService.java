@@ -66,7 +66,7 @@ public class ReceiveTracesService {
             String SAC_ID = "SNR";
             String EBA_SAC_CODE = "GACN";
             String EBA_OCCURTIME = field7.substring(0, 4) + "-" + field7.substring(4, 6) + "-" + field7.substring(6) + " " + field8;
-            /*System.out.println(EBA_OCCURTIME);*/
+            /*BaseLogger.info(EBA_OCCURTIME);*/
             String EBA_SOURCE = "CORREOS";
             String EBA_OCCURPLACE = "";
             try {
@@ -154,7 +154,7 @@ public class ReceiveTracesService {
             zipPath=zipPath.substring(0,zipPath.length()-1);
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
-                if (file.getName().endsWith(".zip") || file.getName().endsWith(".ZIP")) {
+                if (file.getName().endsWith(".zip")) {
                     ZipUtil.unzipFile(zipPath, file.getName(), zipPath);
                     FileUtil.deleteFile(file);
                 }

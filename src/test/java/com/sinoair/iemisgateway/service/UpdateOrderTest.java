@@ -1,5 +1,6 @@
 package com.sinoair.iemisgateway.service;
 
+import com.sinoair.iemisgateway.util.BaseLogger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import org.junit.Test;
 public class UpdateOrderTest {
     @Test
     public void say(){
-        System.out.println("UpdateOrderTest.say");
+        BaseLogger.info("UpdateOrderTest.say");
     }
 // //    @Test
     public void testUpdateOrder() throws Exception {

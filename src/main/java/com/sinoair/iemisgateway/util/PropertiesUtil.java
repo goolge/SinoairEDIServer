@@ -2,7 +2,6 @@ package com.sinoair.iemisgateway.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Properties;
 
 /**
@@ -20,7 +19,7 @@ public class PropertiesUtil {
         Iterator<String> it = prop.stringPropertyNames().iterator();
         while (it.hasNext()) {
             String key = it.next();
-            System.out.println(key + ":" + prop.getProperty(key));
+            BaseLogger.info(key + ":" + prop.getProperty(key));
         }
         in.close();
     }*/

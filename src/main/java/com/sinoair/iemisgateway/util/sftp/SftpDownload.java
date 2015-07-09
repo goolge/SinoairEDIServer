@@ -29,7 +29,7 @@ public class SftpDownload {
             Vector listV = sftPv3Client.ls(remotePath);
             for (int i = 0; i < listV.size(); i++) {
                 SFTPv3DirectoryEntry aa = (SFTPv3DirectoryEntry) listV.elementAt(i);
-                //System.out.println("aaaa:" + aa.filename);
+                //BaseLogger.info("aaaa:" + aa.filename);
                 if (!aa.filename.endsWith(".zip") && !aa.filename.endsWith(".txt") && !aa.filename.endsWith(".ZIP") && !aa.filename.endsWith(".TXT")) {
                     continue;
                 }

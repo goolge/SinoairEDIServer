@@ -21,12 +21,12 @@ public class ZipUtil {
         File file = null;   //压缩文件(带路径)
         ZipFile zipFile = null;
         file = new File(zipFilePath + "/" + zipFileName);
-        System.out.println(">>>>>>解压文件【" + zipFilePath + "/" + zipFileName + "】到【" + targetFileDir + "】目录下<<<<<<");
+        BaseLogger.info(">>>>>>解压文件【" + zipFilePath + "/" + zipFileName + "】到【" + targetFileDir + "】目录下<<<<<<");
         if (false == file.exists()) {
-            System.out.println(">>>>>>压缩文件【" + zipFilePath + "/" + zipFileName + "】不存在<<<<<<");
+            BaseLogger.info(">>>>>>压缩文件【" + zipFilePath + "/" + zipFileName + "】不存在<<<<<<");
             return false;
         } else if (0 == file.length()) {
-            System.out.println(">>>>>>压缩文件【" + zipFilePath + "/" + zipFileName + "】大小为0不需要解压<<<<<<");
+            BaseLogger.info(">>>>>>压缩文件【" + zipFilePath + "/" + zipFileName + "】大小为0不需要解压<<<<<<");
             return false;
         } else {
             //2.开始解压ZIP压缩文件的处理

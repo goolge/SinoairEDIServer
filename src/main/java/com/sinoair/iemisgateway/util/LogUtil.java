@@ -29,7 +29,7 @@ public class LogUtil {
 			java.util.Date date = new java.util.Date();
 			String datestr = df.format(new java.util.Date());
 			String datelog = dflog.format(new java.util.Date());
-            System.out.println(datestr + " " + msg);
+            BaseLogger.info(datestr + " " + msg);
 			// 按日期每天生成一个日志文件
 			FileWriter fwl = new FileWriter(strDirectory + datelog
 					+ ".log", true);
@@ -41,7 +41,7 @@ public class LogUtil {
 			message = "写log文件错误!" + e;
 			e.printStackTrace();
 			log(message,strDirectory);
-			System.out.println(message);
+			BaseLogger.info(message);
 		}
 	}
     public static void log(String msg)

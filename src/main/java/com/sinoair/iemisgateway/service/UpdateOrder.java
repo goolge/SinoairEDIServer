@@ -1,5 +1,6 @@
 package com.sinoair.iemisgateway.service;
 
+import com.sinoair.iemisgateway.util.BaseLogger;
 import com.sinoair.iemisgateway.util.DateUtil;
 import com.sinoair.iemisgateway.util.XMLUtil;
 import com.sinoair.iemisgateway.util.iemisWSClient.updateOrder.UpdateOrderClient;
@@ -17,10 +18,10 @@ import java.io.File;
 
 public class UpdateOrder {
     public String updateOrder(String xmlStr) {
-        System.out.println("----wxx---xmlStr = --" + xmlStr + "----");
+        BaseLogger.info("----wxx---xmlStr = --" + xmlStr + "----");
         String xmlPath = "sinoairEDIServerXML" + File.separator + "SECOND" + File.separator + "update" + DateUtil.getDateWith() + ".xml";
         String xsdPath = (Thread.currentThread().getContextClassLoader().getResource("/") + "com\\sinoair\\iemisgateway").replace("file:/", "") + File.separator + "XMLAndXSD" + File.separator + "update" + File.separator + "Webservice-call2xsd.xml";
-        System.out.println("----wxx---xsdPath = --" + xsdPath + "----");
+        BaseLogger.info("----wxx---xsdPath = --" + xsdPath + "----");
         XMLUtil.writeFile(xmlStr, xmlPath);
         Document document = XMLUtil.xmlVerification(xmlStr);
         if (document == null) return XMLUtil.combinateReturnMessage("invalid xml");

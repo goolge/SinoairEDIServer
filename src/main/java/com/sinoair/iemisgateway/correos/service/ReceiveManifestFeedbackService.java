@@ -50,10 +50,10 @@ public class ReceiveManifestFeedbackService {
             } catch (Exception e) {
 
             }
-            /*System.out.println("errorCode:"+errorCode);
-            System.out.println("errorMessage:"+errorMessage);
-            System.out.println("errorFileName:"+errorFileName);
-            System.out.println("shipmentCode:"+shipmentCode);*/
+            /*BaseLogger.info("errorCode:"+errorCode);
+            BaseLogger.info("errorMessage:"+errorMessage);
+            BaseLogger.info("errorFileName:"+errorFileName);
+            BaseLogger.info("shipmentCode:"+shipmentCode);*/
             updatePstm.setString(1, errorMessage);
             updatePstm.setString(2, errorCode);
             updatePstm.setString(3, errorFileName);

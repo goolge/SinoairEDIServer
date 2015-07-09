@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="logisticsEventsRequest" type="logisticsEventsRequestType"/>
+  <xs:complexType name="logisticsEventType">
+    <xs:sequence>
+      <xs:element type="eventHeaderType" name="eventHeader"/>
+      <xs:element type="eventBodyType" name="eventBody"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="logisticsEventsRequestType">
+    <xs:sequence>
+      <xs:element type="logisticsEventType" name="logisticsEvent"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="eventHeaderType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="eventType"/>
+      <xs:element type="xs:string" name="eventTime"/>
+      <xs:element type="xs:string" name="eventSource"/>
+      <xs:element type="xs:string" name="eventTarget"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="eventBodyType">
+    <xs:sequence>
+      <xs:element type="OrderInfosType" name="OrderInfos"/>
+      <xs:element type="xs:string" name="ecCompanyId"/>
+      <xs:element type="xs:string" name="whCode"/>
+      <xs:element type="xs:long" name="logisticsOrderId"/>
+      <xs:element type="xs:long" name="tradeId"/>
+      <xs:element type="xs:string" name="mailNo"/>
+      <xs:element type="xs:string" name="Rcountry"/>
+      <xs:element type="xs:string" name="Rprovince"/>
+      <xs:element type="xs:string" name="Rcity"/>
+      <xs:element type="xs:string" name="Remail"/>
+      <xs:element type="xs:string" name="Raddress"/>
+      <xs:element type="xs:short" name="Rpostcode"/>
+      <xs:element type="xs:string" name="Rname"/>
+      <xs:element type="xs:int" name="Rphone"/>
+      <xs:element type="xs:string" name="Sname"/>
+      <xs:element type="xs:string" name="SwangwangId"/>
+      <xs:element type="xs:string" name="Sprovince"/>
+      <xs:element type="xs:string" name="Scity"/>
+      <xs:element type="xs:string" name="Saddress"/>
+      <xs:element type="xs:long" name="Sphone"/>
+      <xs:element type="xs:int" name="Spostcode"/>
+      <xs:element type="xs:string" name="channel"/>
+      <xs:element type="xs:short" name="Itotleweight"/>
+      <xs:element type="xs:short" name="Itotlevalue"/>
+      <xs:element type="xs:short" name="totleweight"/>
+      <xs:element type="xs:string" name="country"/>
+      <xs:element type="xs:byte" name="mailKind"/>
+      <xs:element type="xs:string" name="mailClass"/>
+      <xs:element type="xs:string" name="batchNo"/>
+      <xs:element type="xs:string" name="mailType"/>
+      <xs:element type="xs:byte" name="faceType"/>
+      <xs:element type="xs:byte" name="undeliveryOption"/>
+      <xs:element type="xs:string" name="hasBattery"/>
+      <xs:element type="xs:string" name="pickUpAddress"/>
+      <xs:element type="xs:string" name="packageCode"/>
+      <xs:element type="xs:string" name="orderCode"/>
+      <xs:element type="xs:int" name="packageWeight"/>
+      <xs:element type="xs:short" name="ordersInPackage"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderInfosType">
+    <xs:sequence>
+      <xs:element type="productType" name="product"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="productType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="productNameCN"/>
+      <xs:element type="xs:string" name="productNameEN"/>
+      <xs:element type="xs:byte" name="productQantity"/>
+      <xs:element type="xs:string" name="productCateCN"/>
+      <xs:element type="xs:string" name="productCateEN"/>
+      <xs:element type="xs:string" name="productId"/>
+      <xs:element type="xs:string" name="producingArea"/>
+      <xs:element type="xs:short" name="productWeight"/>
+      <xs:element type="xs:short" name="productPrice"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

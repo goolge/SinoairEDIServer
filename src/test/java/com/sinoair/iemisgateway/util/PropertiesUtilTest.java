@@ -26,8 +26,8 @@ public class PropertiesUtilTest {
     public void testReadPropertyExist() throws Exception {
         String resultExcepted = "jdbc:oracle:thin";
         String resultActual = PropertiesUtil.readProperty("db", "database.jdbc.connectionURL");
-        System.out.println("resultExcepted = " + resultExcepted);
-        System.out.println("resultActual = " + resultActual);
+        BaseLogger.info("resultExcepted = " + resultExcepted);
+        BaseLogger.info("resultActual = " + resultActual);
         Assert.assertEquals(true, resultActual.startsWith(resultExcepted));
     }
 
@@ -35,8 +35,8 @@ public class PropertiesUtilTest {
     public void testReadPropertyNotExist() throws Exception {
         String resultExcepted = null;
         String resultActual = PropertiesUtil.readProperty("db", "wew");
-        System.out.println("resultExcepted = " + resultExcepted);
-        System.out.println("resultActual = " + resultActual);
+        BaseLogger.info("resultExcepted = " + resultExcepted);
+        BaseLogger.info("resultActual = " + resultActual);
         Assert.assertEquals(resultExcepted, resultActual);
     }
 }

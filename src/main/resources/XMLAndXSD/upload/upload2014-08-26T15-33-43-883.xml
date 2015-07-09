@@ -1,4 +1,4 @@
-О╩©<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <WSGET>
 	<AccessRequest>
 		<username>jolly</username>
@@ -14,7 +14,7 @@
 			<sac_id>HGH</sac_id>
 			<shipperEN>ZHAO FENG</shipperEN>
 			<shippingCompanyEN>ZHEJIANG JOLLY IT CO LTD</shippingCompanyEN>
-			<shippingCompanyCN>Ф╣≥Ф╠÷Ф┴╖Е╬║Д©║Ф│╞Ф┼─Ф°╞Ф°┴И≥░Е┘╛Е▐╦</shippingCompanyCN>
+			<shippingCompanyCN>уЦ╫╜ж╢сЫпео╒╪╪йУспоч╧╚к╬</shippingCompanyCN>
 			<shipperAddressEN>3F NO 1 BLDG 2 XIANGMAO RD GONGSHU DISTRICT</shipperAddressEN>
 			<depCity>HANGZHOU</depCity>
 			<depState>ZHEJIANG</depState>
@@ -32,7 +32,7 @@
 			<HScode></HScode>
 			<actualWeight></actualWeight>
 			<cubWeight></cubWeight>
-			<unit>Д╩╤</unit>
+			<unit>╪Ч</unit>
 			<pieces>1</pieces>
 			<desCity3C></desCity3C>
 			<packageType></packageType>
@@ -58,7 +58,7 @@
 			<sac_id>HGH</sac_id>
 			<shipperEN>ZHAO FENG</shipperEN>
 			<shippingCompanyEN>ZHEJIANG JOLLY IT CO LTD</shippingCompanyEN>
-			<shippingCompanyCN>Ф╣≥Ф╠÷Ф┴╖Е╬║Д©║Ф│╞Ф┼─Ф°╞Ф°┴И≥░Е┘╛Е▐╦</shippingCompanyCN>
+			<shippingCompanyCN>уЦ╫╜ж╢сЫпео╒╪╪йУспоч╧╚к╬</shippingCompanyCN>
 			<shipperAddressEN>3F NO 1 BLDG 2 XIANGMAO RD GONGSHU DISTRICT</shipperAddressEN>
 			<depCity>HANGZHOU</depCity>
 			<depState>ZHEJIANG</depState>
@@ -76,7 +76,7 @@
 			<HScode></HScode>
 			<actualWeight></actualWeight>
 			<cubWeight></cubWeight>
-			<unit>Д╩╤</unit>
+			<unit>╪Ч</unit>
 			<pieces>1</pieces>
 			<desCity3C></desCity3C>
 			<packageType></packageType>

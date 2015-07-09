@@ -1,0 +1,62 @@
+<logisticsEventsRequest>
+    <logisticsEvent>
+        <eventHeader>
+            <eventType>LOGISTICS_BATCH_SEND</eventType>
+            <eventTime>2015-06-24 05:58:05</eventTime>
+            <eventSource>taobao</eventSource>
+            <eventTarget>DISTRIBUTOR_903172</eventTarget>
+        </eventHeader>
+        <eventBody>
+            <OrderInfos>
+                <product>
+                    <productNameCN>连体衣</productNameCN>
+                    <productNameEN>Jumpsuits &amp; Rompers</productNameEN>
+                    <productQantity>1</productQantity>
+                    <productCateCN>连体衣</productCateCN>
+                    <productCateEN>Jumpsuits &amp; Rompers</productCateEN>
+                    <productId/>
+                    <producingArea/>
+                    <productWeight>165</productWeight>
+                    <productPrice>900</productPrice>
+                </product>
+            </OrderInfos>
+            <ecCompanyId>taobao</ecCompanyId>
+            <whCode>Tran_Store_904912</whCode>
+            <logisticsOrderId>37207236022</logisticsOrderId>
+            <tradeId>3024606314</tradeId>
+            <mailNo>LP00037207236022</mailNo>
+            <Rcountry>ES</Rcountry>
+            <Rprovince>madrid</Rprovince>
+            <Rcity>madrid</Rcity>
+            <Remail>ana.311092@gmail.com</Remail>
+            <Raddress>av betanzos 54 2- 2 calle loto 11 2a</Raddress>
+            <Rpostcode>28029</Rpostcode>
+            <Rname>ana perez marugan</Rname>
+            <Rphone>618078088</Rphone>
+            <Sname>luyang.huang</Sname>
+            <SwangwangId>cn1511159979</SwangwangId>
+            <Sprovince>GuangDong</Sprovince>
+            <Scity>ShenZhen</Scity>
+            <Saddress>Bantian Guangyayuan</Saddress>
+            <Sphone>18927470126</Sphone>
+            <Spostcode>518129</Spostcode>
+            <channel>HK</channel>
+            <Itotleweight>169</Itotleweight>
+            <Itotlevalue>900</Itotlevalue>
+            <totleweight>169</totleweight>
+            <country>CN</country>
+            <mailKind>1</mailKind>
+            <mailClass>L</mailClass>
+            <batchNo>LP00037207236022</batchNo>
+            <mailType>SUMAITONG</mailType>
+            <faceType>2</faceType>
+            <undeliveryOption>2</undeliveryOption>
+            <hasBattery>false</hasBattery>
+            <pickUpAddress>中国广东省深圳市宝安区西乡街道西乡铁岗水库路111号（星宏科技园）D栋一楼</pickUpAddress>
+            <packageCode>YWES20150624EE3003</packageCode>
+            <orderCode>LP00037207236022</orderCode>
+            <packageWeight>2520</packageWeight>
+            <ordersInPackage>17</ordersInPackage>
+        </eventBody>
+    </logisticsEvent>
+</logisticsEventsRequest>

@@ -1,6 +1,7 @@
 package com.sinoair.iemisgateway.util.iemisWSClient.uploadOrderCainiao;
 
 
+import com.sinoair.iemisgateway.util.BaseLogger;
 import com.sinoair.iemisgateway.util.PropertiesUtil;
 
 import javax.xml.rpc.ServiceException;
@@ -19,7 +20,7 @@ public class UploadOrderCainiaoClient {
         try {
 
             String UploadOrderCainiaoServiceHttpSoap12Endpoint_address = PropertiesUtil.readProperty("cainiao", "UploadOrderCainiaoServiceHttpSoap12Endpoint_address");
-            System.out.println("UploadOrderCainiaoServiceHttpSoap12Endpoint_address = " + UploadOrderCainiaoServiceHttpSoap12Endpoint_address);
+            BaseLogger.info("UploadOrderCainiaoServiceHttpSoap12Endpoint_address = " + UploadOrderCainiaoServiceHttpSoap12Endpoint_address);
             UploadOrderCainiaoServiceLocator locator = new UploadOrderCainiaoServiceLocator();
             locator.setUploadOrderCainiaoServiceHttpSoap12EndpointEndpointAddress(UploadOrderCainiaoServiceHttpSoap12Endpoint_address);
             UploadOrderCainiaoServicePortType service = locator.getUploadOrderCainiaoServiceHttpSoap12Endpoint();

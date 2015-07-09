@@ -15,7 +15,7 @@ import java.util.Date;
  */
 public class DateUtil {
     public static void main(String[] args) {
-        System.out.println(getDateWith());
+        BaseLogger.info(getDateWith());
     }
     public static String getDateWith() {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss-SSS");
