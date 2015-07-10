@@ -55,4 +55,12 @@
         <servlet-name>UploadOrderCainiaoAction</servlet-name>
         <url-pattern>/Cainiao/UploadOrderCainiaoByHttp</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PreUploadOrderCainiaoAction</servlet-name>
+        <servlet-class>com.sinoair.iemisgateway.cainiao.action.PreUploadOrderCainiaoAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PreUploadOrderCainiaoAction</servlet-name>
+        <url-pattern>/Cainiao/PreUploadOrderCainiaoByHttp</url-pattern>
+    </servlet-mapping>
 </web-app>

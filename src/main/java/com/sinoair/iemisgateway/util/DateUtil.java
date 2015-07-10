@@ -38,7 +38,10 @@ public class DateUtil {
 
         return "" + year + month + day + hour + minute + second + millisecond;
     }
-
+    public static String getSysdateYMD() {
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+              return simpleDateFormat.format(new Date());
+        }
     /**
      * 获得指定带时分秒的当前时间
      *

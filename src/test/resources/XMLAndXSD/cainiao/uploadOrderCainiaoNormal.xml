@@ -9,6 +9,7 @@
         <eventBody>
             <OrderInfos>
                 <product>
+                    <productCategory>124123213213</productCategory>
                     <productNameCN>连体衣</productNameCN>
                     <productNameEN>Jumpsuits &amp; Rompers</productNameEN>
                     <productQantity>1</productQantity>

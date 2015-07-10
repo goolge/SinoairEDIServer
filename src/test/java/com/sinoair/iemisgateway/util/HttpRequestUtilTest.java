@@ -1,10 +1,7 @@
 package com.sinoair.iemisgateway.util;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -47,6 +44,7 @@ public class HttpRequestUtilTest {
     public void tearDown() throws Exception {
 
     }
+    @Ignore
     @Test
     public void testSendGet() throws Exception {
         //发送 GET 请求
@@ -56,6 +54,7 @@ public class HttpRequestUtilTest {
                 BaseLogger.info("resultActual = " + resultActual);
                 Assert.assertEquals(resultExcepted, resultActual);
     }
+    @Ignore
     @Test
     public void testSendPost() throws Exception {
         //发送 POST 请求

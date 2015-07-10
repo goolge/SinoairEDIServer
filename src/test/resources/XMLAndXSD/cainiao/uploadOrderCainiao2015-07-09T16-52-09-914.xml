@@ -1,0 +1,65 @@
+<logisticsEventsRequest>
+    <logisticsEvent>
+        <eventHeader>
+            <eventType>LOGISTICS_BATCH_SEND</eventType>
+            <eventTime>2015-07-10 09:32:42</eventTime>
+            <eventSource>taobao</eventSource>
+            <eventTarget>DISTRIBUTOR_903172</eventTarget>
+        </eventHeader>
+        <eventBody>
+            <OrderInfos>
+                <product>
+                    <productNameCN>µæÈ¦</productNameCN>
+                    <productNameEN>Washers</productNameEN>
+                    <productQantity>500</productQantity>
+                    <productCateCN>µæÈ¦</productCateCN>
+                    <productCateEN>Washers</productCateEN>
+                    <productId/>
+                    <productCategory>Hardware|Fasteners|Washers</productCategory>
+                    <producingArea/>
+                    <productWeight>100</productWeight>
+                    <productPrice>500</productPrice>
+                </product>
+            </OrderInfos>
+            <ecCompanyId>taobao</ecCompanyId>
+            <whCode>Tran_Store_904787</whCode>
+            <logisticsOrderId>37305119842</logisticsOrderId>
+            <tradeId>3026314796</tradeId>
+            <mailNo>LP00037305119842</mailNo>
+            <Rcountry>ES</Rcountry>
+            <Rprovince>Spain - ES</Rprovince>
+            <Rcity>Toledo</Rcity>
+            <Remail>jignacio.alonso@heimdallsl.com</Remail>
+            <Raddress>C/ Potosi, 5, 4 izq</Raddress>
+            <Rpostcode>45004</Rpostcode>
+            <Rname>Jose Ignacio Alonso Gomez</Rname>
+            <Rphone>630328853</Rphone>
+            <Sname>Bill Wang</Sname>
+            <SwangwangId>cn1501309227</SwangwangId>
+            <Sprovince>ZheJiang</Sprovince>
+            <Scity>WenZhou</Scity>
+            <Saddress>Zhuangyuan</Saddress>
+            <Sphone>13957702935</Sphone>
+            <Spostcode>325011</Spostcode>
+            <channel>HK</channel>
+            <Itotleweight>139</Itotleweight>
+            <Itotlevalue>500</Itotlevalue>
+            <totleweight>139</totleweight>
+            <country>CN</country>
+            <mailKind>1</mailKind>
+            <mailClass>L</mailClass>
+            <batchNo>LP00037305119842</batchNo>
+            <mailType>SUMAITONG</mailType>
+            <faceType>2</faceType>
+            <undeliveryOption>2</undeliveryOption>
+            <hasBattery>false</hasBattery>
+            <pickUpAddress>ÖÐ¹úÉÏº£ÉÏº£ÊÐÕ¢±±ÇøÁéÊ¯Â·697-3ºÅ¾Þ·áÉÌÎñ5ºÅÂ¥1Â¥</pickUpAddress>
+            <packageCode>YWES20150708EE2002</packageCode>
+            <orderCode>LP00037305119842</orderCode>
+            <packageWeight>20400</packageWeight>
+            <ordersInPackage>162</ordersInPackage>
+            <serviceItemId>5000000000010</serviceItemId>
+            <serviceItemId2>5000000000010</serviceItemId2>
+        </eventBody>
+    </logisticsEvent>
+</logisticsEventsRequest>

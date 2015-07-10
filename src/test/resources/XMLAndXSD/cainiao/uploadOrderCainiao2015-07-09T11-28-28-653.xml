@@ -1,0 +1,65 @@
+<logisticsEventsRequest>
+    <logisticsEvent>
+        <eventHeader>
+            <eventType>LOGISTICS_BATCH_SEND</eventType>
+            <eventTime>2015-07-09 11:26:18</eventTime>
+            <eventSource>taobao</eventSource>
+            <eventTarget>DISTRIBUTOR_903172</eventTarget>
+        </eventHeader>
+        <eventBody>
+            <OrderInfos>
+                <product>
+                    <productNameCN>自行车护链贴</productNameCN>
+                    <productNameEN>Bicycle Chain guard</productNameEN>
+                    <productQantity>2</productQantity>
+                    <productCateCN>自行车护链贴</productCateCN>
+                    <productCateEN>Bicycle Chain guard</productCateEN>
+                    <productId/>
+                    <productCategory>Sports &amp; Entertainment|Bicycle &amp; Accessories|Bicycle Parts|Bicycle Chains
+                        &amp; Cleaners
+                    </productCategory>
+                    <producingArea/>
+                    <productWeight>40</productWeight>
+                    <productPrice>200</productPrice>
+                </product>
+            </OrderInfos>
+            <ecCompanyId>taobao</ecCompanyId>
+            <whCode>Tran_Store_904912</whCode>
+            <logisticsOrderId>37717566363</logisticsOrderId>
+            <tradeId>3027445230</tradeId>
+            <mailNo>LP00037717566363</mailNo>
+            <Rcountry>ES</Rcountry>
+            <Rprovince>BIZKAIA</Rprovince>
+            <Rcity>BASAURI</Rcity>
+            <Remail>jesusmonzy@hotmail.com</Remail>
+            <Raddress>KAREAGA GOIKOA 22 - 1B</Raddress>
+            <Rpostcode>48970</Rpostcode>
+            <Rname>JESUS MARIA MONZON BARBERO</Rname>
+            <Rphone>675719620</Rphone>
+            <Sname>GONG PAN -69</Sname>
+            <SwangwangId>cn1501270938</SwangwangId>
+            <Sprovince>GuangDong</Sprovince>
+            <Scity>ShenZhen</Scity>
+            <Saddress>30418,ZhangKengLaoCun,Longhua District</Saddress>
+            <Sphone>13145896010</Sphone>
+            <Spostcode>518131</Spostcode>
+            <channel>HK</channel>
+            <Itotleweight>34</Itotleweight>
+            <Itotlevalue>200</Itotlevalue>
+            <totleweight>34</totleweight>
+            <country>CN</country>
+            <mailKind>1</mailKind>
+            <mailClass>L</mailClass>
+            <batchNo>LP00037717566363</batchNo>
+            <mailType>SUMAITONG</mailType>
+            <faceType>2</faceType>
+            <undeliveryOption>2</undeliveryOption>
+            <hasBattery>false</hasBattery>
+            <pickUpAddress>中国广东省深圳市宝安区西乡街道西乡铁岗水库路111号（星宏科技园）D栋一楼</pickUpAddress>
+            <packageCode>YWES20150709EE3005</packageCode>
+            <orderCode>LP00037717566363</orderCode>
+            <packageWeight>2000</packageWeight>
+            <ordersInPackage>21</ordersInPackage>
+        </eventBody>
+    </logisticsEvent>
+</logisticsEventsRequest>

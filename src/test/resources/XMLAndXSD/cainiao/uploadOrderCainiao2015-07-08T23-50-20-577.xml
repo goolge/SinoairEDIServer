@@ -1,0 +1,64 @@
+<logisticsEventsRequest>
+    <logisticsEvent>
+        <eventHeader>
+            <eventType>LOGISTICS_BATCH_SEND</eventType>
+            <eventTime>2015-07-08 23:48:10</eventTime>
+            <eventSource>taobao</eventSource>
+            <eventTarget>DISTRIBUTOR_903172</eventTarget>
+        </eventHeader>
+        <eventBody>
+            <OrderInfos>
+                <product>
+                    <productNameCN>姣涚粧鐜╁叿</productNameCN>
+                    <productNameEN>plush toy</productNameEN>
+                    <productQantity>1</productQantity>
+                    <productCateCN>姣涚粧鐜╁叿</productCateCN>
+                    <productCateEN>plush toy</productCateEN>
+                    <productId/>
+                    <producingArea/>
+                    <productCategory>Toys &amp; Hobbies|Dolls &amp; Stuffed Toys|Dolls &amp; Accessories|Dolls
+                    </productCategory>
+                    <productWeight>55</productWeight>
+                    <productPrice>280</productPrice>
+                </product>
+            </OrderInfos>
+            <ecCompanyId>taobao</ecCompanyId>
+            <whCode>Tran_Store_904787</whCode>
+            <logisticsOrderId>37718994164</logisticsOrderId>
+            <tradeId>3027441936</tradeId>
+            <mailNo>LP00037718994164</mailNo>
+            <Rcountry>ES</Rcountry>
+            <Rprovince>Madrid</Rprovince>
+            <Rcity>Madrid</Rcity>
+            <Remail>pequenogonzalezmonica@gmail.com</Remail>
+            <Raddress>avenida monforte de lemos 77 piso 1 letra b</Raddress>
+            <Rpostcode>28029</Rpostcode>
+            <Rname>monipeni</Rname>
+            <Rphone>609271152</Rphone>
+            <Sname>Young zhao</Sname>
+            <SwangwangId>cn1501355617</SwangwangId>
+            <Sprovince>ZheJiang</Sprovince>
+            <Scity>HangZhou</Scity>
+            <Saddress>NiuYanWu 57 ,TongLu</Saddress>
+            <Sphone>18857867496</Sphone>
+            <Spostcode>311512</Spostcode>
+            <channel>HK</channel>
+            <Itotleweight>70</Itotleweight>
+            <Itotlevalue>280</Itotlevalue>
+            <totleweight>70</totleweight>
+            <country>CN</country>
+            <mailKind>1</mailKind>
+            <mailClass>L</mailClass>
+            <batchNo>LP00037718994164</batchNo>
+            <mailType>SUMAITONG</mailType>
+            <faceType>2</faceType>
+            <undeliveryOption>2</undeliveryOption>
+            <hasBattery>false</hasBattery>
+            <pickUpAddress>涓浗涓婃捣涓婃捣甯傞椄鍖楀尯鐏电煶璺�697-3鍙峰法涓板晢鍔�5鍙锋ゼ1妤�</pickUpAddress>
+            <packageCode>YWES20150708EE2005</packageCode>
+            <orderCode>LP00037718994164</orderCode>
+            <packageWeight>14800</packageWeight>
+            <ordersInPackage>87</ordersInPackage>
+        </eventBody>
+    </logisticsEvent>
+</logisticsEventsRequest>

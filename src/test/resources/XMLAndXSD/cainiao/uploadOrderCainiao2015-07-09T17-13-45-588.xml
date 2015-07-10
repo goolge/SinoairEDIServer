@@ -1,0 +1,61 @@
+<logisticsEventsRequest>
+    <logisticsEvent>
+        <eventHeader>
+            <eventType>LOGISTICS_BATCH_SEND</eventType>
+            <eventTime>2015-07-09 17:11:34</eventTime>
+            <eventSource>taobao</eventSource>
+            <eventTarget>DISTRIBUTOR_903172</eventTarget>
+        </eventHeader>
+        <eventBody>
+            <OrderInfos>
+                <product>
+                    <productNameCN>绀肩墿</productNameCN>
+                    <productNameEN>Gift</productNameEN>
+                    <productQantity>1</productQantity>
+                    <productCateCN>绀肩墿</productCateCN>
+                    <productCateEN>Gift</productCateEN>
+                    <productId/>
+                    <productCategory>Apparel &amp; Accessories|Women's Clothing|Dresses</productCategory>
+                    <producingArea/>
+                    <productWeight>120</productWeight>
+                    <productPrice>549</productPrice>
+                </product>
+            </OrderInfos>
+            <ecCompanyId>taobao</ecCompanyId>
+            <whCode>Tran_Store_904912</whCode>
+            <logisticsOrderId>37004963357</logisticsOrderId>
+            <tradeId>3024381378</tradeId>
+            <mailNo>LP00037004963357</mailNo>
+            <Rcountry>ES</Rcountry>
+            <Rprovince>4 h</Rprovince>
+            <Remail>demaya1984@hotmail.com</Remail>
+            <Rpostcode>28018</Rpostcode>
+            <Rname>Maria del mar</Rname>
+            <Rphone>629133726</Rphone>
+            <Sname>Mark</Sname>
+            <SwangwangId>cn1513327141</SwangwangId>
+            <Sprovince>GuangDong</Sprovince>
+            <Scity>ShenZhen</Scity>
+            <Saddress>longhuaxinqu,donghuanyilu,lianhedasha</Saddress>
+            <Sphone>13049455880</Sphone>
+            <Spostcode>518000</Spostcode>
+            <channel>HK</channel>
+            <Itotleweight>43</Itotleweight>
+            <Itotlevalue>549</Itotlevalue>
+            <totleweight>43</totleweight>
+            <country>CN</country>
+            <mailKind>1</mailKind>
+            <mailClass>L</mailClass>
+            <batchNo>LP00037004963357</batchNo>
+            <mailType>SUMAITONG</mailType>
+            <faceType>2</faceType>
+            <undeliveryOption>2</undeliveryOption>
+            <hasBattery>false</hasBattery>
+            <pickUpAddress>涓浗骞夸笢鐪佹繁鍦冲競瀹濆畨鍖鸿タ涔¤閬撹タ涔￠搧宀楁按搴撹矾111鍙凤紙鏄熷畯绉戞妧鍥級D鏍嬩竴妤�</pickUpAddress>
+            <packageCode>YWES20150709EE3007</packageCode>
+            <orderCode>LP00037004963357</orderCode>
+            <packageWeight>10970</packageWeight>
+            <ordersInPackage>77</ordersInPackage>
+        </eventBody>
+    </logisticsEvent>
+</logisticsEventsRequest>

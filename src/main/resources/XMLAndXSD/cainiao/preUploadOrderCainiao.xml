@@ -1,0 +1,56 @@
+<logisticsEventsRequest>
+    <logisticsEvent>
+        <eventHeader>
+            <eventType>LOGISTICS_REPORT_SEND</eventType>
+            <eventTime>2015-01-19 21:37:33</eventTime>
+            <eventSource>taobao</eventSource>
+            <eventTarget>DISTRIBUTOR_199965</eventTarget>
+        </eventHeader>
+        <eventBody>
+            <OrderInfos>
+                <product>
+                    <productNameCN>T恤</productNameCN>
+                    <productNameEN>T-Shirts</productNameEN>
+                    <productQantity>1</productQantity>
+                    <productCateCN>T恤</productCateCN>
+                    <productCateEN>T-Shirts</productCateEN>
+                    <productId></productId>
+                    <producingArea></producingArea>
+                    <productWeight>0</productWeight>
+                    <productPrice>0</productPrice>
+                </product>
+            </OrderInfos>
+            <ecCompanyId>taobao</ecCompanyId>
+            <whCode>Tran_Store_232890</whCode>
+            <logisticsOrderId>31372825686</logisticsOrderId>
+            <tradeId>3000713231</tradeId>
+            <mailNo>RA101907868FI</mailNo>
+            <Rcountry>RU</Rcountry>
+            <Rprovince>Other</Rprovince>
+            <Rcity>Kerch Republic of Crimea</Rcity>
+            <Raddress>Zyabrev St. 76</Raddress>
+            <Rpostcode>298309</Rpostcode>
+            <Rname>Kolomoyets Tatyana Anatolyevna</Rname>
+            <Rphone>79788180004</Rphone>
+            <Sname>zhu Liaolian</Sname>
+            <Sprovince>GuangDong</Sprovince>
+            <Scity>ShenZhen</Scity>
+            <Saddress>Xichengshangzhu, Chuangyeyilu Road</Saddress>
+            <Sphone>15017927663</Sphone>
+            <Spostcode>518100</Spostcode>
+            <channel>HK</channel>
+            <Itotleweight>158</Itotleweight>
+            <Itotlevalue>0</Itotlevalue>
+            <totleweight>158</totleweight>
+            <country>CN</country>
+            <mailKind>1</mailKind>
+            <mailClass>L</mailClass>
+            <batchNo></batchNo>
+            <mailType>SUMAITONG</mailType>
+            <faceType>2</faceType>
+            <undeliveryOption>1</undeliveryOption>
+            <hasBattery>false</hasBattery>
+            <pickUpAddress>中国广东省深圳市宝安区福永街道福围社区第二工业区A6</pickUpAddress>
+        </eventBody>
+    </logisticsEvent>
+</logisticsEventsRequest>

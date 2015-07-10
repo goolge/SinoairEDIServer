@@ -41,7 +41,12 @@ public class PushTrace2CainiaoService {
 
             int successRow = 0;
             int failedRow = 0;
+            int line=0;
             while (resultSet.next()) {
+                line++;
+                if(line%100==0){
+                    connection.commit();
+                }
                 String eba_syscode = resultSet.getString("eba_syscode");
 
                 TraceRequest2Cainiao traceRequest2Cainiao = getTraceRequest2Cainiao(resultSet);

@@ -37,14 +37,32 @@ public class XMLUtil {
         BaseLogger.info("username:" + username + "   password:" + password);
         return validateNameAndPWD(username, password);
     }
- public static boolean xmlValiadationCainiao(Document document) {
+
+    public static boolean xmlValiadationCainiao(Document document) {
 //        Node nodeUsername = document.selectSingleNode("//username");
 //        Node nodePassword = document.selectSingleNode("//password");
 //        String username = nodeUsername.getText();
 //        String password = nodePassword.getText();
 //        BaseLogger.info("username:" + username + "   password:" + password);
-     //todo 校验菜鸟身份
+        //todo 校验菜鸟身份
         return true;
+    }
+
+    public static boolean xmlVerificateCainiao(Document document, String[] checkArray) {
+        //todo-wxx-u xsd检查
+        for (String nodeName : checkArray) {
+            if (checkNodeIsNull(document, nodeName)) return false;
+        }
+        return true;
+    }
+
+    public static boolean checkNodeIsNull(Document document, String nodeName) {
+        Node node = document.selectSingleNode("//" + nodeName);
+        if (node == null) return true;
+        String nodeContent = node.getText();
+        if (nodeContent == null || "".equals(nodeContent)) return true;
+        BaseLogger.debug(nodeName + ":" + nodeContent);
+        return false;
     }
 
     private static boolean validateNameAndPWD(String username, String password) {
@@ -93,6 +111,7 @@ public class XMLUtil {
             // 开始验证，成功输出success!!!，失败输出fail
             validator.validate(source);
         } catch (SAXException e) {
+            BaseLogger.error(e.getMessage());
             BaseLogger.error("xsd 检验未通过");
             return false;
         } catch (IOException e) {
@@ -102,14 +121,20 @@ public class XMLUtil {
         return true;
     }
 
-    public static void writeFile(String xml, String FilePath) {
+    public static void writeFile(String xml, String filePath) {
         try {
-            File xmlFile = new File(FilePath);
+            File xmlFile = new File(filePath);
             BaseLogger.info(xmlFile.getAbsolutePath());
-            xmlFile.createNewFile();
+            File folder = xmlFile.getParentFile();
+            if (!folder.exists() && !folder.isDirectory()) {
+                folder.mkdirs();
+            }
+            if (!xmlFile.exists()) {
+                xmlFile.createNewFile();
+            }
             FileOutputStream fileOutputStream = new FileOutputStream(xmlFile);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
-            if(xml==null)xml="";
+            if (xml == null) xml = "";
             outputStreamWriter.write(xml);
             outputStreamWriter.flush();
             outputStreamWriter.close();
@@ -128,17 +153,20 @@ public class XMLUtil {
                 "</WSRETURN>";
 
     }
-    public static String combinateReturnMessage4Cainiao(boolean success,String reason) {
-//        标识	说明
-//        S01	非法的XML格式
-//        S02	非法的数字签名
-//        S06	服务器请求超时，目标主机不可达请重试
-//        S07	系统异常，请重试
-//        S12	非法的请求参数
-//        S13	业务服务异常
-//        S14	系统流控
-//        S20	业务报文校验参数不通过
 
+    /**
+     * @param success
+     * @param reason  S01	非法的XML格式
+     *                S02	非法的数字签名
+     *                S06	服务器请求超时，目标主机不可达请重试
+     *                S07	系统异常，请重试
+     *                S12	非法的请求参数
+     *                S13	业务服务异常
+     *                S14	系统流控
+     *                S20	业务报文校验参数不通过
+     * @return
+     */
+    public static String combinateReturnMessage4Cainiao(boolean success, String reason) {
         return "<responses>\n" +
                 "\t<responseItems>\n" +
                 "\t\t<response>\n" +

@@ -13,73 +13,71 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="eventHeaderType">
-    <xs:all>
+    <xs:sequence>
       <xs:element type="xs:string" name="eventType"/>
       <xs:element type="xs:string" name="eventTime"/>
       <xs:element type="xs:string" name="eventSource"/>
       <xs:element type="xs:string" name="eventTarget"/>
-    </xs:all>
+    </xs:sequence>
   </xs:complexType>
   <xs:complexType name="eventBodyType">
-    <xs:all>
+    <xs:sequence>
       <xs:element type="OrderInfosType" name="OrderInfos"/>
       <xs:element type="xs:string" name="ecCompanyId"/>
       <xs:element type="xs:string" name="whCode"/>
-      <xs:element type="xs:string" name="logisticsOrderId"/>
-      <xs:element type="xs:string" name="tradeId"/>
+      <xs:element type="xs:long" name="logisticsOrderId"/>
+      <xs:element type="xs:long" name="tradeId"/>
       <xs:element type="xs:string" name="mailNo"/>
       <xs:element type="xs:string" name="Rcountry"/>
       <xs:element type="xs:string" name="Rprovince"/>
       <xs:element type="xs:string" name="Rcity"/>
       <xs:element type="xs:string" name="Remail"/>
       <xs:element type="xs:string" name="Raddress"/>
-      <xs:element type="xs:string" name="Rpostcode"/>
+      <xs:element type="xs:short" name="Rpostcode"/>
       <xs:element type="xs:string" name="Rname"/>
-      <xs:element type="xs:string" name="Rphone"/>
-      <xs:element type="xs:string" name="serviceItemId"/>
+      <xs:element type="xs:int" name="Rphone"/>
       <xs:element type="xs:string" name="Sname"/>
       <xs:element type="xs:string" name="SwangwangId"/>
       <xs:element type="xs:string" name="Sprovince"/>
       <xs:element type="xs:string" name="Scity"/>
       <xs:element type="xs:string" name="Saddress"/>
-      <xs:element type="xs:string" name="Sphone"/>
-      <xs:element type="xs:string" name="Spostcode"/>
+      <xs:element type="xs:long" name="Sphone"/>
+      <xs:element type="xs:int" name="Spostcode"/>
       <xs:element type="xs:string" name="channel"/>
-      <xs:element type="xs:long" name="Itotleweight"/>
-      <xs:element type="xs:long" name="Itotlevalue"/>
-      <xs:element type="xs:long" name="totleweight"/>
+      <xs:element type="xs:short" name="Itotleweight"/>
+      <xs:element type="xs:short" name="Itotlevalue"/>
+      <xs:element type="xs:short" name="totleweight"/>
       <xs:element type="xs:string" name="country"/>
-      <xs:element type="xs:string" name="mailKind"/>
+      <xs:element type="xs:byte" name="mailKind"/>
       <xs:element type="xs:string" name="mailClass"/>
       <xs:element type="xs:string" name="batchNo"/>
       <xs:element type="xs:string" name="mailType"/>
-      <xs:element type="xs:string" name="faceType"/>
-      <xs:element type="xs:string" name="undeliveryOption"/>
+      <xs:element type="xs:byte" name="faceType"/>
+      <xs:element type="xs:byte" name="undeliveryOption"/>
       <xs:element type="xs:string" name="hasBattery"/>
       <xs:element type="xs:string" name="pickUpAddress"/>
       <xs:element type="xs:string" name="packageCode"/>
       <xs:element type="xs:string" name="orderCode"/>
-      <xs:element type="xs:long" name="packageWeight"/>
-      <xs:element type="xs:long" name="ordersInPackage"/>
-    </xs:all>
+      <xs:element type="xs:int" name="packageWeight"/>
+      <xs:element type="xs:short" name="ordersInPackage"/>
+    </xs:sequence>
   </xs:complexType>
   <xs:complexType name="OrderInfosType">
-    <xs:choice>
-      <xs:element type="productType" name="product"  minOccurs="1" maxOccurs="unbounded"/>
-    </xs:choice>
+    <xs:sequence>
+      <xs:element type="productType" name="product"/>
+    </xs:sequence>
   </xs:complexType>
   <xs:complexType name="productType">
-    <xs:all >
-      <xs:element type="xs:string" name="productCategory"/>
-      <xs:element type="xs:string" name="productNameEN"/>
+    <xs:sequence>
       <xs:element type="xs:string" name="productNameCN"/>
-      <xs:element type="xs:long" name="productQantity"/>
+      <xs:element type="xs:string" name="productNameEN"/>
+      <xs:element type="xs:byte" name="productQantity"/>
       <xs:element type="xs:string" name="productCateCN"/>
       <xs:element type="xs:string" name="productCateEN"/>
       <xs:element type="xs:string" name="productId"/>
       <xs:element type="xs:string" name="producingArea"/>
-      <xs:element type="xs:long" name="productWeight"/>
-      <xs:element type="xs:long" name="productPrice"/>
-    </xs:all>
+      <xs:element type="xs:short" name="productWeight"/>
+      <xs:element type="xs:short" name="productPrice"/>
+    </xs:sequence>
   </xs:complexType>
 </xs:schema>

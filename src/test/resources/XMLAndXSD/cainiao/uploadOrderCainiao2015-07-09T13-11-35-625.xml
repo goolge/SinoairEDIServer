@@ -1,0 +1,75 @@
+<logisticsEventsRequest>
+    <logisticsEvent>
+        <eventHeader>
+            <eventType>LOGISTICS_BATCH_SEND</eventType>
+            <eventTime>2015-07-09 13:09:25</eventTime>
+            <eventSource>taobao</eventSource>
+            <eventTarget>DISTRIBUTOR_903172</eventTarget>
+        </eventHeader>
+        <eventBody>
+            <OrderInfos>
+                <product>
+                    <productNameCN>亲子装</productNameCN>
+                    <productNameEN>Family Matching Outfits</productNameEN>
+                    <productQantity>1</productQantity>
+                    <productCateCN>亲子装</productCateCN>
+                    <productCateEN>Family Matching Outfits</productCateEN>
+                    <productId/>
+                    <productCategory>Mother &amp; Kids|Children's Clothing|Family Matching Outfits</productCategory>
+                    <producingArea/>
+                    <productWeight>120</productWeight>
+                    <productPrice>740</productPrice>
+                </product>
+                <product>
+                    <productNameCN>亲子装</productNameCN>
+                    <productNameEN>Family Matching Outfits</productNameEN>
+                    <productQantity>1</productQantity>
+                    <productCateCN>亲子装</productCateCN>
+                    <productCateEN>Family Matching Outfits</productCateEN>
+                    <productId/>
+                    <productCategory>Mother &amp; Kids|Children's Clothing|Family Matching Outfits</productCategory>
+                    <producingArea/>
+                    <productWeight>120</productWeight>
+                    <productPrice>740</productPrice>
+                </product>
+            </OrderInfos>
+            <ecCompanyId>taobao</ecCompanyId>
+            <whCode>Tran_Store_904817</whCode>
+            <logisticsOrderId>37550650214</logisticsOrderId>
+            <tradeId>3027688655</tradeId>
+            <mailNo>LP00037550650214</mailNo>
+            <Rcountry>ES</Rcountry>
+            <Rprovince>Guadalajara</Rprovince>
+            <Rcity>Guadalajara</Rcity>
+            <Remail>coryclifort@hotmail.es</Remail>
+            <Raddress>Mercedes gaibrois 2 portal 44-d</Raddress>
+            <Rpostcode>19005</Rpostcode>
+            <Rname>Coral canales del rey</Rname>
+            <Rphone>677800236</Rphone>
+            <Sname>Justin Dave</Sname>
+            <SwangwangId>cn1514556658pkzl</SwangwangId>
+            <Sprovince>ZheJiang</Sprovince>
+            <Scity>HangZhou</Scity>
+            <Saddress>DongXin</Saddress>
+            <Sphone>13567161386</Sphone>
+            <Spostcode>310000</Spostcode>
+            <channel>HK</channel>
+            <Itotleweight>317</Itotleweight>
+            <Itotlevalue>1480</Itotlevalue>
+            <totleweight>317</totleweight>
+            <country>CN</country>
+            <mailKind>1</mailKind>
+            <mailClass>L</mailClass>
+            <batchNo>LP00037550650214</batchNo>
+            <mailType>SUMAITONG</mailType>
+            <faceType>2</faceType>
+            <undeliveryOption>2</undeliveryOption>
+            <hasBattery>false</hasBattery>
+            <pickUpAddress>中国浙江省杭州市江干区东港家苑三区底商5-6号花园兜街</pickUpAddress>
+            <packageCode>YWES20150707EE6003</packageCode>
+            <orderCode>LP00037550650214</orderCode>
+            <packageWeight>8700</packageWeight>
+            <ordersInPackage>42</ordersInPackage>
+        </eventBody>
+    </logisticsEvent>
+</logisticsEventsRequest>

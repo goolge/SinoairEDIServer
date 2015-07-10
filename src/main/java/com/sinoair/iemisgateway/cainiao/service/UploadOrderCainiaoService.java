@@ -22,11 +22,11 @@ public class UploadOrderCainiaoService {
         BaseLogger.info("----cainiao batch message = --" + xmlStr + "----");
         String xmlPath = PropertiesUtil.readProperty("common", "historyRootPath") + File.separator + "Cainiao" + File.separator + "uploadOrderCainiao" + DateUtil.getDateWith() + ".xml";
         String xsdPath = UploadOrderCainiaoService.class.getResource("/XMLAndXSD/cainiao/uploadOrderCainiao.xsd").getPath();
-        BaseLogger.info("--------------"+File.separator+"---------------------------");
-        if("\\".equals(File.separator)){
-             xsdPath = xsdPath.substring(1);
-}
-        BaseLogger.info("---xsdPath---"+xsdPath);
+        BaseLogger.info("--------------" + File.separator + "---------------------------");
+        if ("\\".equals(File.separator)) {
+            xsdPath = xsdPath.substring(1);
+        }
+        BaseLogger.info("---xsdPath---" + xsdPath);
         XMLUtil.writeFile(xmlStr, xmlPath);
         Document document = XMLUtil.xmlVerification(xmlStr);
         if (document == null) {
@@ -37,8 +37,9 @@ public class UploadOrderCainiaoService {
             BaseLogger.info("非法的数字签名");
             return XMLUtil.combinateReturnMessage4Cainiao(false, "S02");
         }
-        if (!XMLUtil.verificateXMLByXSD(xsdPath, xmlPath)) {
-            BaseLogger.info("未通过xsd校验");
+        String[] checkArray = {"Raddress", "Rcity"};
+        if (!XMLUtil.xmlVerificateCainiao(document, checkArray)) {
+            BaseLogger.info("xml缺失关键节点：Raddress、Rcity");
             return XMLUtil.combinateReturnMessage4Cainiao(false, "S01");
         }
         String result;
