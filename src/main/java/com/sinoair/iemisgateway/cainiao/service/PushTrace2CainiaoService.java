@@ -25,7 +25,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 public class PushTrace2CainiaoService {
-    public  void push() {
+    public void push() {
         Connection connection = null;
         Statement statement = null;
         Statement statement4Update = null;
@@ -41,10 +41,11 @@ public class PushTrace2CainiaoService {
 
             int successRow = 0;
             int failedRow = 0;
-            int line=0;
+            int line = 0;
             while (resultSet.next()) {
                 line++;
-                if(line%100==0){
+                if (line % 100 == 0) {
+                    BaseLogger.info("commit once erery 100 line");
                     connection.commit();
                 }
                 String eba_syscode = resultSet.getString("eba_syscode");
@@ -69,6 +70,7 @@ public class PushTrace2CainiaoService {
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
+            e.printStackTrace();
             try {
                 connection.rollback();
             } catch (SQLException e1) {
@@ -115,29 +117,41 @@ public class PushTrace2CainiaoService {
         String mailNos = resultSet.getString("eawb_reference1");
         String txLogisticID = resultSet.getString("eawb_reference2");
         String time = resultSet.getString("eba_occurtime");
-        String desc = resultSet.getString("eba_remark");
+        String sinoair_desc = resultSet.getString("eba_remark");
         String city = resultSet.getString("eba_occurplace");
+        String cainiao_desc = resultSet.getString("EAT_PARTNER_ACTIVITY_DESC");
+        String action = resultSet.getString("eat_partner_activity_code");
         traceRequest2Cainiao.setLogistic_provider_id(logistic_provider_id);
         traceRequest2Cainiao.setMailNos(mailNos);
         traceRequest2Cainiao.setTxLogisticID(txLogisticID);
         traceRequest2Cainiao.setTime(time);
         traceRequest2Cainiao.setCity(city);
-
-        traceRequest2Cainiao = translateAction2Cainiao(resultSet.getString("ead_code"), resultSet.getString("east_code"), desc, traceRequest2Cainiao);
+        traceRequest2Cainiao.setAction(action);
+        traceRequest2Cainiao.setDesc(formatDesc(sinoair_desc, cainiao_desc, city));
+//        traceRequest2Cainiao = translateAction2Cainiao(resultSet.getString("ead_code"), resultSet.getString("east_code"), desc, traceRequest2Cainiao);
         return traceRequest2Cainiao;
     }
 
+    protected static String formatDesc(String sinoair_desc, String cainiao_desc, String city) {
+        String desc = cainiao_desc.replace("City", city);
+        if (sinoair_desc == null || "".equals(sinoair_desc) || "null".equalsIgnoreCase(sinoair_desc)) {
+            desc = desc + ".";
+        } else {
+            desc = desc + ":" + sinoair_desc;
+        }
+        return desc;
+    }
+
     private static ResultSet getResultSet(Statement statement) throws SQLException {
-        String sql = "select eba_syscode,ep.eawb_printcode,eawb_servicetype,eawb_reference1,eawb_reference2,eba_occurtime,eba_remark,eba_occurplace,ead_code, east_code" +
-                " from eawbpre ep, expressbusinessactivity eba" +
-                " where ep.eawb_printcode = eba.eawb_printcode" +
-                " AND (EBA.QA IS NULL OR EBA.QA <> 's')" +
-                "AND " +
-                "(ead_code IN ('FC_INBOUND','DELIVERY') " +
-                "OR east_code IN ('ASS','ASF','CP','CLRD','CUSN','SI','RM','DEF') )" +
-                " and ep.eawb_so_code ='00060491'" +
-                " AND ep.eawb_handletime>SYSDATE-60";//todo 为了提高查询效率，只查找最近两个月处理的单子
-        BaseLogger.info(new Date().toString() + "查询最近两个月所有的需要发给菜鸟的轨迹:" + sql);
+        String sql = "SELECT EBA_SYSCODE,EP.EAWB_PRINTCODE,EAWB_SERVICETYPE,EAWB_REFERENCE1,EAWB_REFERENCE2,EBA_OCCURTIME,EBA_REMARK,EBA.EBA_OCCURPLACE,EBA.EAD_CODE,EBA.EAST_CODE,EAT.EAT_PARTNER_ACTIVITY_DESC,EAT.EAT_PARTNER_ACTIVITY_CODE\n  FROM EAWBPRE EP, EXPRESSBUSINESSACTIVITY EBA,EXPRESSACTIVITYTRANSLATE EAT\n" +
+                " WHERE EP.EAWB_PRINTCODE = EBA.EAWB_PRINTCODE\n" +
+                " AND EAT.EAD_CODE=EBA.EAD_CODE\n" +
+                " AND EAT.EAST_CODE=EBA.EAST_CODE\n" +
+                " AND EAT.EAT_PARTNER_ID='cainiao'\n" +
+                " AND (EBA.QA IS NULL OR EBA.QA <> 's')\n" +
+                " AND EP.EAWB_SO_CODE = '00060491'\n" +
+                " AND EP.EAWB_HANDLETIME > SYSDATE - 60";//todo 为了提高查询效率，只查找最近两个月处理的单子
+        BaseLogger.info("查询最近两个月所有的需要发给菜鸟的轨迹:\n" + sql);
         ResultSet resultSet = statement.executeQuery(sql);
         return resultSet;
     }
@@ -159,52 +173,8 @@ public class PushTrace2CainiaoService {
         }
     }
 
-    /**
-     * 翻译菜鸟的环节，而后装饰TraceRequest2
-     * @param ead_code
-     * @param east_code
-     * @param desc
-     * @param traceRequest2Cainiao
-     * @return
-     */
-    private static TraceRequest2Cainiao translateAction2Cainiao(String ead_code, String east_code, String desc, TraceRequest2Cainiao traceRequest2Cainiao) {//todo
-        String action = "";
-        //todo 得判断不能为空或者null或者“null”，否则菜鸟不显示轨迹
-        if ("FC_INBOUND".equals(ead_code)) {
-            action = "CAI_GOT";
-            desc = "Got the item from yanwen.";
-        } else if ("ASS".equals(east_code)) {
-            action = "CAI_AIR_DELIVERY";
-            desc = "Aviation security success.";
-        } else if ("ASF".equals(east_code)) {
-            action = "CAI_AIR_DELIVERY_FAIL";
-            desc = "Aviation security failed" + ((desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "." : ":" + desc);
-        } else if ("CP".equals(east_code)) {
-            action = "CAI_CUSTOMS_CLR_SUC";
-        } else if ("CLRD".equals(east_code)) {
-            action = "CAI_CUSTOMS_CLR";
-        } else if ("CUSN".equals(east_code)) {
-            action = "CAI_CUSTOMS_CLR_FAIL";
-        } else if ("SI".equals(east_code)) {
-            action = "CAI_AE_PROCESS";
-            desc = (desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "" : desc;
-        } else if ("RM".equals(east_code)) {
-            action = "CAI_AE_ARRIVED";
-            desc = (desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "" : desc;
-        }else if ("DELIVERY".equals(ead_code)) {
-            action = "CAI_SIGN_IN";
-            desc = (desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "" : desc;
-        }else if ("DEF".equals(east_code)) {
-            action = "CAI_SIGN_IN_FAIL";
-            desc = (desc == null || desc.equals("") || desc.equalsIgnoreCase("null")) ? "" : desc;
-        }
-        traceRequest2Cainiao.setAction(action);
-        traceRequest2Cainiao.setDesc(desc);
-        return traceRequest2Cainiao;
-    }
 
     /**
-     *
      * @param traceRequest2Cainiao pojo
      * @return
      * @throws NoSuchAlgorithmException
@@ -213,6 +183,7 @@ public class PushTrace2CainiaoService {
 
     public String pushTrace2Cainiao(TraceRequest2Cainiao traceRequest2Cainiao) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String logistics_interface = traceRequest2Cainiao.combiteTraceXml4Cainiao();
+        BaseLogger.info(logistics_interface);
         return pushTrace2Cainiao(logistics_interface, traceRequest2Cainiao.getLogistic_provider_id());
     }
 
@@ -239,17 +210,19 @@ public class PushTrace2CainiaoService {
                 session_type +
                 "&data_digest=" + URLEncoder.encode(data_digest, "utf-8");
 
-        String resultPost = HttpRequestUtil.sendPost(requestUrl2CainiaoTraces, requestParam);
+        String resultPost = "";
+        resultPost = HttpRequestUtil.sendPost(requestUrl2CainiaoTraces, requestParam);
         return resultPost;
     }
 
     /**
      * 淘宝加密
+     *
      * @param content
      * @param keys
      * @return
      */
-    public  String doSign(String content, String keys) {
+    public String doSign(String content, String keys) {
         String sign = "";
         content = content + keys;
         try {

@@ -15,15 +15,34 @@ import org.junit.Test;
  * To change this template use File | Settings | File Templates.
  */
 public class PushTrace2CainiaoServiceTest {
-    PushTrace2CainiaoService PushTrace2CainiaoService = null;
+    PushTrace2CainiaoService pushTrace2CainiaoService = null;
+    String sinoair_desc = "";
+    String cainiao_desc = "";
+    String city = "";
 
     @Before
     public void setUp() throws Exception {
-        PushTrace2CainiaoService = new PushTrace2CainiaoService();
+        pushTrace2CainiaoService = new PushTrace2CainiaoService();
     }
 
     @After
     public void tearDown() throws Exception {
+
+    }
+
+    @Test
+    public void testFormatDesc() {
+         sinoair_desc = "";
+         cainiao_desc = "Sinotrans-City-Outbound clearance successfully and loaded to airline";
+         city = "Madrid";
+        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline.",
+                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
+         sinoair_desc = "wow";
+        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline:wow",
+                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
+        sinoair_desc = null;
+        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline.",
+                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
 
     }
 
@@ -57,7 +76,7 @@ public class PushTrace2CainiaoServiceTest {
         traceRequest2Cainiao.setDesc(desc);
 //        String resultExcepted = "<response><logisticProviderID /><responseItems><response><success>true</success><mailNos>120150513131100</mailNos><txLogisticID>LP20150513131100</txLogisticID><reason /></response></responseItems></response>";
         String resultExcepted = "<responses>  <logisticProviderID>DISTRIBUTOR_902950</logisticProviderID>  <responseItems>    <response>      <mailNos>RA100001009FI</mailNos>      <txLogisticID>LP00012015280275</txLogisticID>      <success>true</success>    </response>  </responseItems></responses>";
-        String resultActual = PushTrace2CainiaoService.pushTrace2Cainiao(traceRequest2Cainiao.combiteTraceXml4Cainiao(), traceRequest2Cainiao.getLogistic_provider_id());
+        String resultActual = pushTrace2CainiaoService.pushTrace2Cainiao(traceRequest2Cainiao.combiteTraceXml4Cainiao(), traceRequest2Cainiao.getLogistic_provider_id());
         BaseLogger.info("resultActual = " + resultActual);
         BaseLogger.info("resultExcepted = " + resultExcepted);
         Assert.assertEquals(resultExcepted, resultActual);
@@ -66,12 +85,12 @@ public class PushTrace2CainiaoServiceTest {
 
     @Test
     public void testDoSign() throws Exception {
-       // http://bifrost.tbsandbox.com/cp/sign_efficacy.htm?spm=a219l.7404944.0.0.mCheZM
+        // http://bifrost.tbsandbox.com/cp/sign_efficacy.htm?spm=a219l.7404944.0.0.mCheZM
         String content = "wxx123";
         String keys = "v6lfQ5XH677s5I4835tgecOOBmZ9u7T9";
 
         String resultExcepted = "54pNwgW8AZj/KHFY8q0mrQ==";
-        String resultActual = PushTrace2CainiaoService.doSign(content, keys);
+        String resultActual = pushTrace2CainiaoService.doSign(content, keys);
         BaseLogger.info("resultExcepted = " + resultExcepted);
         BaseLogger.info("resultActual = " + resultActual);
         Assert.assertEquals(resultExcepted, resultActual);
