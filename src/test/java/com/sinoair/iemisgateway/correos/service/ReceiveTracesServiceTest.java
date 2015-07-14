@@ -49,7 +49,7 @@ public class ReceiveTracesServiceTest {
             PreparedStatement updatePstm = conn.prepareStatement("update express_correos_manifest ecm set ecm.ECM_dealEC0800='N'," +
                     "ecm.ECM_OCCURTIME=?," +
                     "ecm.ECM_EXPRIYDATE=?," +
-                    "ecm.ECM_ECREMARK ||' '||?,ecm.ECM_HANDLETIME=sysdate where ecm.EAWB_PRINTCODE=?");
+                    "ecm.ECM_ECREMARK=ecm.ECM_ECREMARK ||' '||?,ecm.ECM_HANDLETIME=sysdate where ecm.EAWB_PRINTCODE=?");
            PreparedStatement selectPstm=conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=?");
             try {
            InputStream in = Object.class.getResourceAsStream("/correos.properties");
