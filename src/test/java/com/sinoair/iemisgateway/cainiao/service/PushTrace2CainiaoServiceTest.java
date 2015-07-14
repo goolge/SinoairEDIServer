@@ -6,6 +6,11 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,11 +19,13 @@ import org.junit.Test;
  * Time: 下午2:57
  * To change this template use File | Settings | File Templates.
  */
+@RunWith(Parameterized.class)
 public class PushTrace2CainiaoServiceTest {
     PushTrace2CainiaoService pushTrace2CainiaoService = null;
     String sinoair_desc = "";
     String cainiao_desc = "";
     String city = "";
+    String expected = "";
 
     @Before
     public void setUp() throws Exception {
@@ -30,6 +37,31 @@ public class PushTrace2CainiaoServiceTest {
 
     }
 
+    @Parameterized.Parameters
+    public static Collection init() {
+        return Arrays.asList(new Object[][]{
+                //测试desc为空的情况
+                {"", "Sinotrans-City-Outbound clearance successfully and loaded to airline", "Madrid", "Sinotrans-Madrid-Outbound clearance successfully and loaded to airline."},
+                //测试desc不为空的情况
+                {"wow", "Sinotrans-City-Outbound clearance successfully and loaded to airline", "Madrid", "Sinotrans-Madrid-Outbound clearance successfully and loaded to airline:wow"},
+                //测试desc为null的情况
+                {null, "Sinotrans-City-Outbound clearance successfully and loaded to airline", "Madrid", "Sinotrans-Madrid-Outbound clearance successfully and loaded to airline."}
+        });
+    }
+
+    public PushTrace2CainiaoServiceTest(String sinoair_desc, String cainiao_desc, String city, String expected) {
+        this.sinoair_desc = sinoair_desc;
+        this.cainiao_desc = cainiao_desc;
+        this.city = city;
+        this.expected = expected;
+    }
+
+    @Test
+    public void testFormatDesc() {
+        Assert.assertEquals(expected,
+                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));
+    }
+    /*
     @Test
     public void testFormatDesc() {
          sinoair_desc = "";
@@ -45,6 +77,7 @@ public class PushTrace2CainiaoServiceTest {
                 pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
 
     }
+*/
 
     /**
      * 回传物流公司签收CAI_AIR_DELIVERY
