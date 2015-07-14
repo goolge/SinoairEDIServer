@@ -46,13 +46,17 @@ public class ReceiveTracesServiceTest {
            conn.setAutoCommit(false);
            PreparedStatement insertPstm=conn.prepareStatement("insert into expressbusinessactivity(EBA_SYSCODE,EAWB_PRINTCODE,EAD_CODE,EAST_CODE,EBA_E_ID_HANDLER,EBA_HANDLETIME,EBA_REMARK,SAC_ID,EBA_SAC_CODE,EBA_OCCURTIME,EBA_SOURCE,EBA_OCCURPLACE,FLAG,QA) values(" +
                    "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?)");
+            PreparedStatement updatePstm = conn.prepareStatement("update express_correos_manifest ecm set ecm.ECM_dealEC0800='N'," +
+                    "ecm.ECM_OCCURTIME=?," +
+                    "ecm.ECM_EXPRIYDATE=?," +
+                    "ecm.ECM_ECREMARK ||' '||?,ecm.ECM_HANDLETIME=sysdate where ecm.EAWB_PRINTCODE=?");
            PreparedStatement selectPstm=conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=?");
             try {
            InputStream in = Object.class.getResourceAsStream("/correos.properties");
            Properties p = new Properties();
            p.load(in);
                 for (File file : fileList) {
-                    receiveTracesService.DBinsert(file, insertPstm, selectPstm,p);
+                    receiveTracesService.DBinsert(file, insertPstm, selectPstm,updatePstm,p);
                     //文件备份删除操作
                     FileUtil.copyFile(file, backUpPath);
                     FileUtil.deleteFile(file);

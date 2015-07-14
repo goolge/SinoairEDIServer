@@ -18,7 +18,7 @@ import java.util.Properties;
  * To change this template use File | Settings | File Templates.
  */
 public class ReceiveTracesService {
-    public void DBinsert(File file, PreparedStatement insertPstm, PreparedStatement selectPstm, Properties p) throws IOException, SQLException {
+    public void DBinsert(File file, PreparedStatement insertPstm, PreparedStatement selectPstm,PreparedStatement updatePstm, Properties p) throws IOException, SQLException {
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         //数据库插入操作
@@ -54,11 +54,8 @@ public class ReceiveTracesService {
             //String EAST_CODE=traceArray[5];
             String EAST_CODE = p.getProperty(field5); //todo-wxx-u
             String EBA_E_ID_HANDLER = "1";
-            String EBA_REMARK = field5;
-            //从第九个字段开始，把后面字段拼接起来，作为轨迹的备注字段
-            for (int f = 8; f < traceArray.length; f++) {
-                EBA_REMARK += "|"+traceArray[f] ;
-            }
+            String EBA_REMARK = "";//如果是“ES8XX”时，显示错误原因，取自，其他显显示空；
+
             //状态发生的日期  如：20140415
             String field7 = traceArray[6];
             //状态发生时间  如：13:29
@@ -81,7 +78,16 @@ public class ReceiveTracesService {
             } catch (Exception e) {
 
             }
-
+            if(field5.startsWith("ES08")){
+               String expiryDate=traceArray[Integer.parseInt(p.getProperty("ES0800XX"))-1];
+               EBA_REMARK=traceArray[Integer.parseInt(p.getProperty("ES0800REMARK"))-1];
+               updatePstm.setTimestamp(1,new Timestamp(DateUtil.getStringToDate(EBA_OCCURTIME, "yyyy-MM-dd hh:mm").getTime()));
+               updatePstm.setTimestamp(2,new Timestamp(DateUtil.getStringToDate(expiryDate, "yyyy-MM-dd hh:mm").getTime()));
+               updatePstm.setString(3,EBA_REMARK);
+               updatePstm.setString(4,field3);
+               updatePstm.addBatch();
+                EBA_REMARK=EBA_REMARK+" expiry date:"+expiryDate;
+            }
             String FLAG = "";
             String QA = "";
             insertPstm.setString(1, field3);
@@ -97,9 +103,12 @@ public class ReceiveTracesService {
             insertPstm.setString(10, EBA_OCCURPLACE);
             insertPstm.setString(11, FLAG);
             insertPstm.setString(12, QA);
+            insertPstm.setString(13, field5);
+            insertPstm.setString(14, line);
             insertPstm.addBatch();
         }
         insertPstm.executeBatch();
+        updatePstm.executeBatch();
         bufferedReader.close();
         fileReader.close();
 
@@ -110,15 +119,19 @@ public class ReceiveTracesService {
         if (dir.exists()) {
             File[] fileList = dir.listFiles();
             conn.setAutoCommit(false);
-            PreparedStatement insertPstm = conn.prepareStatement("insert into expressbusinessactivity(EBA_SYSCODE,EAWB_PRINTCODE,EAD_CODE,EAST_CODE,EBA_E_ID_HANDLER,EBA_HANDLETIME,EBA_REMARK,SAC_ID,EBA_SAC_CODE,EBA_OCCURTIME,EBA_SOURCE,EBA_OCCURPLACE,FLAG,QA) values(" +
-                    "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?)");
+            PreparedStatement insertPstm = conn.prepareStatement("insert into expressbusinessactivity(EBA_SYSCODE,EAWB_PRINTCODE,EAD_CODE,EAST_CODE,EBA_E_ID_HANDLER,EBA_HANDLETIME,EBA_REMARK,SAC_ID,EBA_SAC_CODE,EBA_OCCURTIME,EBA_SOURCE,EBA_OCCURPLACE,FLAG,QA,EAT_partner_ACTIVITY_CODE,EAT_PARTNER_ORIGIN,EAT_PARTNER_ID) values(" +
+                    "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?,?,?,'CORREOS')");
+            PreparedStatement updatePstm = conn.prepareStatement("update express_correos_manifest ecm set ecm.ECM_dealEC0800='N'," +
+                    "ecm.ECM_OCCURTIME=?," +
+                    "ecm.ECM_EXPRIYDATE=?," +
+                    "ecm.ECM_ECREMARK=ecm.ECM_ECREMARK ||' '||?,ecm.ECM_HANDLETIME=sysdate where ecm.EAWB_PRINTCODE=?");
             PreparedStatement selectPstm = conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=?");
             try {
                 InputStream in = Object.class.getResourceAsStream("/correos.properties");
                 Properties p = new Properties();
                 p.load(in);
                 for (File file : fileList) {
-                    DBinsert(file, insertPstm, selectPstm, p);
+                    DBinsert(file, insertPstm, selectPstm,updatePstm, p);
                     //文件备份删除操作
                     FileUtil.copyFile(file, backUpPath);
                     FileUtil.deleteFile(file);
