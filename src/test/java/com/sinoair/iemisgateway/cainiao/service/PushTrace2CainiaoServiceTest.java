@@ -6,6 +6,11 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,18 +19,65 @@ import org.junit.Test;
  * Time: 下午2:57
  * To change this template use File | Settings | File Templates.
  */
+@RunWith(Parameterized.class)
 public class PushTrace2CainiaoServiceTest {
-    PushTrace2CainiaoService PushTrace2CainiaoService = null;
+    PushTrace2CainiaoService pushTrace2CainiaoService = null;
+    String sinoair_desc = "";
+    String cainiao_desc = "";
+    String city = "";
+    String expected = "";
 
     @Before
     public void setUp() throws Exception {
-        PushTrace2CainiaoService = new PushTrace2CainiaoService();
+        pushTrace2CainiaoService = new PushTrace2CainiaoService();
     }
 
     @After
     public void tearDown() throws Exception {
 
     }
+
+    @Parameterized.Parameters
+    public static Collection init() {
+        return Arrays.asList(new Object[][]{
+                //测试desc为空的情况
+                {"", "Sinotrans-City-Outbound clearance successfully and loaded to airline", "Madrid", "Sinotrans-Madrid-Outbound clearance successfully and loaded to airline."},
+                //测试desc不为空的情况
+                {"wow", "Sinotrans-City-Outbound clearance successfully and loaded to airline", "Madrid", "Sinotrans-Madrid-Outbound clearance successfully and loaded to airline:wow"},
+                //测试desc为null的情况
+                {null, "Sinotrans-City-Outbound clearance successfully and loaded to airline", "Madrid", "Sinotrans-Madrid-Outbound clearance successfully and loaded to airline."}
+        });
+    }
+
+    public PushTrace2CainiaoServiceTest(String sinoair_desc, String cainiao_desc, String city, String expected) {
+        this.sinoair_desc = sinoair_desc;
+        this.cainiao_desc = cainiao_desc;
+        this.city = city;
+        this.expected = expected;
+    }
+
+    @Test
+    public void testFormatDesc() {
+        Assert.assertEquals(expected,
+                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));
+    }
+    /*
+    @Test
+    public void testFormatDesc() {
+         sinoair_desc = "";
+         cainiao_desc = "Sinotrans-City-Outbound clearance successfully and loaded to airline";
+         city = "Madrid";
+        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline.",
+                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
+         sinoair_desc = "wow";
+        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline:wow",
+                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
+        sinoair_desc = null;
+        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline.",
+                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
+
+    }
+*/
 
     /**
      * 回传物流公司签收CAI_AIR_DELIVERY
@@ -57,7 +109,7 @@ public class PushTrace2CainiaoServiceTest {
         traceRequest2Cainiao.setDesc(desc);
 //        String resultExcepted = "<response><logisticProviderID /><responseItems><response><success>true</success><mailNos>120150513131100</mailNos><txLogisticID>LP20150513131100</txLogisticID><reason /></response></responseItems></response>";
         String resultExcepted = "<responses>  <logisticProviderID>DISTRIBUTOR_902950</logisticProviderID>  <responseItems>    <response>      <mailNos>RA100001009FI</mailNos>      <txLogisticID>LP00012015280275</txLogisticID>      <success>true</success>    </response>  </responseItems></responses>";
-        String resultActual = PushTrace2CainiaoService.pushTrace2Cainiao(traceRequest2Cainiao.combiteTraceXml4Cainiao(), traceRequest2Cainiao.getLogistic_provider_id());
+        String resultActual = pushTrace2CainiaoService.pushTrace2Cainiao(traceRequest2Cainiao.combiteTraceXml4Cainiao(), traceRequest2Cainiao.getLogistic_provider_id());
         BaseLogger.info("resultActual = " + resultActual);
         BaseLogger.info("resultExcepted = " + resultExcepted);
         Assert.assertEquals(resultExcepted, resultActual);
@@ -66,12 +118,12 @@ public class PushTrace2CainiaoServiceTest {
 
     @Test
     public void testDoSign() throws Exception {
-       // http://bifrost.tbsandbox.com/cp/sign_efficacy.htm?spm=a219l.7404944.0.0.mCheZM
+        // http://bifrost.tbsandbox.com/cp/sign_efficacy.htm?spm=a219l.7404944.0.0.mCheZM
         String content = "wxx123";
         String keys = "v6lfQ5XH677s5I4835tgecOOBmZ9u7T9";
 
         String resultExcepted = "54pNwgW8AZj/KHFY8q0mrQ==";
-        String resultActual = PushTrace2CainiaoService.doSign(content, keys);
+        String resultActual = pushTrace2CainiaoService.doSign(content, keys);
         BaseLogger.info("resultExcepted = " + resultExcepted);
         BaseLogger.info("resultActual = " + resultActual);
         Assert.assertEquals(resultExcepted, resultActual);
