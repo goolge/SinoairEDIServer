@@ -5,6 +5,7 @@ import com.sinoair.iemisgateway.util.BaseLogger;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -61,30 +62,13 @@ public class PushTrace2CainiaoServiceTest {
         Assert.assertEquals(expected,
                 pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));
     }
-    /*
-    @Test
-    public void testFormatDesc() {
-         sinoair_desc = "";
-         cainiao_desc = "Sinotrans-City-Outbound clearance successfully and loaded to airline";
-         city = "Madrid";
-        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline.",
-                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
-         sinoair_desc = "wow";
-        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline:wow",
-                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
-        sinoair_desc = null;
-        Assert.assertEquals("Sinotrans-Madrid-Outbound clearance successfully and loaded to airline.",
-                pushTrace2CainiaoService.formatDesc(sinoair_desc, cainiao_desc, city));;
-
-    }
-*/
 
     /**
      * 回传物流公司签收CAI_AIR_DELIVERY
      *
      * @throws Exception
      */
-//    @Test todo 因菜鸟测试平台问题，此测试用例在测试环境下跑不了
+   @Ignore @Test //todo 因菜鸟测试平台问题，此测试用例在测试环境下跑不了
     public void testPushTrace2Cainiao() throws Exception {
         String logistic_provider_id = "DISTRIBUTOR_902950";
         String mailNos = "RA100001009FI";

@@ -1,6 +1,7 @@
 package com.sinoair.iemisgateway.cainiao.service;
 
 import com.sinoair.iemisgateway.cainiao.domain.TraceRequest2Cainiao;
+import com.sinoair.iemisgateway.domain.ExpressEdiLog;
 import com.sinoair.iemisgateway.util.BaseLogger;
 import com.sinoair.iemisgateway.util.ConnectionFactory;
 import com.sinoair.iemisgateway.util.HttpRequestUtil;
@@ -52,15 +53,27 @@ public class PushTrace2CainiaoService {
 
                 TraceRequest2Cainiao traceRequest2Cainiao = getTraceRequest2Cainiao(resultSet);
                 String result = "";
-                result = pushTrace2Cainiao(traceRequest2Cainiao);
+                String logistics_interface = traceRequest2Cainiao.combiteTraceXml4Cainiao();
+                BaseLogger.info(logistics_interface);
                 String QA = "";
-                if (checkCainiaoReturn(result)) {
-                    QA = "s";
-                    successRow++;
-                } else {
+                try {
+                    result = pushTrace2Cainiao(logistics_interface, traceRequest2Cainiao.getLogistic_provider_id());
+                    if (checkCainiaoReturn(result)) {
+                        QA = "s";
+                        successRow++;
+                        new ExpressEdiLog("cainiao","pushTrace2Cainiao",logistics_interface,result,ExpressEdiLog.is_not_exception,"").insertRecord();
+                    } else {
+                        QA = "f";
+                        failedRow++;
+                        new ExpressEdiLog("cainiao","pushTrace2Cainiao",logistics_interface,result,ExpressEdiLog.is_exception,"").insertRecord();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                     QA = "f";
                     failedRow++;
+                    new ExpressEdiLog("cainiao","pushTrace2Cainiao",logistics_interface,result,ExpressEdiLog.is_exception,e.getMessage()).insertRecord();
                 }
+
                 String updateSql = "update expressbusinessactivity set QA='" + QA + "' where eba_syscode='" + eba_syscode + "'";
                 BaseLogger.info("updateSql = " + updateSql);
                 statement4Update.executeUpdate(updateSql);
@@ -83,10 +96,6 @@ public class PushTrace2CainiaoService {
             } catch (SQLException e1) {
                 e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } finally {
             try {
                 if (resultSet != null) {
@@ -173,19 +182,6 @@ public class PushTrace2CainiaoService {
         }
     }
 
-
-    /**
-     * @param traceRequest2Cainiao pojo
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
-     */
-
-    public String pushTrace2Cainiao(TraceRequest2Cainiao traceRequest2Cainiao) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        String logistics_interface = traceRequest2Cainiao.combiteTraceXml4Cainiao();
-        BaseLogger.info(logistics_interface);
-        return pushTrace2Cainiao(logistics_interface, traceRequest2Cainiao.getLogistic_provider_id());
-    }
 
     /**
      * @param logistics_interface  消息内容(message content)
