@@ -21,8 +21,8 @@ public class ExpressEdiLog {
     String eel_is_exception;
     String eel_handle_time;
     String eel_comments;
-public static final String is_exception="N";
-public static final String is_not_exception="Y";
+public static final String is_exception="Y";
+public static final String is_not_exception="N";
 
     public ExpressEdiLog(String eel_partner, String eel_interface, String eel_request, String eel_response, String eel_is_exception, String eel_comments) {
         this.eel_partner = eel_partner;
