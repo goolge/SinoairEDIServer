@@ -1,5 +1,6 @@
 package com.sinoair.iemisgateway.domain;
 
+import com.sinoair.iemisgateway.util.BaseLogger;
 import com.sinoair.iemisgateway.util.ConnectionFactory;
 
 import java.sql.Connection;
@@ -42,6 +43,7 @@ public static final String is_not_exception="Y";
         this.insertRecord();
     }
     public void insertRecord() {
+        BaseLogger.debug("begin insert record");
         if (eel_handle_time == null || eel_handle_time.equals("")) {
             eel_handle_time = "sysdate";
         }
@@ -49,8 +51,8 @@ public static final String is_not_exception="Y";
         Statement statement = null;
 
         try {
-            connection = ConnectionFactory.get200Connection();
-            PreparedStatement preparedStatement=connection.prepareStatement("INSERT INTO EXPRESS_EDI_LOG\n" +
+            connection = ConnectionFactory.getConnectionInProperties();
+            String sql="INSERT INTO EXPRESS_EDI_LOG\n" +
                     "  (EEL_ID,\n" +
                     "   EEL_PARTNER,\n" +
                     "   EEL_INTERFACE,\n" +
@@ -67,7 +69,8 @@ public static final String is_not_exception="Y";
                     "   ?,\n" +
                     "   ?,\n" +
                     "   sysdate,\n" +
-                    "   ?)");
+                    "   ?)";
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             int i=0;
             preparedStatement.setString(++i,eel_partner);
             preparedStatement.setString(++i,eel_interface);
@@ -76,6 +79,9 @@ public static final String is_not_exception="Y";
             preparedStatement.setString(++i,eel_is_exception);
             preparedStatement.setString(++i,eel_comments);
             preparedStatement.executeQuery();
+            BaseLogger.debug("sql----------------------\n"+sql);
+            BaseLogger.debug("insert record done");
+
            /* statement = connection.createStatement();
             String sql = "INSERT INTO EXPRESS_EDI_LOG\n" +
                     "  (EEL_ID,\n" +
@@ -99,8 +105,10 @@ public static final String is_not_exception="Y";
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            BaseLogger.debug(e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
+            BaseLogger.debug(e.getMessage());
         } finally {
             try {
                 if (statement != null) {

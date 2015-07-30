@@ -36,4 +36,9 @@ public class ExpressEdiLogTest {
         expressEdiLog.setEel_comments("6");
         expressEdiLog.insertRecord();
     }
+    @Test
+    public void testInsertRecord2() throws Exception {
+        new ExpressEdiLog("cainiao","pushTrace2Cainiao","2321","123",ExpressEdiLog.is_not_exception,"").insertRecord();
+
+    }
 }
