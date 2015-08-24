@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Enumeration;
 
 /**
@@ -27,7 +28,7 @@ public class UploadOrderCainiaoAction extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        BaseLogger.info("UploadOrderCainiaoByHttp.doGet");
+        long beginTime = new Date().getTime();
         String uri = req.getRequestURI();
         StringBuffer url = req.getRequestURL();
         BaseLogger.info("uri = " + uri);
@@ -44,6 +45,11 @@ public class UploadOrderCainiaoAction extends HttpServlet {
         BaseLogger.info("result = " + result);
         resp.setContentType("text/html; charset=utf-8");
         PrintWriter out = resp.getWriter();
+        long endTime = new Date().getTime();
+        System.out.println("beginTime = " + beginTime);
+        System.out.println("endTime = " + endTime);
+        System.out.println("处理http请求耗时" + (endTime - beginTime));
+        BaseLogger.info("UploadOrderCainiaoByHttp.doGet");
         out.print(result);
     }
 

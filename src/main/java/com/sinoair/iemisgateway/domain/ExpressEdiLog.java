@@ -21,9 +21,39 @@ public class ExpressEdiLog {
     String eel_is_exception;
     String eel_handle_time;
     String eel_comments;
-public static final String is_exception="Y";
-public static final String is_not_exception="N";
+    static Connection connection = null;
+    static PreparedStatement preparedStatement=null;
+    public static final String is_exception = "Y";
+    public static final String is_not_exception = "N";
+static {
+    try {
+        connection = ConnectionFactory.getConnectionInProperties();
+        String sql = "INSERT INTO EXPRESS_EDI_LOG\n" +
+                "  (EEL_ID,\n" +
+                "   EEL_PARTNER,\n" +
+                "   EEL_INTERFACE,\n" +
+                "   EEL_REQUEST,\n" +
+                "   EEL_RESPONSE,\n" +
+                "   EEL_IS_EXCEPTION,\n" +
+                "   EEL_HANDLE_TIME,\n" +
+                "   EEL_COMMENTS)\n" +
+                "VALUES\n" +
+                "  (SEQ_EXPRESS_EDI_LOG.NEXTVAL,\n" +
+                "   ?,\n" +
+                "   ?,\n" +
+                "   ?,\n" +
+                "   ?,\n" +
+                "   ?,\n" +
+                "   sysdate,\n" +
+                "   ?)";
+         preparedStatement = connection.prepareStatement(sql);
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
 
+}
     public ExpressEdiLog(String eel_partner, String eel_interface, String eel_request, String eel_response, String eel_is_exception, String eel_comments) {
         this.eel_partner = eel_partner;
         this.eel_interface = eel_interface;
@@ -36,93 +66,30 @@ public static final String is_not_exception="N";
 
     public ExpressEdiLog() {
     }
+
     public void insertRecord(String eel_response, String Eel_is_exception, String eel_comments) {
         this.setEel_response(eel_response);
         this.setEel_is_exception(Eel_is_exception);
         this.setEel_comments(eel_comments);
         this.insertRecord();
     }
+
     public void insertRecord() {
         BaseLogger.debug("begin insert record");
-        if (eel_handle_time == null || eel_handle_time.equals("")) {
-            eel_handle_time = "sysdate";
-        }
-        Connection connection = null;
-        Statement statement = null;
-
         try {
-            connection = ConnectionFactory.getConnectionInProperties();
-            String sql="INSERT INTO EXPRESS_EDI_LOG\n" +
-                    "  (EEL_ID,\n" +
-                    "   EEL_PARTNER,\n" +
-                    "   EEL_INTERFACE,\n" +
-                    "   EEL_REQUEST,\n" +
-                    "   EEL_RESPONSE,\n" +
-                    "   EEL_IS_EXCEPTION,\n" +
-                    "   EEL_HANDLE_TIME,\n" +
-                    "   EEL_COMMENTS)\n" +
-                    "VALUES\n" +
-                    "  (SEQ_EXPRESS_EDI_LOG.NEXTVAL,\n" +
-                    "   ?,\n" +
-                    "   ?,\n" +
-                    "   ?,\n" +
-                    "   ?,\n" +
-                    "   ?,\n" +
-                    "   sysdate,\n" +
-                    "   ?)";
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            int i=0;
-            preparedStatement.setString(++i,eel_partner);
-            preparedStatement.setString(++i,eel_interface);
+            int i = 0;
+            preparedStatement.setString(++i, eel_partner);
+            preparedStatement.setString(++i, eel_interface);
             preparedStatement.setString(++i, eel_request);
             preparedStatement.setString(++i, eel_response);
-            preparedStatement.setString(++i,eel_is_exception);
-            preparedStatement.setString(++i,eel_comments);
+            preparedStatement.setString(++i, eel_is_exception);
+            preparedStatement.setString(++i, eel_comments);
             preparedStatement.executeQuery();
-            BaseLogger.debug("sql----------------------\n"+sql);
             BaseLogger.debug("insert record done");
-
-           /* statement = connection.createStatement();
-            String sql = "INSERT INTO EXPRESS_EDI_LOG\n" +
-                    "  (EEL_ID,\n" +
-                    "   EEL_PARTNER,\n" +
-                    "   EEL_INTERFACE,\n" +
-                    "   EEL_REQUEST,\n" +
-                    "   EEL_RESPONSE,\n" +
-                    "   EEL_IS_EXCEPTION,\n" +
-                    "   EEL_HANDLE_TIME,\n" +
-                    "   EEL_COMMENTS)\n" +
-                    "VALUES\n" +
-                    "  (SEQ_EXPRESS_EDI_LOG.NEXTVAL,\n" +
-                    "   '" + eel_partner + "',\n" +
-                    "   '" + eel_interface + "',\n" +
-                    "   '" + eel_request + "',\n" +
-                    "   '" + eel_response + "',\n" +
-                    "   '" + eel_is_exception + "',\n" +
-                    "   " + eel_handle_time + ",\n" +
-                    "   '" + eel_comments + "')";
-            System.out.println("sql = " + sql);*/
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            BaseLogger.debug(e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
             BaseLogger.debug(e.getMessage());
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-
-
     }
 
 
