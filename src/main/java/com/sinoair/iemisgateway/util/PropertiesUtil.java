@@ -12,27 +12,23 @@ import java.util.Properties;
  * To change this template use File | Settings | File Templates.
  */
 public class PropertiesUtil {
- /*   public static void main(String[] args) throws IOException {
+    public static String readProperty(String fileName, String key) {
+        String value = "";
         Properties prop = new Properties();
-        InputStream in = PropertiesUtil.class.getResourceAsStream("/db.properties");
-        prop.load(in);     ///加载属性列表
-        Iterator<String> it = prop.stringPropertyNames().iterator();
-        while (it.hasNext()) {
-            String key = it.next();
-            BaseLogger.info(key + ":" + prop.getProperty(key));
-        }
-        in.close();
-    }*/
-
-    public static String readProperty(String fileName, String key)  {
-//        String value = "";
-        Properties prop = new Properties();
-        InputStream in = PropertiesUtil.class.getResourceAsStream("/"+fileName+".properties");
+        InputStream in = PropertiesUtil.class.getResourceAsStream("/" + fileName + ".properties");
         try {
             prop.load(in);     ///加载属性列表
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return prop.getProperty(key);
+        value = prop.getProperty(key);
+        if (in != null) {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return value;
     }
 }

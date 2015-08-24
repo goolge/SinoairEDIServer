@@ -5,6 +5,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.util.Properties;
+
 /**
  * Created by IntelliJ IDEA.
  * User: WangXX4
@@ -24,11 +27,12 @@ public class PropertiesUtilTest {
 
     @Test
     public void testReadPropertyExist() throws Exception {
-        String resultExcepted = "jdbc:oracle:thin";
-        String resultActual = PropertiesUtil.readProperty("db", "database.jdbc.connectionURL");
+
+        String resultExcepted = "SYSDATE-60";
+        String resultActual = PropertiesUtil.readProperty("cainiao", "date");
         BaseLogger.info("resultExcepted = " + resultExcepted);
         BaseLogger.info("resultActual = " + resultActual);
-        Assert.assertEquals(true, resultActual.startsWith(resultExcepted));
+        Assert.assertEquals(resultExcepted, resultActual);
     }
 
     @Test
