@@ -61,17 +61,17 @@ public class PushTrace2CainiaoService {
                     if (checkCainiaoReturn(result)) {
                         QA = "s";
                         successRow++;
-                        new ExpressEdiLog("cainiao","pushTrace2Cainiao",logistics_interface,result,ExpressEdiLog.is_not_exception,"").insertRecord();
+                        new ExpressEdiLog("cainiao", "pushTrace2Cainiao", logistics_interface, result, ExpressEdiLog.is_not_exception, "").insertRecord();
                     } else {
                         QA = "f";
                         failedRow++;
-                        new ExpressEdiLog("cainiao","pushTrace2Cainiao",logistics_interface,result,ExpressEdiLog.is_exception,"").insertRecord();
+                        new ExpressEdiLog("cainiao", "pushTrace2Cainiao", logistics_interface, result, ExpressEdiLog.is_exception, "").insertRecord();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     QA = "f";
                     failedRow++;
-                    new ExpressEdiLog("cainiao","pushTrace2Cainiao",logistics_interface,result,ExpressEdiLog.is_exception,e.getMessage()).insertRecord();
+                    new ExpressEdiLog("cainiao", "pushTrace2Cainiao", logistics_interface, result, ExpressEdiLog.is_exception, e.getMessage()).insertRecord();
                 }
 
                 String updateSql = "update expressbusinessactivity set QA='" + QA + "' where eba_syscode='" + eba_syscode + "'";
@@ -142,7 +142,14 @@ public class PushTrace2CainiaoService {
     }
 
     protected static String formatDesc(String sinoair_desc, String cainiao_desc, String city) {
-        String desc = cainiao_desc.replace("City", city);
+        if (city == null) {
+            city = "";
+        }
+        String desc = cainiao_desc;
+        if (cainiao_desc != null) {
+            desc = cainiao_desc.replace("City", city);
+        }
+
         if (sinoair_desc == null || "".equals(sinoair_desc) || "null".equalsIgnoreCase(sinoair_desc)) {
             desc = desc + ".";
         } else {
@@ -152,7 +159,7 @@ public class PushTrace2CainiaoService {
     }
 
     private static ResultSet getResultSet(Statement statement) throws SQLException {
-        String date=PropertiesUtil.readProperty("cainiao","date");
+        String date = PropertiesUtil.readProperty("cainiao", "date");
         String sql = "SELECT EBA_SYSCODE,EP.EAWB_PRINTCODE,EAWB_SERVICETYPE,EAWB_REFERENCE1,EAWB_REFERENCE2,EBA_OCCURTIME,EBA_REMARK,EBA.EBA_OCCURPLACE,EBA.EAD_CODE,EBA.EAST_CODE,EAT.EAT_PARTNER_ACTIVITY_DESC,EAT.EAT_PARTNER_ACTIVITY_CODE\n  FROM EAWBPRE EP, EXPRESSBUSINESSACTIVITY EBA,EXPRESSACTIVITYTRANSLATE EAT\n" +
                 " WHERE EP.EAWB_PRINTCODE = EBA.EAWB_PRINTCODE\n" +
                 " AND EAT.EAD_CODE=EBA.EAD_CODE\n" +
@@ -160,7 +167,7 @@ public class PushTrace2CainiaoService {
                 " AND EAT.EAT_PARTNER_ID='cainiao'\n" +
                 " AND (EBA.QA IS NULL OR EBA.QA <> 's')\n" +
                 " AND EP.EAWB_SO_CODE = '00060491'\n" +
-                " AND EP.EAWB_HANDLETIME > "+date;//todo 为了提高查询效率，只查找最近两个月处理的单子
+                " AND EP.EAWB_HANDLETIME > " + date;//todo 为了提高查询效率，只查找最近两个月处理的单子
         BaseLogger.info("查询最近两个月所有的需要发给菜鸟的轨迹:\n" + sql);
         ResultSet resultSet = statement.executeQuery(sql);
         return resultSet;
