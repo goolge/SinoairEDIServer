@@ -42,7 +42,7 @@ public class RoyalMailManifest {
     String Postcode_B11 = "TW14 0NG";
     String Country_B12 = "GBR";
     String PostingLocation_B13 = "9876543210";
-    String ReceivingHUB_B14 = "000000";
+    String ReceivingHUB_B14 = "002673";
 
     String RecordTypeIndicator_D1 = "09";
     String VersionNumber_D2 = "02";

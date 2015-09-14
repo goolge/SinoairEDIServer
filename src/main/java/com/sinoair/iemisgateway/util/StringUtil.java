@@ -156,6 +156,21 @@ public class StringUtil {
         return str;
     }
 
+    /**
+     * 循环截掉，字符串开头的字符
+     * @param str
+     * @param character
+     * @return
+     */
+    public static String trimCharacterLeft(String str,String character){
+        if(str==null || "".equals(str) || character==null || "".equals(character)){
+            return "";
+        }
+        while(str.startsWith(character)){
+         str=str.replaceFirst(character,"");
+        }
+        return str;
+    }
 
 
 

@@ -45,8 +45,10 @@ public class RoyalMailItem {
 
     HashMap<String, Object> mapParam = null;
 
-    public  RoyalMailItem(){}
-    public  RoyalMailItem(HashMap<String, Object> mapParam){
+    public RoyalMailItem() {
+    }
+
+    public RoyalMailItem(HashMap<String, Object> mapParam) {
         this.copyProperties(mapParam);
     }
 
@@ -64,15 +66,53 @@ public class RoyalMailItem {
         this.DeliveryAddress1_C6 = addressArr[0];
         this.DeliveryAddress2_C7 = addressArr[1];
         this.DeliveryAddress3_C8 = addressArr[2];
-        this.Posttown_C9= StringUtil.getStringSpace(String.valueOf(mapParam.get("EAWB_DESTCITY")), 30, 1);
-        this.Postcode_C10= StringUtil.getStringSpace(String.valueOf(mapParam.get("EAWB_DELIVER_POSTCODE")), 8, 5);
-        this.SortCode_C11= StringUtil.getFixedString(String.valueOf(mapParam.get("SORTCODE")), 3, " ",false);
-        this.SendersReference1_C16=StringUtil.getStringSpace(String.valueOf(mapParam.get("EAWB_REFERENCE2")), 20, 0);
+        this.Posttown_C9 = StringUtil.getStringSpace(String.valueOf(mapParam.get("EAWB_DESTCITY")), 30, 1);
+        this.Postcode_C10 = StringUtil.getStringSpace(String.valueOf(mapParam.get("EAWB_DELIVER_POSTCODE")), 8, 5);
+        this.SortCode_C11 = StringUtil.getFixedString(String.valueOf(mapParam.get("SORTCODE")), 3, " ", false);
+        this.SendersReference1_C16 = StringUtil.getStringSpace(String.valueOf(mapParam.get("EAWB_REFERENCE2")), 20, 0);
         Double weight = Double.parseDouble(mapParam.get("EAWB_DECLAREGROSSWEIGHT").toString()) * 1000; //单位是kg ,要转换成g
         java.text.DecimalFormat decimalFormat = new java.text.DecimalFormat("#");
-        this.ItemWeight_C19=StringUtil.getString(decimalFormat.format(weight), 7, 1,"0",false);
-        this.RecipientEmail_C25=StringUtil.getStringSpace(mapParam.get("EAWB_DELIVER_EMAIL").toString(),60,0);
-        this.RecipientContactNo_C29=StringUtil.getPhoneNum(mapParam.get("EAWB_DELIVER_PHONE").toString(), 20);
+        this.ItemWeight_C19 = StringUtil.getString(decimalFormat.format(weight), 7, 1, "0", false);
+        this.RecipientEmail_C25 = StringUtil.getStringSpace(mapParam.get("EAWB_DELIVER_EMAIL").toString(), 60, 0);
+        this.RecipientContactNo_C29 = StringUtil.getPhoneNum(mapParam.get("EAWB_DELIVER_PHONE").toString(), 20);
+        String[] phoneArr = generatePhone(mapParam.get("EAWB_DELIVER_PHONE").toString(), mapParam.get("EAWB_DELIVER_EMAIL").toString());
+        this.NotificationCode_C24 = phoneArr[0];
+        this.RecipientEmail_C25 = phoneArr[1];
+        this.RecipientTelephone_C26 = phoneArr[2];
+        this.RecipientContactNo_C29 = phoneArr[3];
+    }
+
+    /**
+     * 根据收货人电话，填写24,25,26,29字段填写
+     *
+     * @param EAWB_DELIVER_PHONE
+     * @param EAWB_DELIVER_EMAIL
+     * @return
+     */
+    private String[] generatePhone(String EAWB_DELIVER_PHONE, String EAWB_DELIVER_EMAIL) {
+        String[] phoneArr = new String[]{"", "", "", ""};
+        String phone = StringUtil.trimCharacterLeft(StringUtil.getPhoneNum(EAWB_DELIVER_PHONE, 20), "0");
+        boolean sms = true;
+        boolean mail = true;
+        if ("4407".startsWith(phone) || "447".startsWith(phone)) {
+            phoneArr[3] = phone;
+        } else {
+            sms = false;
+            phoneArr[2] = phone;
+        }
+        if (EAWB_DELIVER_EMAIL != null && !"".equals(EAWB_DELIVER_EMAIL.trim())) {
+            phoneArr[1] = EAWB_DELIVER_EMAIL;
+        } else {
+            mail = false;
+        }
+        if (sms && mail) {
+            phoneArr[0] = "SMS+EMAIL";
+        } else if (sms && !mail) {
+            phoneArr[0] = "SMS";
+        } else if (!sms && mail) {
+            phoneArr[0] = "EMAIL";
+        }
+        return phoneArr;
     }
 
     private String[] generateAddress(String address) {
