@@ -94,7 +94,7 @@ public class RoyalMailItem {
         String phone = StringUtil.trimCharacterLeft(StringUtil.getPhoneNum(EAWB_DELIVER_PHONE, 20), "0");
         boolean sms = true;
         boolean mail = true;
-        if ("4407".startsWith(phone) || "447".startsWith(phone)) {
+        if (phone.startsWith("4407") || phone.startsWith("447") || phone.startsWith("7")) {
             phoneArr[3] = phone;
         } else {
             sms = false;
