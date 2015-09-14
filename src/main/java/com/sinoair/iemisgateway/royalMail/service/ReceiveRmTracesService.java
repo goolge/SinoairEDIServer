@@ -131,13 +131,13 @@ public class ReceiveRmTracesService {
         String  localTraceDir = historyRootPath+"/royalMail/in/traces/";
         String  localTraceDirCopy = historyRootPath+"/royalMail/in/traces/";
         if (connsft != null) {
-            LogUtil.log("下载轨迹反馈-连接西邮服务器成功！");
+            LogUtil.log("下载轨迹反馈-连接英邮服务器成功！");
             SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
             //1.从英邮服务器上下载到本地，同时删除英邮服务器上的轨迹文件
             SftpDownload.download(localTraceDir, PropertiesUtil.readProperty("royalMail", "rmTrackDir"), sftPv3Client);
             sftPv3Client.close();
             connsft.close();
-            LogUtil.log("下载轨迹反馈-下载轨迹反馈成功！");
+            LogUtil.log("下载轨迹反馈-下载英邮轨迹反馈成功！");
         }
        /* String zipPath = localTraceDir;
         File[] files = FileUtil.getFiles(zipPath);
@@ -154,7 +154,7 @@ public class ReceiveRmTracesService {
         }*/
         //在本地解析轨迹，插入轨迹信息，备份轨迹，删除本地轨迹
         analysisData(conn,localTraceDir, localTraceDirCopy);
-        LogUtil.log("下载轨迹反馈-解析轨迹反馈报文、本地备份成功！");
+        LogUtil.log("下载轨迹反馈-解析英邮轨迹反馈报文、本地备份成功！");
     }
 
     public static void main(String[] args) throws Exception {
