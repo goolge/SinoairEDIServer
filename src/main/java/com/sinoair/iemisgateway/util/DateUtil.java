@@ -106,4 +106,14 @@ public class DateUtil {
 
 		return d1;
 	}
+    public static String getCurrentDateStrGB(String format) {
+        return getDateStrAheadHours(-7, format);
+    }
+    public static String getDateStrAheadHours(int hours,String format){
+      Calendar calendar=Calendar.getInstance();
+      calendar.setTime(new Date());
+      calendar.add(Calendar.HOUR_OF_DAY,hours);
+      SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format);
+      return simpleDateFormat.format(calendar.getTime());
+    }
 }
