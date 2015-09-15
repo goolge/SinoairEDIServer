@@ -79,7 +79,6 @@ public class RoyalMailItem {
         this.NotificationCode_C24 = phoneArr[0];
         this.RecipientEmail_C25 = phoneArr[1];
         this.RecipientTelephone_C26 = phoneArr[2];
-        this.RecipientContactNo_C29 = phoneArr[3];
     }
 
     /**
@@ -90,15 +89,14 @@ public class RoyalMailItem {
      * @return
      */
     private String[] generatePhone(String EAWB_DELIVER_PHONE, String EAWB_DELIVER_EMAIL) {
-        String[] phoneArr = new String[]{"", "", "", ""};
+        String[] phoneArr = new String[]{"", "", ""};
         String phone = StringUtil.trimCharacterLeft(StringUtil.getPhoneNum(EAWB_DELIVER_PHONE, 20), "0");
         boolean sms = true;
         boolean mail = true;
-        if (phone.startsWith("4407") || phone.startsWith("447") || phone.startsWith("7")) {
-            phoneArr[3] = phone;
-        } else {
-            sms = false;
+        if (phone!=null && !"".equals(phone)) {
             phoneArr[2] = phone;
+        }else{
+            sms = false;
         }
         if (EAWB_DELIVER_EMAIL != null && !"".equals(EAWB_DELIVER_EMAIL.trim())) {
             phoneArr[1] = EAWB_DELIVER_EMAIL;

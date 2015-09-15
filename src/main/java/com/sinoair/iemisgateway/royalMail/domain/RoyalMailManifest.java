@@ -41,7 +41,7 @@ public class RoyalMailManifest {
     String Posttown_B10 = "london";
     String Postcode_B11 = "TW14 0NG";
     String Country_B12 = "GBR";
-    String PostingLocation_B13 = "9876543210";
+    String PostingLocation_B13 = "9000446082";
     String ReceivingHUB_B14 = "002673";
 
     String RecordTypeIndicator_D1 = "09";
@@ -115,7 +115,7 @@ public class RoyalMailManifest {
                 sb.append("\n");
             }
 
-            this.RecordCount_D3=(royalMailItemList.size() + 3)+"";
+            this.RecordCount_D3=StringUtil.getIntFormString(5,(royalMailItemList.size() + 3));
             sb.append(StringUtil.nullAndCommaProcess(RecordTypeIndicator_D1));
             sb.append(StringUtil.nullAndCommaProcess(VersionNumber_D2));
             sb.append(RecordCount_D3);

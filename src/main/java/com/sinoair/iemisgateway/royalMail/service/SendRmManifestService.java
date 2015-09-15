@@ -108,7 +108,7 @@ public class SendRmManifestService {
                 if (rs.next()) {
                     oneSeq = rs.getString(1);
                 }
-                //oneSeq = StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
+                oneSeq = StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
                 royalMailManifest.setFileSerialNumber_A4(oneSeq);
                 royalMailManifest.setFileSubmissionDate_A5(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(0, 8));
                 royalMailManifest.setFileSubmissionTime_A6(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(8));
