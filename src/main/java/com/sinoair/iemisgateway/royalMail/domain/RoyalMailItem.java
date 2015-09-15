@@ -74,7 +74,6 @@ public class RoyalMailItem {
         java.text.DecimalFormat decimalFormat = new java.text.DecimalFormat("#");
         this.ItemWeight_C19 = StringUtil.getString(decimalFormat.format(weight), 7, 1, "0", false);
         this.RecipientEmail_C25 = StringUtil.getStringSpace(mapParam.get("EAWB_DELIVER_EMAIL").toString(), 60, 0);
-        this.RecipientContactNo_C29 = StringUtil.getPhoneNum(mapParam.get("EAWB_DELIVER_PHONE").toString(), 20);
         String[] phoneArr = generatePhone(mapParam.get("EAWB_DELIVER_PHONE").toString(), mapParam.get("EAWB_DELIVER_EMAIL").toString());
         this.NotificationCode_C24 = phoneArr[0];
         this.RecipientEmail_C25 = phoneArr[1];

@@ -61,6 +61,30 @@ public class SendRmManifestService {
         //BaseLogger.info("aaaa:" + sql);
         return arrayList;
     }
+    /*public ArrayList getInfoList(Connection conn) throws Exception {
+        String sql = "select distinct eawb.EAWB_PRINTCODE," + //1
+                "eawb.EAWB_REFERENCE1," +//2
+                "eawb.EAWB_REFERENCE2," + //3
+                "eawb.EAWB_CONSIGNEE_ACCOUNTNAME," + //4
+                "eawb.EAWB_DELIVER_ADDRESS," +  //5
+                "eawb.EAWB_DESTCITY," + //6
+                "eawb.EAWB_DELIVER_POSTCODE," +   //7
+                "eawb.EAWB_DECLAREGROSSWEIGHT," +  //8
+                "eawb.EAWB_DELIVER_PHONE," +
+                "eawb.EAWB_DELIVER_EMAIL," + //9
+                "case when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 4)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 4)) " +
+                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 3)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 3))" +
+                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2))" +
+                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) else '___' end SORTCODE " +
+                " from  expressairwaybill eawb" +
+                " where eawb.EAWB_PRINTCODE in('880002227426', '880002227415', '880002227441','880002221813', '880002221903', '880002221846')";
+       // System.out.println(sql);
+        ExeSQL texesql = new ExeSQL();
+        texesql.setConnection(conn);
+        ArrayList arrayList = texesql.execSqltoArr(sql);
+        //BaseLogger.info("aaaa:" + sql);
+        return arrayList;
+    }*/
 
     /**
      * 根据数据集合，在本地生成报文
@@ -108,7 +132,6 @@ public class SendRmManifestService {
                 if (rs.next()) {
                     oneSeq = rs.getString(1);
                 }
-                oneSeq = StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
                 royalMailManifest.setFileSerialNumber_A4(oneSeq);
                 royalMailManifest.setFileSubmissionDate_A5(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(0, 8));
                 royalMailManifest.setFileSubmissionTime_A6(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(8));
@@ -123,7 +146,7 @@ public class SendRmManifestService {
                 //System.out.println("royalMailItemList:" + royalMailItemList.size());
                 //System.out.println("royalMailManifest.getMessageContent():" + royalMailManifest.getMessageContent());
                 String strFilePath = "";
-                strFilePath = app_dir + royalMailManifest.getWireNumber_A8() + oneSeq;
+                strFilePath = app_dir + royalMailManifest.getWireNumber_A8() + StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
                 FileUtil.generateFile(royalMailManifest.getMessageContent(), strFilePath);
             }
         }
@@ -213,7 +236,7 @@ public class SendRmManifestService {
     }
 
     public static void main(String[] args) throws Exception {
-        Connection conn = ConnectionFactory.get200Connection();
+        Connection conn = ConnectionFactory.get194Connection();
         String historyRootPath = "D:/express/SinoairEDIServerHistory";
         SendRmManifestService generateInfo = new SendRmManifestService();
         generateInfo.sendManifest(conn, historyRootPath);
