@@ -1,11 +1,8 @@
 package com.sinoair.iemisgateway.royalMail.service;
 
-import ch.ethz.ssh2.SFTPv3Client;
 import com.sinoair.iemisgateway.royalMail.domain.RoyalMailManifest;
 import com.sinoair.iemisgateway.royalMail.domain.RoyalMailTrace;
 import com.sinoair.iemisgateway.util.*;
-import com.sinoair.iemisgateway.util.sftp.SftpConnection;
-import com.sinoair.iemisgateway.util.sftp.SftpDownload;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,9 +31,11 @@ public class ReceiveRmTracesService {
         //从第二行开始读数据，第一行是表头,最后一行是表尾
         while ((line = bufferedReader.readLine()) != null) {
             i += 1;
+            String sourceStr=line;
+            line=line.replaceAll("\"","");
             String[] traceArray = line.split(",");
             //如果是表尾，则不再读取数据
-            if (traceArray==null ||traceArray.length!=15 || !"D".equals(traceArray[0])) {
+            if (traceArray==null ||traceArray.length<11 || !"D".equals(traceArray[0])) {
                 continue;
             }
             RoyalMailTrace royalMailTrace=new RoyalMailTrace(traceArray);
@@ -89,7 +88,7 @@ public class ReceiveRmTracesService {
             insertPstm.setString(11, FLAG);
             insertPstm.setString(12, QA);
             insertPstm.setString(13, royalMailTrace.getB7_Eventcode());
-            insertPstm.setString(14, line);
+            insertPstm.setString(14, sourceStr);
             insertPstm.addBatch();
         }
         insertPstm.executeBatch();
@@ -105,7 +104,7 @@ public class ReceiveRmTracesService {
             conn.setAutoCommit(false);
             PreparedStatement insertPstm = conn.prepareStatement("insert into expressbusinessactivity(EBA_SYSCODE,EAWB_PRINTCODE,EAD_CODE,EAST_CODE,EBA_E_ID_HANDLER,EBA_HANDLETIME,EBA_REMARK,SAC_ID,EBA_SAC_CODE,EBA_OCCURTIME,EBA_SOURCE,EBA_OCCURPLACE,FLAG,QA,EAT_partner_ACTIVITY_CODE,EAT_PARTNER_ORIGIN,EAT_PARTNER_ID) values(" +
                     "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?,?,?,'"+RoyalMailManifest.PARTNER_CODE+"')");
-            PreparedStatement selectPstm = conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=?");
+            PreparedStatement selectPstm = conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=? ");
             try {
 
                 for (File file : fileList) {
@@ -127,9 +126,10 @@ public class ReceiveRmTracesService {
     }
 
     public void ReceiveTraces(Connection conn,String historyRootPath) throws Exception {
-        ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnectionWithPassword(RoyalMailManifest.RMURL, RoyalMailManifest.USERNAME, RoyalMailManifest.PASSWORD,RoyalMailManifest.PROTNUM);
-        String  localTraceDir = historyRootPath+"/royalMail/in/traces/";
-        String  localTraceDirCopy = historyRootPath+"/royalMail/in/traces/";
+
+        String  localTraceDir =     historyRootPath+"/royalMail/in/traces/";
+        String  localTraceDirCopy = historyRootPath+"/royalMail/bak/in/traces/";
+       /* ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnectionWithPassword(RoyalMailManifest.RMURL, RoyalMailManifest.USERNAME, RoyalMailManifest.PASSWORD,RoyalMailManifest.PROTNUM);
         if (connsft != null) {
             LogUtil.log("下载轨迹反馈-连接英邮服务器成功！");
             SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
@@ -138,19 +138,6 @@ public class ReceiveRmTracesService {
             sftPv3Client.close();
             connsft.close();
             LogUtil.log("下载轨迹反馈-下载英邮轨迹反馈成功！");
-        }
-       /* String zipPath = localTraceDir;
-        File[] files = FileUtil.getFiles(zipPath);
-        if (files != null && files.length > 0) {
-            zipPath=zipPath.substring(0,zipPath.length()-1);
-            for (int i = 0; i < files.length; i++) {
-                File file = files[i];
-                if (file.getName().endsWith(".zip")) {
-                    ZipUtil.unzipFile(zipPath, file.getName(), zipPath);
-                    FileUtil.deleteFile(file);
-                }
-                LogUtil.log("下载轨迹反馈-解压轨迹反馈成功！");
-            }
         }*/
         //在本地解析轨迹，插入轨迹信息，备份轨迹，删除本地轨迹
         analysisData(conn,localTraceDir, localTraceDirCopy);
@@ -158,7 +145,7 @@ public class ReceiveRmTracesService {
     }
 
     public static void main(String[] args) throws Exception {
-        Connection conn = ConnectionFactory.get200Connection();
+      Connection conn = ConnectionFactory.get200Connection();
         String historyRootPath="D:/express/SinoairEDIServerHistory";
         ReceiveRmTracesService receiveTracesService = new ReceiveRmTracesService();
         receiveTracesService.ReceiveTraces(conn,historyRootPath);

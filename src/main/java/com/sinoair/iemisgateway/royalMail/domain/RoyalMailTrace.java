@@ -35,7 +35,7 @@ public class RoyalMailTrace {
      * @param arr
      */
     public void copyProperties(String[] arr) {
-        if (arr != null && arr.length != 15) {
+        if (arr != null && arr.length >= 12) {
             this.B1_Recordtype = arr[0];
             this.B2_Wirenumber = arr[1];
             this.B3_Item_code = arr[2];
@@ -48,9 +48,15 @@ public class RoyalMailTrace {
             this.B10_Logtime = arr[9];
             this.B11_Service = arr[10];
             this.B12_Despatchsite = arr[11];
-            this.B13_Spare1 = arr[12];
-            this.B14_Spare2 = arr[13];
-            this.B15_Spare3 = arr[14];
+            if(arr.length>12){
+               this.B13_Spare1 = arr[12];
+            }
+            if(arr.length>13){
+             this.B14_Spare2 = arr[13];
+            }
+            if(arr.length>14){
+              this.B15_Spare3 = arr[14];
+            }
         }
     }
 
