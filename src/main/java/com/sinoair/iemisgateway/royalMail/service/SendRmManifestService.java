@@ -32,7 +32,7 @@ public class SendRmManifestService {
      * @return
      * @throws Exception
      */
-    public ArrayList getInfoList(Connection conn) throws Exception {
+    /*public ArrayList getInfoList(Connection conn) throws Exception {
         String sql = "select distinct eawb.EAWB_PRINTCODE," + //1
                 "eawb.EAWB_REFERENCE1," +//2
                 "eawb.EAWB_REFERENCE2," + //3
@@ -60,8 +60,8 @@ public class SendRmManifestService {
         ArrayList arrayList = texesql.execSqltoArr(sql);
         //BaseLogger.info("aaaa:" + sql);
         return arrayList;
-    }
-    /*public ArrayList getInfoList(Connection conn) throws Exception {
+    }*/
+    public ArrayList getInfoList(Connection conn) throws Exception {
         String sql = "select distinct eawb.EAWB_PRINTCODE," + //1
                 "eawb.EAWB_REFERENCE1," +//2
                 "eawb.EAWB_REFERENCE2," + //3
@@ -77,14 +77,16 @@ public class SendRmManifestService {
                 "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2))" +
                 "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) else '___' end SORTCODE " +
                 " from  expressairwaybill eawb" +
-                " where eawb.EAWB_PRINTCODE in('880002227426', '880002227415', '880002227441','880002221813', '880002221903', '880002221846')";
+                " where eawb.EAWB_PRINTCODE in('880001022605', '880001022596', '880001022585', '880001022574'," +
+                "          '880001022563', '880001022552', '880001022541', '880001022530'," +
+                "          '880001022526', '880001022515')";
        // System.out.println(sql);
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
         //BaseLogger.info("aaaa:" + sql);
         return arrayList;
-    }*/
+    }
 
     /**
      * 根据数据集合，在本地生成报文
@@ -178,7 +180,6 @@ public class SendRmManifestService {
         //组织西邮报文数据，在本地存一份备份，然后放到西邮服务器，同时更新运单状态为发送成功
         ArrayList arrayList = null;
         String localpfileDir = historyRootPath + "/royalMail/out/manifest/";
-        String localpfileDirCopy = historyRootPath + "/royalMail/bak/out/manifest/";
         try {
 
             //1.获取需要发送预报的运单数据；
@@ -187,6 +188,7 @@ public class SendRmManifestService {
             updateSuccess(arrayList, conn);
             //3.生成报文
             generateFileRoyalMail(arrayList, localpfileDir, conn);
+
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception e) {
@@ -198,6 +200,15 @@ public class SendRmManifestService {
         int sendNum = arrayList == null ? 0 : arrayList.size();
         LogUtil.log(" 英邮发送报文-获取发预报的数据条数：" + sendNum);
          //4.向英邮发送预报,同时备份本地文件
+       sendRmManifestAndDeleteLocateFiles(localpfileDir);
+        //5.如果发送运单数量不为0，则给一英国相关人员发送信息
+       sendEmail(sendNum);
+
+
+    }
+    public void sendRmManifestAndDeleteLocateFiles(String historyRootPath) throws Exception{
+        String localpfileDir = historyRootPath + "/royalMail/out/manifest/";
+        String localpfileDirCopy = historyRootPath + "/royalMail/bak/out/manifest/";
         File[] files = FileUtil.getFiles(localpfileDir);
         if (files != null && files.length > 0) {
             ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnectionWithPassword(RoyalMailManifest.RMURL, RoyalMailManifest.USERNAME, RoyalMailManifest.PASSWORD, RoyalMailManifest.PROTNUM);
@@ -205,11 +216,10 @@ public class SendRmManifestService {
                 LogUtil.log(" 英邮发送报文-连接英邮服务器成功");
                 SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
                 SftpUpload.upload(localpfileDir, PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir"), sftPv3Client, localpfileDirCopy);
-                //sftPv3Client.mv(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir"),PropertiesUtil.readProperty("royalMail", "rmManifestDir"));
                 Vector vector=sftPv3Client.ls(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir"));
                 for (int i = 0; i < vector.size(); i++){
                  SFTPv3DirectoryEntry aa = (SFTPv3DirectoryEntry) vector.elementAt(i);
-                 if(aa.filename.startsWith("W9EA")){
+                 if(aa.filename.startsWith(RoyalMailManifest.WireNumber_A8)){
                   sftPv3Client.mv(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir")+aa.filename,PropertiesUtil.readProperty("royalMail", "rmManifestDir")+aa.filename);
                  }
                 }
@@ -219,6 +229,9 @@ public class SendRmManifestService {
             }
 
         }
+    }
+
+    public  void sendEmail(int sendNum) throws Exception{
         if(sendNum>0){
             MailUtil.postMail(
                     PropertiesUtil.readProperty("royalMail", "rmTo"),
@@ -231,14 +244,15 @@ public class SendRmManifestService {
                     "iemis",
                     "SinoAiriemis");
         }
-
-
     }
-
     public static void main(String[] args) throws Exception {
-        Connection conn = ConnectionFactory.get194Connection();
-        String historyRootPath = "D:/express/SinoairEDIServerHistory";
         SendRmManifestService generateInfo = new SendRmManifestService();
-        generateInfo.sendManifest(conn, historyRootPath);
+        /*Connection conn = ConnectionFactory.get200Connection();
+        String historyRootPath = "D:/express/SinoairEDIServerHistory";
+        generateInfo.sendManifest(conn, historyRootPath);*/
+
+        String historyRootPath = "D:/express/SinoairEDIServerHistory";
+        generateInfo.sendRmManifestAndDeleteLocateFiles(historyRootPath);
+
     }
 }

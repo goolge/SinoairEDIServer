@@ -24,7 +24,7 @@ public class RoyalMailManifest {
     String FileSubmissionDate_A5;
     String FileSubmissionTime_A6;
     String ContactEmail_A7 = "ZHANGMJ@SINOAIR.COM";
-    String WireNumber_A8 = "W9EA";
+    public static final String WireNumber_A8 = "W9EA";
     String SiteSystemName_A9 = "";
     String CradleID_A10 = "9999";
     String FileStatus_A11 = "LIVE";
@@ -151,10 +151,6 @@ public class RoyalMailManifest {
 
     public void setContactEmail_A7(String contactEmail_A7) {
         ContactEmail_A7 = contactEmail_A7;
-    }
-
-    public void setWireNumber_A8(String wireNumber_A8) {
-        WireNumber_A8 = wireNumber_A8;
     }
 
     public void setSiteSystemName_A9(String siteSystemName_A9) {
