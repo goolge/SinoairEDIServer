@@ -64,7 +64,7 @@ public class RoyalMailManifest {
             sb.append(StringUtil.nullAndCommaProcess(SiteSystemName_A9));
             sb.append(StringUtil.nullAndCommaProcess(CradleID_A10));
             sb.append(StringUtil.nullAndCommaProcess(FileStatus_A11));
-            sb.append("\n");
+            sb.append("\r\n");
 
             sb.append(StringUtil.nullAndCommaProcess(RecordTypeIndicator_B1));
             sb.append(StringUtil.nullAndCommaProcess(VersionNumber_B2));
@@ -80,7 +80,7 @@ public class RoyalMailManifest {
             sb.append(StringUtil.nullAndCommaProcess(Country_B12));
             sb.append(StringUtil.nullAndCommaProcess(PostingLocation_B13));
             sb.append(StringUtil.nullAndCommaProcess(ReceivingHUB_B14));
-            sb.append("\n");
+            sb.append("\r\n");
             for (int i = 0; i < royalMailItemList.size(); i++) {
                 RoyalMailItem royalMailItem = royalMailItemList.get(i);
                 sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getRecordTypeIndicator_C1()));
@@ -112,7 +112,7 @@ public class RoyalMailManifest {
                 sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSpareAttribute_C27()));
                 sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSpareAttribute_C28()));
                 sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getRecipientContactNo_C29()));
-                sb.append("\n");
+                sb.append("\r\n");
             }
 
             this.RecordCount_D3=StringUtil.getIntFormString(5,(royalMailItemList.size() + 3));
