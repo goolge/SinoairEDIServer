@@ -113,6 +113,7 @@ public class RoyalMailManifest {
                 sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSpareAttribute_C28()));
                 sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getRecipientContactNo_C29()));
                 sb.append("\r\n");
+
             }
 
             this.RecordCount_D3=StringUtil.getIntFormString(5,(royalMailItemList.size() + 3));
