@@ -125,7 +125,7 @@ public class ExeSQL {
     }
 
     public ArrayList execSqltoArr(String sql) {
-        return execSqltoArr(sql, 10000);
+        return execSqltoArr(sql, 100000);
     }
 
     public ArrayList execSqltoArr(String sql, int maxRowCount) {
