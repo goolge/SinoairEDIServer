@@ -77,9 +77,7 @@ public class SendRmManifestService {
                 "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2))" +
                 "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) else '___' end SORTCODE " +
                 " from  expressairwaybill eawb" +
-                " where eawb.EAWB_PRINTCODE in('880001022605', '880001022596', '880001022585', '880001022574'," +
-                "          '880001022563', '880001022552', '880001022541', '880001022530'," +
-                "          '880001022526', '880001022515')";
+                " where eawb.EAWB_PRINTCODE in('880001022245', '880001022256', '880001022260', '880001022271','880001022282')";
        // System.out.println(sql);
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
@@ -134,6 +132,7 @@ public class SendRmManifestService {
                 if (rs.next()) {
                     oneSeq = rs.getString(1);
                 }
+                oneSeq =StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
                 royalMailManifest.setFileSerialNumber_A4(oneSeq);
                 royalMailManifest.setFileSubmissionDate_A5(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(0, 8));
                 royalMailManifest.setFileSubmissionTime_A6(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(8));
@@ -148,7 +147,7 @@ public class SendRmManifestService {
                 //System.out.println("royalMailItemList:" + royalMailItemList.size());
                 //System.out.println("royalMailManifest.getMessageContent():" + royalMailManifest.getMessageContent());
                 String strFilePath = "";
-                strFilePath = app_dir + royalMailManifest.getWireNumber_A8() + StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
+                strFilePath = app_dir + royalMailManifest.getWireNumber_A8() + oneSeq;
                 FileUtil.generateFile(royalMailManifest.getMessageContent(), strFilePath);
             }
         }
@@ -246,12 +245,13 @@ public class SendRmManifestService {
         }
     }
     public static void main(String[] args) throws Exception {
+        String historyRootPath = "D:/express/SinoairEDIServerHistory";
         SendRmManifestService generateInfo = new SendRmManifestService();
-        /*Connection conn = ConnectionFactory.get200Connection();
-        String historyRootPath = "D:/express/SinoairEDIServerHistory";
-        generateInfo.sendManifest(conn, historyRootPath);*/
+        Connection conn = ConnectionFactory.get200Connection();
 
-        String historyRootPath = "D:/express/SinoairEDIServerHistory";
+        /*generateInfo.sendManifest(conn, historyRootPath);*/
+
+
         generateInfo.sendRmManifestAndDeleteLocateFiles(historyRootPath);
 
     }

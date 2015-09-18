@@ -15,6 +15,7 @@ public class StringUtil {
             return input;
         }
     }
+
     public static String nullAndCommaProcess(String src) {
         return nullProcess(src, ",");
     }
@@ -22,7 +23,8 @@ public class StringUtil {
     public static String nullAndSemicolonProcess(String src) {
         return nullProcess(src, ";");
     }
-     public static String nullAndTabProcess(String src) {
+
+    public static String nullAndTabProcess(String src) {
         return nullProcess(src, "\t");
     }
 
@@ -39,13 +41,13 @@ public class StringUtil {
         }
     }
 
-     /**
+    /**
      * 获取格式化整数
      * len：int 格式化后的数据长度;num:int 需要格式化的整数;
      * 如果数字长度超过len，则从头截取长度为len的字符
      * 返回值:String 格式化后的整数
      */
-    public static String getIntFormString(int len, int num)  {
+    public static String getIntFormString(int len, int num) {
         String strRecord = String.valueOf(num);
         return getFixedString(strRecord, len, "0", true);
     }
@@ -158,21 +160,152 @@ public class StringUtil {
 
     /**
      * 循环截掉，字符串开头的字符
+     *
      * @param str
      * @param character
      * @return
      */
-    public static String trimCharacterLeft(String str,String character){
-        if(str==null || "".equals(str) || character==null || "".equals(character)){
+    public static String trimCharacterLeft(String str, String character) {
+        if (str == null || "".equals(str) || character == null || "".equals(character)) {
             return "";
         }
-        while(str.startsWith(character)){
-         str=str.replaceFirst(character,"");
+        while (str.startsWith(character)) {
+            str = str.replaceFirst(character, "");
         }
         return str;
     }
 
+    public static String calculate(String acount, String lpNum) {
+        if (lpNum == null || lpNum.length() < 8) {
+            return "";
+        }
+        String itemId = acount + lpNum.substring(lpNum.length() - 8);
+        int int0 = getRMNumByLetter(itemId.substring(0, 1));
+        int int1 = getHexadecimal(getRMNumByLetter(itemId.substring(1, 2)) * 2);
+        int int2 = getRMNumByLetter(itemId.substring(2, 3));
+        int int3 = getHexadecimal(getRMNumByLetter(itemId.substring(3, 4)) * 2);
+        int int4 = getRMNumByLetter(itemId.substring(4, 5));
+        int int5 = getHexadecimal(getRMNumByLetter(itemId.substring(5, 6)) * 2);
+       /* System.out.println(itemId.substring(5, 6) + "int5:" + int5);*/
+        int int6 = getRMNumByLetter(itemId.substring(6, 7));
+        int int7 = getHexadecimal(getRMNumByLetter(itemId.substring(7, 8)) * 2);
+       /* System.out.println(itemId.substring(7, 8) + "int7:" + int7);*/
+        int int8 = getRMNumByLetter(itemId.substring(8, 9));
+        int int9 = getHexadecimal(getRMNumByLetter(itemId.substring(9, 10)) * 2);
+        int int10 = getRMNumByLetter(itemId.substring(10, 11));
+        int int11 = getHexadecimal(getRMNumByLetter(itemId.substring(11, 12)) * 2);
+        int int12 = getRMNumByLetter(itemId.substring(12, 13));
+        int int13 = getHexadecimal(getRMNumByLetter(itemId.substring(13, 14)) * 2);
+        int int14 = getRMNumByLetter(itemId.substring(14, 15));
+        int int15 = getHexadecimal(getRMNumByLetter(itemId.substring(15, 16)) * 2);
+        int int16 = getRMNumByLetter(itemId.substring(16, 17));
+        int int17 = getHexadecimal(getRMNumByLetter(itemId.substring(17, 18)) * 2);
+        int int18 = getRMNumByLetter(itemId.substring(18, 19));
+        int int19 = getHexadecimal(getRMNumByLetter(itemId.substring(19)) * 2);
+        /*System.out.println("int0:" + int0);
+        System.out.println("int1:" + int1);
+        System.out.println("int2:" + int2);
+        System.out.println("int3:" + int3);
+        System.out.println("int4:" + int4);
+        System.out.println("int5:" + int5);
+        System.out.println("int6:" + int6);
+        System.out.println("int7:" + int7);
+        System.out.println("int8:" + int8);
+        System.out.println("int9:" + int9);
+        System.out.println("int10:" + int10);
+        System.out.println("int11:" + int11);
+        System.out.println("int12:" + int12);
+        System.out.println("int13:" + int13);
+        System.out.println("int14:" + int14);
+        System.out.println("int15:" + int15);
+        System.out.println("int16:" + int16);
+        System.out.println("int17:" + int17);
+        System.out.println("int18:" + int18);
+        System.out.println("int19:" + int19);*/
+        int totalInt = int0 + int1 + int2 + int3 + int4 + int5 + int6 + int7 + int8 + int9 + int10 + int11 + int12 + int13 + int14 + int15 + int16 + int17 + int18 + int19;
+        System.out.println("totalInt:" + totalInt);
+        int charInt = totalInt % 16;
+        charInt = 16 - charInt;
+        return itemId + getRMLetterByNum(charInt);
+    }
+    public static String calculate(String str20) {
+       if (str20 == null || str20.length() < 8) {
+            return "";
+        }
+        int totalInt=0;
+        for(int i=0;i<str20.length();i++){
+            int num=0;
+          if(i==str20.length()-1){
+           num=getRMNumByLetter(str20.substring(i));
+          }else{
+           num=getRMNumByLetter(str20.substring(i, i+1));
+          }
+          if(i%2==1){
+           num=getHexadecimal(num);
+          }
+          totalInt=totalInt+num;
 
+        }
 
+        System.out.println("xintotalInt:" + totalInt);
+        int charInt = totalInt % 16;
+        charInt = 16 - charInt;
+        return str20 + getRMLetterByNum(charInt);
+    }
 
+    public static String getRMLetterByNum(int num) {
+        String letter = num + "";
+        if (num == 10) {
+            letter = "A";
+        } else if (num == 11) {
+            letter = "B";
+        } else if (num == 12) {
+            letter = "C";
+        } else if (num == 13) {
+            letter = "D";
+        } else if (num == 14) {
+            letter = "E";
+        } else if (num == 15) {
+            letter = "F";
+        }
+        return letter;
+    }
+
+    public static int getRMNumByLetter(String letter) {
+        int num = 0;
+        if (letter != null) {
+            if (letter.equals("A")) {
+                num = 10;
+            } else if (letter.equals("B")) {
+                num = 11;
+            } else if (letter.equals("C")) {
+                num = 12;
+            } else if (letter.equals("D")) {
+                num = 13;
+            } else if (letter.equals("E")) {
+                num = 14;
+            } else if (letter.equals("F")) {
+                num = 15;
+            } else {
+                num = Integer.parseInt(letter);
+            }
+        }
+
+        return num;
+
+    }
+
+    public static int getHexadecimal(int num) {
+        int stNum = 0;
+        int ge = num % 16;
+        int shi = Integer.parseInt((Math.floor(num / 16) + "").substring(0, (Math.floor(num / 16) + "").indexOf(".")));
+        stNum = Integer.parseInt(shi + "" + ge);
+        if (shi == 0 && stNum >= 10 && stNum <= 15) {
+            stNum = stNum / 2;
+        } else {
+            stNum = shi + ge;
+        }
+
+        return stNum;
+    }
 }
