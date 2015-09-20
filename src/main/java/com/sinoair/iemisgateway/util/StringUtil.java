@@ -202,7 +202,7 @@ public class StringUtil {
         int int17 = getHexadecimal(getRMNumByLetter(itemId.substring(17, 18)) * 2);
         int int18 = getRMNumByLetter(itemId.substring(18, 19));
         int int19 = getHexadecimal(getRMNumByLetter(itemId.substring(19)) * 2);
-        /*System.out.println("int0:" + int0);
+       /* System.out.println("int0:" + int0);
         System.out.println("int1:" + int1);
         System.out.println("int2:" + int2);
         System.out.println("int3:" + int3);
@@ -223,7 +223,7 @@ public class StringUtil {
         System.out.println("int18:" + int18);
         System.out.println("int19:" + int19);*/
         int totalInt = int0 + int1 + int2 + int3 + int4 + int5 + int6 + int7 + int8 + int9 + int10 + int11 + int12 + int13 + int14 + int15 + int16 + int17 + int18 + int19;
-        System.out.println("totalInt:" + totalInt);
+        /*System.out.println("totalInt:" + totalInt);*/
         int charInt = totalInt % 16;
         charInt = 16 - charInt;
         return itemId + getRMLetterByNum(charInt);
@@ -235,19 +235,20 @@ public class StringUtil {
         int totalInt=0;
         for(int i=0;i<str20.length();i++){
             int num=0;
+
           if(i==str20.length()-1){
            num=getRMNumByLetter(str20.substring(i));
           }else{
            num=getRMNumByLetter(str20.substring(i, i+1));
           }
           if(i%2==1){
-           num=getHexadecimal(num);
+           num=getHexadecimal(num*2);
           }
           totalInt=totalInt+num;
 
         }
 
-        System.out.println("xintotalInt:" + totalInt);
+       /* System.out.println("xintotalInt:" + totalInt);*/
         int charInt = totalInt % 16;
         charInt = 16 - charInt;
         return str20 + getRMLetterByNum(charInt);
@@ -300,6 +301,7 @@ public class StringUtil {
         int ge = num % 16;
         int shi = Integer.parseInt((Math.floor(num / 16) + "").substring(0, (Math.floor(num / 16) + "").indexOf(".")));
         stNum = Integer.parseInt(shi + "" + ge);
+        //十位数为0，代表着没有除开，余数就是被除数，规则里只有这种情况才会除2
         if (shi == 0 && stNum >= 10 && stNum <= 15) {
             stNum = stNum / 2;
         } else {
