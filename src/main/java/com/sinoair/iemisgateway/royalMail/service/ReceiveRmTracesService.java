@@ -1,8 +1,11 @@
 package com.sinoair.iemisgateway.royalMail.service;
 
+import ch.ethz.ssh2.SFTPv3Client;
 import com.sinoair.iemisgateway.royalMail.domain.RoyalMailManifest;
 import com.sinoair.iemisgateway.royalMail.domain.RoyalMailTrace;
 import com.sinoair.iemisgateway.util.*;
+import com.sinoair.iemisgateway.util.sftp.SftpConnection;
+import com.sinoair.iemisgateway.util.sftp.SftpDownload;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -129,7 +132,7 @@ public class ReceiveRmTracesService {
 
         String  localTraceDir =     historyRootPath+"/royalMail/in/traces/";
         String  localTraceDirCopy = historyRootPath+"/royalMail/bak/in/traces/";
-       /* ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnectionWithPassword(RoyalMailManifest.RMURL, RoyalMailManifest.USERNAME, RoyalMailManifest.PASSWORD,RoyalMailManifest.PROTNUM);
+        ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnectionWithPassword(RoyalMailManifest.RMURL, RoyalMailManifest.USERNAME, RoyalMailManifest.PASSWORD, RoyalMailManifest.PROTNUM);
         if (connsft != null) {
             LogUtil.log("下载轨迹反馈-连接英邮服务器成功！");
             SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
@@ -138,14 +141,14 @@ public class ReceiveRmTracesService {
             sftPv3Client.close();
             connsft.close();
             LogUtil.log("下载轨迹反馈-下载英邮轨迹反馈成功！");
-        }*/
+        }
         //在本地解析轨迹，插入轨迹信息，备份轨迹，删除本地轨迹
         analysisData(conn,localTraceDir, localTraceDirCopy);
         LogUtil.log("下载轨迹反馈-解析英邮轨迹反馈报文、本地备份成功！");
     }
 
     public static void main(String[] args) throws Exception {
-      Connection conn = ConnectionFactory.get200Connection();
+      Connection conn = ConnectionFactory.get194Connection();
         String historyRootPath="D:/express/SinoairEDIServerHistory";
         ReceiveRmTracesService receiveTracesService = new ReceiveRmTracesService();
         receiveTracesService.ReceiveTraces(conn,historyRootPath);
