@@ -78,11 +78,21 @@ public class ReceiveTracesService {
             } catch (Exception e) {
 
             }
-            if(field5.startsWith("ES08")){
-               String expiryDate=traceArray[Integer.parseInt(p.getProperty("ES0800XX"))-1];
+            if(field5.startsWith("ES08") && traceArray.length>9){
+                String expiryDate="";
+                try{
+                   expiryDate=traceArray[Integer.parseInt(p.getProperty("ES0800XX"))-1];
+                }catch(Exception e){
+                    e.printStackTrace();
+                   expiryDate="";
+                }
+
                EBA_REMARK=traceArray[Integer.parseInt(p.getProperty("ES0800REMARK"))-1];
                updatePstm.setTimestamp(1,new Timestamp(DateUtil.getStringToDate(EBA_OCCURTIME, "yyyy-MM-dd hh:mm").getTime()));
-               updatePstm.setTimestamp(2,new Timestamp(DateUtil.getStringToDate(expiryDate, "yyyy-MM-dd hh:mm").getTime()));
+               if(!"".equals(expiryDate)){
+                   updatePstm.setTimestamp(2,new Timestamp(DateUtil.getStringToDate(expiryDate, "yyyy-MM-dd hh:mm").getTime()));
+               }
+
                updatePstm.setString(3,EBA_REMARK);
                updatePstm.setString(4,field3);
                updatePstm.addBatch();
@@ -90,6 +100,16 @@ public class ReceiveTracesService {
             }
             String FLAG = "";
             String QA = "";
+            if(EAD_CODE==null || "".equals(EAD_CODE)){
+               EAD_CODE="INTERNATIONAL";
+            }
+            if(EAST_CODE==null|| "".equals(EAST_CODE)){
+                EAST_CODE="OT";
+            }
+            /*System.out.println("EAD_CODE:"+EAD_CODE);
+            System.out.println("EAST_CODE:"+EAST_CODE);
+            System.out.println("field5:"+field5);
+            System.out.println("field3:"+field3);*/
             insertPstm.setString(1, field3);
             insertPstm.setString(2, EAD_CODE);
             insertPstm.setString(3, EAST_CODE);
@@ -164,6 +184,7 @@ public class ReceiveTracesService {
         String zipPath = localTraceDir;
         File[] files = FileUtil.getFiles(zipPath);
         if (files != null && files.length > 0) {
+             LogUtil.log("下载轨迹反馈-下载轨迹反馈数量："+files.length);
             zipPath=zipPath.substring(0,zipPath.length()-1);
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
@@ -180,7 +201,7 @@ public class ReceiveTracesService {
     }
 
     public static void main(String[] args) throws Exception {
-        Connection conn = ConnectionFactory.get200Connection();
+        Connection conn = ConnectionFactory.get194Connection();
         String historyRootPath="D:/express/SinoairEDIServerHistory";
         ReceiveTracesService receiveTracesService = new ReceiveTracesService();
         receiveTracesService.ReceiveTraces(conn,historyRootPath);
