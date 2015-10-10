@@ -63,6 +63,13 @@ public class ReceiveTracesService {
             String SAC_ID = "SNR";
             String EBA_SAC_CODE = "GACN";
             String EBA_OCCURTIME = field7.substring(0, 4) + "-" + field7.substring(4, 6) + "-" + field7.substring(6) + " " + field8;
+            java.util.Date EBA_OCCURTIME_date=DateUtil.getStringToDate(EBA_OCCURTIME, "yyyy-MM-dd hh:mm");
+            if(EBA_OCCURTIME_date==null){
+                   LogUtil.log("报文错误："+line);
+                   EBA_OCCURTIME = traceArray[5].substring(0, 4) + "-" + traceArray[5].substring(4, 6) + "-" + traceArray[5].substring(6) + " " + field7;
+                   EBA_OCCURTIME_date=DateUtil.getStringToDate(EBA_OCCURTIME, "yyyy-MM-dd hh:mm");
+            }
+
             /*BaseLogger.info(EBA_OCCURTIME);*/
             String EBA_SOURCE = "CORREOS";
             String EBA_OCCURPLACE = "";
@@ -88,9 +95,15 @@ public class ReceiveTracesService {
                 }
 
                EBA_REMARK=traceArray[Integer.parseInt(p.getProperty("ES0800REMARK"))-1];
-               updatePstm.setTimestamp(1,new Timestamp(DateUtil.getStringToDate(EBA_OCCURTIME, "yyyy-MM-dd hh:mm").getTime()));
-               if(!"".equals(expiryDate)){
-                   updatePstm.setTimestamp(2,new Timestamp(DateUtil.getStringToDate(expiryDate, "yyyy-MM-dd hh:mm").getTime()));
+               updatePstm.setTimestamp(1,new Timestamp(EBA_OCCURTIME_date.getTime()));
+               if(!"".equals(expiryDate) && !"NO INFORMATION".equals(expiryDate.trim())){
+                   java.util.Date expiryDate_date=DateUtil.getStringToDate(expiryDate, "yyyy-MM-dd hh:mm");
+                   if(expiryDate_date==null){
+                        updatePstm.setTimestamp(2,new Timestamp(expiryDate_date.getTime()));
+                   }else{
+                        LogUtil.log("截止日期错误："+expiryDate+" 文件名称："+file.getName()+" 国际运单号："+field3);
+                   }
+
                }
 
                updatePstm.setString(3,EBA_REMARK);
@@ -117,8 +130,7 @@ public class ReceiveTracesService {
             insertPstm.setString(5, EBA_REMARK);
             insertPstm.setString(6, SAC_ID);
             insertPstm.setString(7, EBA_SAC_CODE);
-            // insertPstm.setDate(8,new java.sql.Date(DateUtil.getStringToDate(EBA_OCCURTIME, "yyyy-MM-dd hh:mm").getTime()));
-            insertPstm.setTimestamp(8, new Timestamp(DateUtil.getStringToDate(EBA_OCCURTIME, "yyyy-MM-dd hh:mm").getTime()));
+            insertPstm.setTimestamp(8, new Timestamp(EBA_OCCURTIME_date.getTime()));
             insertPstm.setString(9, EBA_SOURCE);
             insertPstm.setString(10, EBA_OCCURPLACE);
             insertPstm.setString(11, FLAG);
@@ -151,7 +163,8 @@ public class ReceiveTracesService {
                 Properties p = new Properties();
                 p.load(in);
                 for (File file : fileList) {
-                    DBinsert(file, insertPstm, selectPstm,updatePstm, p);
+                    LogUtil.log("开始读取："+file.getName());
+                    DBinsert(file, insertPstm, selectPstm, updatePstm, p);
                     //文件备份删除操作
                     FileUtil.copyFile(file, backUpPath);
                     FileUtil.deleteFile(file);
@@ -192,7 +205,7 @@ public class ReceiveTracesService {
                     ZipUtil.unzipFile(zipPath, file.getName(), zipPath);
                     FileUtil.deleteFile(file);
                 }
-                LogUtil.log("下载轨迹反馈-解压轨迹反馈成功！");
+                /*LogUtil.log("下载轨迹反馈-解压轨迹反馈成功！");*/
             }
         }
         //在本地解析轨迹，插入轨迹信息，备份轨迹，删除本地轨迹

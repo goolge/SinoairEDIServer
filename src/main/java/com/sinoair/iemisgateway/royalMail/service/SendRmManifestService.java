@@ -32,7 +32,7 @@ public class SendRmManifestService {
      * @return
      * @throws Exception
      */
-    /*public ArrayList getInfoList(Connection conn) throws Exception {
+    public ArrayList getInfoList(Connection conn) throws Exception {
         String sql = "select distinct eawb.EAWB_PRINTCODE," + //1
                 "eawb.EAWB_REFERENCE1," +//2
                 "eawb.EAWB_REFERENCE2," + //3
@@ -58,10 +58,10 @@ public class SendRmManifestService {
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
-        //BaseLogger.info("aaaa:" + sql);
+        BaseLogger.info("aaaa:" + sql);
         return arrayList;
-    }*/
-    public ArrayList getInfoList(Connection conn) throws Exception {
+    }
+   /* public ArrayList getInfoList(Connection conn) throws Exception {
         String sql = "select distinct eawb.EAWB_PRINTCODE," + //1
                 "eawb.EAWB_REFERENCE1," +//2
                 "eawb.EAWB_REFERENCE2," + //3
@@ -84,7 +84,7 @@ public class SendRmManifestService {
         ArrayList arrayList = texesql.execSqltoArr(sql);
         //BaseLogger.info("aaaa:" + sql);
         return arrayList;
-    }
+    }*/
 
     /**
      * 根据数据集合，在本地生成报文
