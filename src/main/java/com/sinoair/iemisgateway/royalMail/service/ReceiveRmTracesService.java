@@ -22,6 +22,7 @@ import java.sql.*;
  */
 public class ReceiveRmTracesService {
     public void DBinsert(File file, PreparedStatement insertPstm, PreparedStatement selectPstm) throws IOException, SQLException {
+        LogUtil.log("开始处理轨迹文件filename:" + file.getName());
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String rmTrack_OK=PropertiesUtil.readProperty("royalMail", "rmTrack_OK");
@@ -152,5 +153,8 @@ public class ReceiveRmTracesService {
         String historyRootPath="D:/express/SinoairEDIServerHistory";
         ReceiveRmTracesService receiveTracesService = new ReceiveRmTracesService();
         receiveTracesService.ReceiveTraces(conn,historyRootPath);
+       /* String  localTraceDir =     historyRootPath+"/royalMail/in/traces/";
+        String  localTraceDirCopy = historyRootPath+"/royalMail/bak/in/traces/";
+        receiveTracesService.analysisData(conn,localTraceDir,localTraceDirCopy);*/
     }
 }

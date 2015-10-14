@@ -1,6 +1,7 @@
 package com.sinoair.iemisgateway.correos.service;
 
 import ch.ethz.ssh2.SFTPv3Client;
+import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import com.sinoair.iemisgateway.util.*;
 import com.sinoair.iemisgateway.util.sftp.SftpConnection;
 import com.sinoair.iemisgateway.util.sftp.SftpUpload;
@@ -10,10 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -54,6 +52,32 @@ public class SendManifestService {
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
         // BaseLogger.info("aaaa:"+sql);
+        return arrayList;
+    }
+     public ArrayList getInfoListSome(Connection conn) throws Exception {
+        String sql = "select eawb.EAWB_CONSIGNEE_ACCOUNTNAME," + //1
+                "eawb.EAWB_DELIVER_ADDRESS," +//2
+                "eawb.EAWB_DESTCITY," + //3
+                "eawb.EAWB_DESTSTATE," + //4
+                "eawb.EAWB_DELIVER_POSTCODE," +  //5
+                "eawb.EAWB_DELIVER_PHONE," + //6
+                "eawb.EAWB_DECLAREGROSSWEIGHT," +   //7
+                "eawb.EAWB_SHIPPER_ACCOUNTNAME," +  //8
+                "eawb.EAWB_PICKUP_ADDRESS," +  //9
+                "eawb.EAWB_DEPARTCITY," +  //10
+                "eawb.EAWB_DEPARTSTATE," +  //11
+                "eawb.EAWB_PICKUP_POSTCODE," +   //12
+                "eawb.EAWB_PICKUP_PHONE," +  //13
+                "eawb.EAWB_REFERENCE1," +
+                "eawb.EAWB_PRINTCODE," +
+                "nvl(eawb.EAWB_DECLAREVALUE,0) EAWB_DECLAREVALUE " + //14
+                " from expressairwaybill eawb,express_correos_manifest ecm" +
+                " where ecm.eawb_printcode=eawb.eawb_printcode" +
+                " and eawb.eawb_printcode in('880002462295','880002873722','880002795492','880002844685','880002805305','880002641801','880002833672','880002572852')";
+        ExeSQL texesql = new ExeSQL();
+        texesql.setConnection(conn);
+        ArrayList arrayList = texesql.execSqltoArr(sql);
+        BaseLogger.info("aaaa:"+sql);
         return arrayList;
     }
 
@@ -468,9 +492,19 @@ public class SendManifestService {
         if (files != null && files.length > 0) {
             ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnection(PropertiesUtil.readProperty("correos", "correosUrl"), PropertiesUtil.readProperty("correos", "pfUsername"), PropertiesUtil.readProperty("correos", "keyFileManifest"));
             if (connsft != null) {
-                LogUtil.log(" 发送报文-连接西邮服务器成功");
+                LogUtil.log(" 发送报文-连接西邮服务器成功:报文个数"+files.length);
                 SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
-                SftpUpload.upload(localpfileDir, PropertiesUtil.readProperty("correos", "correospfDir"), sftPv3Client, localpfileDirCopy);
+                SftpUpload.upload(localpfileDir, PropertiesUtil.readProperty("correos", "correospfDirTemp"), sftPv3Client, null);
+                SftpUpload.upload(localpfileDir, PropertiesUtil.readProperty("correos", "correospfDirBak"), sftPv3Client, localpfileDirCopy);
+
+                 Vector vector=sftPv3Client.ls(PropertiesUtil.readProperty("correos", "correospfDirTemp"));
+                for (int i = 0; i < vector.size(); i++){
+                 SFTPv3DirectoryEntry aa = (SFTPv3DirectoryEntry) vector.elementAt(i);
+                 if(aa.filename.startsWith("FD")){
+                  sftPv3Client.mv(PropertiesUtil.readProperty("correos", "correospfDirTemp")+aa.filename,PropertiesUtil.readProperty("correos", "correospfDir")+aa.filename);
+                 }
+                }
+
                 sftPv3Client.close();
                 connsft.close();
                 LogUtil.log(" 发送报文-上传西邮服务器报文成功！");
@@ -480,7 +514,7 @@ public class SendManifestService {
     }
 
     public static void main(String[] args) throws Exception {
-        Connection conn = ConnectionFactory.get200Connection();
+        Connection conn = ConnectionFactory.get194Connection();
         String historyRootPath="D:/express/SinoairEDIServerHistory";
         SendManifestService generateInfo = new SendManifestService();
         generateInfo.sendManifest(conn,historyRootPath);
