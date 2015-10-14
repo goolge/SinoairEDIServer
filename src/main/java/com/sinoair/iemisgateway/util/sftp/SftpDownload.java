@@ -30,7 +30,8 @@ public class SftpDownload {
             for (int i = 0; i < listV.size(); i++) {
                 SFTPv3DirectoryEntry aa = (SFTPv3DirectoryEntry) listV.elementAt(i);
                 //BaseLogger.info("aaaa:" + aa.filename);
-                if (!aa.filename.endsWith(".zip") && !aa.filename.endsWith(".txt") && !aa.filename.endsWith(".ZIP") && !aa.filename.endsWith(".TXT")) {
+                //if (!aa.filename.endsWith(".zip") && !aa.filename.endsWith(".txt") && !aa.filename.endsWith(".ZIP") && !aa.filename.endsWith(".TXT") ) {
+                if (aa.filename.startsWith(".")) {
                     continue;
                 }
                 SFTPv3FileHandle fileHandle = sftPv3Client.openFileRO(remotePath + aa.filename);

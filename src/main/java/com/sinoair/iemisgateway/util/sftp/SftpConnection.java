@@ -39,6 +39,19 @@ public class SftpConnection {
         }
        return conn;
     }
+    public static Connection getSFTPConnectionWithPassword(String hostname, String username, String password, int portnum){
+        Connection conn=null;
+        try{
+           conn = new Connection(hostname,portnum);
+          conn.connect();
+          boolean isAuthenticated = conn.authenticateWithPassword(username, password);
+           if (isAuthenticated == false){throw new IOException("Authentication failed.");
+           }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+       return conn;
+    }
 
 
 }
