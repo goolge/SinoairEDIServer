@@ -14,13 +14,14 @@ public class StringUtilTest {
     @Test
     public void testCalculate() throws Exception {
        // System.out.println("hhah:"+ StringUtil.calculate("0B0418383000","94286899"));
-   Assert.assertEquals("0B012722900021AC35B21", StringUtil.calculate("0B0127229000","21AC35B2"));
+   //Assert.assertEquals("0B012722900021AC35B21", StringUtil.calculate("0B0127229000","21AC35B2"));
   // Assert.assertEquals("0B012722900021AC35B21", StringUtil.calculate("0B0418383000","94286899"));
     /*Assert.assertEquals("0B0418383000113701162", StringUtil.calculate("0B0418383000","11370116"));
     Assert.assertEquals("0B041838300011370124F", StringUtil.calculate("0B0418383000","11370124"));
     Assert.assertEquals("0B0418383000000369948", StringUtil.calculate("0B0418383000","00036994"));
 */
-    Assert.assertEquals("0B012722900021AC35B21", StringUtil.calculate("0B012722900021AC35B2"));
+    //Assert.assertEquals("0B012722900021AC35B21", StringUtil.calculate("0B012722900021AC35B2"));
+    Assert.assertEquals("0B012722900021AC35B21", StringUtil.calculate("OB041838300027112411"));
    /* Assert.assertEquals("0B0418383000113701162", StringUtil.calculate("0B041838300011370116"));
     Assert.assertEquals("0B041838300011370124F", StringUtil.calculate("0B041838300011370124"));
     Assert.assertEquals("0B0418383000000369948", StringUtil.calculate("0B041838300000036994"));*/

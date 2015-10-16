@@ -19,6 +19,12 @@ public class StringUtil {
     public static String nullAndCommaProcess(String src) {
         return nullProcess(src, ",");
     }
+    public static String nullAndCommaQuotesProcess(String src) {
+        if(src==null){
+            src="";
+        }
+        return nullProcess("\""+src+"\"", ",");
+    }
 
     public static String nullAndSemicolonProcess(String src) {
         return nullProcess(src, ";");
@@ -229,6 +235,7 @@ public class StringUtil {
         return itemId + getRMLetterByNum(charInt);
     }
     public static String calculate(String str20) {
+        System.out.println("str20:"+str20);
        if (str20 == null || str20.length() < 8) {
             return "";
         }
@@ -288,6 +295,7 @@ public class StringUtil {
             } else if (letter.equals("F")) {
                 num = 15;
             } else {
+                System.out.println("嘿嘿:"+Integer.parseInt("0"));
                 num = Integer.parseInt(letter);
             }
         }

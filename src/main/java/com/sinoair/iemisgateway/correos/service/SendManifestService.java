@@ -44,7 +44,8 @@ public class SendManifestService {
                 "eawb.EAWB_PICKUP_PHONE," +  //13
                 "eawb.EAWB_REFERENCE1," +
                 "eawb.EAWB_PRINTCODE," +
-                "nvl(eawb.EAWB_DECLAREVALUE,0) EAWB_DECLAREVALUE " + //14
+                "nvl(eawb.EAWB_DECLAREVALUE,0) EAWB_DECLAREVALUE," +
+                "eawb.EAWB_DELIVER_EMAIL " + //14
                 " from expressairwaybill eawb,express_correos_manifest ecm" +
                 " where ecm.eawb_printcode=eawb.eawb_printcode" +
                 " and ecm.ecm_status='PENDING'";
@@ -71,6 +72,7 @@ public class SendManifestService {
                 "eawb.EAWB_REFERENCE1," +
                 "eawb.EAWB_PRINTCODE," +
                 "nvl(eawb.EAWB_DECLAREVALUE,0) EAWB_DECLAREVALUE " + //14
+                "eawb.EAWB_DELIVER_EMAIL " + //14
                 " from expressairwaybill eawb,express_correos_manifest ecm" +
                 " where ecm.eawb_printcode=eawb.eawb_printcode" +
                 " and eawb.eawb_printcode in('880002462295','880002873722','880002795492','880002844685','880002805305','880002641801','880002833672','880002572852')";
@@ -184,7 +186,7 @@ public class SendManifestService {
             sb.append(getStrCorreos(0, "", "", false, true));//第39
             sb.append(getStrCorreos(0, "", "", false, true));//第40
             sb.append(getStrCorreos(12, getNumLength(map.get("EAWB_DELIVER_PHONE"), 12), "", false, true));//第41
-            sb.append(getStrCorreos(0, "", "", false, true));//第42
+            sb.append(getStrCorreos(50, map.get("EAWB_DELIVER_POSTCODE").toString(), "", false, true));//第42 收件人邮箱
             sb.append(getStrCorreos(0, "", "", false, true));//第43
             sb.append(getStrCorreos(2, deliveryMode44, "", false, true));//第44
             Double weight = Double.parseDouble(map.get("EAWB_DECLAREGROSSWEIGHT").toString())*1000; //单位是kg ,要转换成g

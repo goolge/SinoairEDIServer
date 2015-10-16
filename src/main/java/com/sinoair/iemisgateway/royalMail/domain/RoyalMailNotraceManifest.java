@@ -1,5 +1,6 @@
 package com.sinoair.iemisgateway.royalMail.domain;
 
+import com.sinoair.iemisgateway.util.DateUtil;
 import com.sinoair.iemisgateway.util.StringUtil;
 
 import java.util.List;
@@ -12,232 +13,306 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class RoyalMailNotraceManifest {
-    public static final String PARTNER_CODE="ROYALMAIL";
-    public static final String RMURL="ftg.bdtg.royalmailgroup.com";
-    public static final String USERNAME="E000647";
-    public static final String PASSWORD="EW4AGiD5";
-    public static final int PROTNUM=22022;
-    String RecordTypeIndicator11_A1 = "00";
-    String VersionNumber12_A2 = "02";
-    String FileType13_A3 = "RMCM";
-    String FileSerialNumber_A4;
-    String FileSubmissionDate_A5;
-    String FileSubmissionTime_A6;
-    String ContactEmail_A7 = "ZHANGMJ@SINOAIR.COM";
-    public static final String WireNumber_A8 = "W9EA";
-    String SiteSystemName_A9 = "";
-    String CradleID_A10 = "9999";
-    String FileStatus_A11 = "LIVE";
+    public static final String PARTNER_CODE = "ROYALMAILNOTRACE";
+    public static final String FILENAMEPREFIX = "COSS";
+    public static final String PREADVICE3 = "_PreAdvice3_";
+    public static final String A4_GenericAcccountNumber = "0418383000";
 
-    String RecordTypeIndicator_B1 = "01";
-    String VersionNumber_B2 = "02";
-    String ContactName_B3 = "mike";
-    String ContactTelephone_B4 = "4402089310200";
-    String ContactEmail_B5 = "mike@ccllhr.com";
-    String BusinessName_B6 = "CCL";
-    String DespatchAddress1_B7 = "Unit4 Radius Park Faggs Road Feltham";
-    String DespatchAddress2_B8 = "";
-    String DespatchAddress3_B9 = "";
-    String Posttown_B10 = "london";
-    String Postcode_B11 = "TW14 0NG";
-    String Country_B12 = "GBR";
-    String PostingLocation_B13 = "9000446082";
-    String ReceivingHUB_B14 = "002673";
+    String A1_RecordTypeIndicator = "00";
+    String A2_FileVersionNumber = "03";
+    String A3_FileType = "RMBS";
+    String A5_GenericAcccountCode = "MULTIPLE";
+    String A6_BatchNumber = "1";
+    String A7_DespatchCollectionTime = "";
+    String A8_EarlistCollectionDateTime = "";
+    String A9_LatestCollectionTime = "";
+    //todo 测试期间“TEST”,上线以后LIVE
+    String A10_FileStatus = "TEST";
+    String A11_FileSubmissionDateTime = "";
+    String A12_WireNumber = "W9EA";
+    String A13_HashAuthenticaiton = "";
+    String A14_ChannelIdentifier = "OB";
 
-    String RecordTypeIndicator_D1 = "09";
-    String VersionNumber_D2 = "02";
-    String RecordCount_D3;
+    String B1_RecordTypeIndicator = "01";
+    String B2_FileVersionNumber = "03";
+    String B3_SenderName = "ccl";
+    String B4_SendersAddressLine1 = "Unit4 Radius Park Faggs Road Feltham";
+    String B5_SendersAddressLine2 = "";
+    String B6_SendersAddressLine3 = "";
+    String B7_SendersAddressLine4 = "";
+    String B8_SendersAddressLine5 = "";
+    String B9_SendersPosttown = "london";
+    String B10_SenderPostcode = "TW14 0NG";
+    String B11_ContactName = "Mike";
+    String B12_ContactTelephone = "4402089310200";
+    String B13_Vehicle = "";
+    String B14_PaymentMethod = "";
+    String B15_PaymentValue = "";
+    String B16_ContactEmail = "mike@ccllhr.com";
+    String B17_ReceivingHUB = "002673";
+    String B18_PostingLocationNumber = "9000446082";
 
-    List<RoyalMailItem> royalMailItemList;
+    String D1_RecordTypeIndicator = "09";
+    String D2_VersionNumber = "03";
+    String D3_RecordCount = "";
+
+    List<RoyalMailNotraceItem> royalMailNotraceItemList;
 
     public String getMessageContent() {
         StringBuffer sb = new StringBuffer();
-        if (royalMailItemList != null && royalMailItemList.size() > 0) {
-            sb.append(StringUtil.nullAndCommaProcess(RecordTypeIndicator11_A1));
-            sb.append(StringUtil.nullAndCommaProcess(VersionNumber12_A2));
-            sb.append(StringUtil.nullAndCommaProcess(FileType13_A3));
-            sb.append(StringUtil.nullAndCommaProcess(StringUtil.getStringSpace(FileSerialNumber_A4,4,1)));
-            sb.append(StringUtil.nullAndCommaProcess(StringUtil.getFixedStringSpace(FileSubmissionDate_A5,8)));
-            sb.append(StringUtil.nullAndCommaProcess(StringUtil.getFixedStringSpace(FileSubmissionTime_A6,6)));
-            sb.append(StringUtil.nullAndCommaProcess(ContactEmail_A7));
-            sb.append(StringUtil.nullAndCommaProcess(WireNumber_A8));
-            sb.append(StringUtil.nullAndCommaProcess(SiteSystemName_A9));
-            sb.append(StringUtil.nullAndCommaProcess(CradleID_A10));
-            sb.append(StringUtil.nullAndCommaProcess(FileStatus_A11));
+        if (royalMailNotraceItemList != null && royalMailNotraceItemList.size() > 0) {
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A1_RecordTypeIndicator));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A2_FileVersionNumber));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A3_FileType));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A4_GenericAcccountNumber));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A5_GenericAcccountCode));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A6_BatchNumber));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A7_DespatchCollectionTime));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A8_EarlistCollectionDateTime));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A9_LatestCollectionTime));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A10_FileStatus));
+            this.A11_FileSubmissionDateTime= DateUtil.getDateStrAheadHours(-8, "yyyy-MM-dd'T'HH:mm:ss+08:00");
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A11_FileSubmissionDateTime));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A12_WireNumber));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(A13_HashAuthenticaiton));
+            sb.append("\""+StringUtil.nullProcess(A14_ChannelIdentifier,null)+"\"");
             sb.append("\r\n");
 
-            sb.append(StringUtil.nullAndCommaProcess(RecordTypeIndicator_B1));
-            sb.append(StringUtil.nullAndCommaProcess(VersionNumber_B2));
-            sb.append(StringUtil.nullAndCommaProcess(ContactName_B3));
-            sb.append(StringUtil.nullAndCommaProcess(ContactTelephone_B4));
-            sb.append(StringUtil.nullAndCommaProcess(ContactEmail_B5));
-            sb.append(StringUtil.nullAndCommaProcess(BusinessName_B6));
-            sb.append(StringUtil.nullAndCommaProcess(DespatchAddress1_B7));
-            sb.append(StringUtil.nullAndCommaProcess(DespatchAddress2_B8));
-            sb.append(StringUtil.nullAndCommaProcess(DespatchAddress3_B9));
-            sb.append(StringUtil.nullAndCommaProcess(Posttown_B10));
-            sb.append(StringUtil.nullAndCommaProcess(Postcode_B11));
-            sb.append(StringUtil.nullAndCommaProcess(Country_B12));
-            sb.append(StringUtil.nullAndCommaProcess(PostingLocation_B13));
-            sb.append(StringUtil.nullAndCommaProcess(ReceivingHUB_B14));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B1_RecordTypeIndicator));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B2_FileVersionNumber));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B3_SenderName));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B4_SendersAddressLine1));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B5_SendersAddressLine2));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B6_SendersAddressLine3));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B7_SendersAddressLine4));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B8_SendersAddressLine5));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B9_SendersPosttown));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B10_SenderPostcode));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B11_ContactName));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B12_ContactTelephone));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B13_Vehicle));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B14_PaymentMethod));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B15_PaymentValue));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B16_ContactEmail));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(B17_ReceivingHUB));
+            sb.append("\""+StringUtil.nullProcess(B18_PostingLocationNumber,null)+"\"");
             sb.append("\r\n");
-            for (int i = 0; i < royalMailItemList.size(); i++) {
-                RoyalMailItem royalMailItem = royalMailItemList.get(i);
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getRecordTypeIndicator_C1()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getVersionNumber_C2()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getItemNumber_C3()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getRecipientName_C4()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getBusinessName_C5()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getDeliveryAddress1_C6()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getDeliveryAddress2_C7()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getDeliveryAddress3_C8()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getPosttown_C9()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getPostcode_C10()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSortCode_C11()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getContract_C12()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getServiceID_C13()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getServiceEnhancement_C14()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getAccountNumber_C15()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSendersReference1_C16()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSpareAttribute_C17()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSafeplace_C18()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getItemWeight_C19()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSpareAttribute_C20()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSpareAttribute_C21()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getDeliveryOption_C22()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getDeclaredValue_C23()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getNotificationCode_C24()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getRecipientEmail_C25()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getRecipientTelephone_C26()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSpareAttribute_C27()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getSpareAttribute_C28()));
-                sb.append(StringUtil.nullAndCommaProcess(royalMailItem.getRecipientContactNo_C29()));
+            for (int i = 0; i < royalMailNotraceItemList.size(); i++) {
+                RoyalMailNotraceItem  royalMailNotraceItem= royalMailNotraceItemList.get(i);
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC1_RecordTypeIndicator()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC2_FileVersionNumber()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC3_ConsignmentNumber()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC4_ServiceID()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC5_WeekendHandlingCode()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC6_SpareField()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC7_SpareField()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC8_SenderReference1()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC9_CollectionIDLocationID()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC10_ContractNumber()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC11_ConsignmentWeight()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC12_NumberofItems()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC13_SpareField()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC14_RecipientBusinessName()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC15_DeliveryAddress1()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC16_DeliveryAddress2()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC17_DeliveryAddress3()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC18_DeliveryPostTown()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC19_DeliveryPostcodeDPS()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC20_RecipientName()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC21_BuildingNumber()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC22_BuildingName()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC23_DeliveryAddress4()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC24_DeliveryAddress5()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC25_DeliveryCountry()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC26_ZISOBillToDestinationCode()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC27_UniqueItemID()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC28_ItemWeight()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC29_WeightType()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC30_TypeofItem()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC31_Format()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC32_Diemensions()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC33_DiemensionsType()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC34_DeclaredValue()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC35_PricePaid()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC36_POLFADcode()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC37_Dienumber()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC38_1DTrackingNumber()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC39_Class()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC40_DateofProduction()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC41_ProvisionalDate()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC42_TariffRate()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC43_TariffVersion()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC44_Sortcode()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC45_ContractCode()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC46_SenderReference2()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC47_ServiceEnhancement()));
+                sb.append(StringUtil.nullAndCommaQuotesProcess(royalMailNotraceItem.getC48_RecipientContactNo()));
+                sb.append("\""+StringUtil.nullProcess(royalMailNotraceItem.getC49_ExpectedDateofDelivery(),null)+"\"");
                 sb.append("\r\n");
-
             }
+            this.D3_RecordCount = StringUtil.getStringSpace(""+(royalMailNotraceItemList.size() + 3),5,1);
+            sb.append(StringUtil.nullAndCommaQuotesProcess(D1_RecordTypeIndicator));
+            sb.append(StringUtil.nullAndCommaQuotesProcess(D2_VersionNumber));
+            sb.append("\""+StringUtil.nullProcess(D3_RecordCount,null)+"\"");
 
-            this.RecordCount_D3=StringUtil.getIntFormString(5,(royalMailItemList.size() + 3));
-            sb.append(StringUtil.nullAndCommaProcess(RecordTypeIndicator_D1));
-            sb.append(StringUtil.nullAndCommaProcess(VersionNumber_D2));
-            sb.append(RecordCount_D3);
         }
 
         return sb.toString();
     }
 
-    public void setRecordTypeIndicator11_A1(String recordTypeIndicator11_A1) {
-        RecordTypeIndicator11_A1 = recordTypeIndicator11_A1;
+    public void setRoyalMailNotraceItemList(List<RoyalMailNotraceItem> royalMailNotraceItemList) {
+        this.royalMailNotraceItemList = royalMailNotraceItemList;
     }
 
-    public void setVersionNumber12_A2(String versionNumber12_A2) {
-        VersionNumber12_A2 = versionNumber12_A2;
+    public static String getPartnerCode() {
+        return PARTNER_CODE;
     }
 
-    public void setFileType13_A3(String fileType13_A3) {
-        FileType13_A3 = fileType13_A3;
+    public static String getFilenameprefix() {
+        return FILENAMEPREFIX;
     }
 
-    public void setFileSerialNumber_A4(String fileSerialNumber_A4) {
-        FileSerialNumber_A4 = fileSerialNumber_A4;
+    public static String getPreadvice3() {
+        return PREADVICE3;
     }
 
-    public void setFileSubmissionDate_A5(String fileSubmissionDate_A5) {
-        FileSubmissionDate_A5 = fileSubmissionDate_A5;
+    public String getA1_RecordTypeIndicator() {
+        return A1_RecordTypeIndicator;
     }
 
-    public void setFileSubmissionTime_A6(String fileSubmissionTime_A6) {
-        FileSubmissionTime_A6 = fileSubmissionTime_A6;
+    public String getA2_FileVersionNumber() {
+        return A2_FileVersionNumber;
     }
 
-    public void setContactEmail_A7(String contactEmail_A7) {
-        ContactEmail_A7 = contactEmail_A7;
+    public String getA3_FileType() {
+        return A3_FileType;
     }
 
-    public void setSiteSystemName_A9(String siteSystemName_A9) {
-        SiteSystemName_A9 = siteSystemName_A9;
+    public String getA4_GenericAcccountNumber() {
+        return A4_GenericAcccountNumber;
     }
 
-    public void setCradleID_A10(String cradleID_A10) {
-        CradleID_A10 = cradleID_A10;
+    public String getA5_GenericAcccountCode() {
+        return A5_GenericAcccountCode;
     }
 
-    public void setFileStatus_A11(String fileStatus_A11) {
-        FileStatus_A11 = fileStatus_A11;
+    public String getA6_BatchNumber() {
+        return A6_BatchNumber;
     }
 
-    public void setRecordTypeIndicator_B1(String recordTypeIndicator_B1) {
-        RecordTypeIndicator_B1 = recordTypeIndicator_B1;
+    public String getA7_DespatchCollectionTime() {
+        return A7_DespatchCollectionTime;
     }
 
-    public void setVersionNumber_B2(String versionNumber_B2) {
-        VersionNumber_B2 = versionNumber_B2;
+    public String getA8_EarlistCollectionDateTime() {
+        return A8_EarlistCollectionDateTime;
     }
 
-    public void setContactName_B3(String contactName_B3) {
-        ContactName_B3 = contactName_B3;
+    public String getA9_LatestCollectionTime() {
+        return A9_LatestCollectionTime;
     }
 
-    public void setContactTelephone_B4(String contactTelephone_B4) {
-        ContactTelephone_B4 = contactTelephone_B4;
+    public String getA10_FileStatus() {
+        return A10_FileStatus;
     }
 
-    public void setContactEmail_B5(String contactEmail_B5) {
-        ContactEmail_B5 = contactEmail_B5;
+    public String getA11_FileSubmissionDateTime() {
+        return A11_FileSubmissionDateTime;
     }
 
-    public void setBusinessName_B6(String businessName_B6) {
-        BusinessName_B6 = businessName_B6;
+    public String getA12_WireNumber() {
+        return A12_WireNumber;
     }
 
-    public void setDespatchAddress1_B7(String despatchAddress1_B7) {
-        DespatchAddress1_B7 = despatchAddress1_B7;
+    public String getA13_HashAuthenticaiton() {
+        return A13_HashAuthenticaiton;
     }
 
-    public void setDespatchAddress2_B8(String despatchAddress2_B8) {
-        DespatchAddress2_B8 = despatchAddress2_B8;
+    public String getA14_ChannelIdentifier() {
+        return A14_ChannelIdentifier;
     }
 
-    public void setDespatchAddress3_B9(String despatchAddress3_B9) {
-        DespatchAddress3_B9 = despatchAddress3_B9;
+    public String getB1_RecordTypeIndicator() {
+        return B1_RecordTypeIndicator;
     }
 
-    public void setPosttown_B10(String posttown_B10) {
-        Posttown_B10 = posttown_B10;
+    public String getB2_FileVersionNumber() {
+        return B2_FileVersionNumber;
     }
 
-    public void setPostcode_B11(String postcode_B11) {
-        Postcode_B11 = postcode_B11;
+    public String getB3_SenderName() {
+        return B3_SenderName;
     }
 
-    public void setCountry_B12(String country_B12) {
-        Country_B12 = country_B12;
+    public String getB4_SendersAddressLine1() {
+        return B4_SendersAddressLine1;
     }
 
-    public void setPostingLocation_B13(String postingLocation_B13) {
-        PostingLocation_B13 = postingLocation_B13;
+    public String getB5_SendersAddressLine2() {
+        return B5_SendersAddressLine2;
     }
 
-    public void setReceivingHUB_B14(String receivingHUB_B14) {
-        ReceivingHUB_B14 = receivingHUB_B14;
+    public String getB6_SendersAddressLine3() {
+        return B6_SendersAddressLine3;
     }
 
-    public void setRecordTypeIndicator_D1(String recordTypeIndicator_D1) {
-        RecordTypeIndicator_D1 = recordTypeIndicator_D1;
+    public String getB7_SendersAddressLine4() {
+        return B7_SendersAddressLine4;
     }
 
-    public void setVersionNumber_D2(String versionNumber_D2) {
-        VersionNumber_D2 = versionNumber_D2;
+    public String getB8_SendersAddressLine5() {
+        return B8_SendersAddressLine5;
     }
 
-    public void setRecordCount_D3(String recordCount_D3) {
-        RecordCount_D3 = recordCount_D3;
+    public String getB9_SendersPosttown() {
+        return B9_SendersPosttown;
     }
 
-    public void setRoyalMailItemList(List<RoyalMailItem> royalMailItemList) {
-        this.royalMailItemList = royalMailItemList;
+    public String getB10_SenderPostcode() {
+        return B10_SenderPostcode;
     }
 
-    public String getWireNumber_A8() {
-        return WireNumber_A8;
+    public String getB11_ContactName() {
+        return B11_ContactName;
+    }
+
+    public String getB12_ContactTelephone() {
+        return B12_ContactTelephone;
+    }
+
+    public String getB13_Vehicle() {
+        return B13_Vehicle;
+    }
+
+    public String getB14_PaymentMethod() {
+        return B14_PaymentMethod;
+    }
+
+    public String getB15_PaymentValue() {
+        return B15_PaymentValue;
+    }
+
+    public String getB16_ContactEmail() {
+        return B16_ContactEmail;
+    }
+
+    public String getB17_ReceivingHUB() {
+        return B17_ReceivingHUB;
+    }
+
+    public String getB18_PostingLocationNumber() {
+        return B18_PostingLocationNumber;
+    }
+
+    public String getD1_RecordTypeIndicator() {
+        return D1_RecordTypeIndicator;
+    }
+
+    public String getD2_VersionNumber() {
+        return D2_VersionNumber;
+    }
+
+    public String getD3_RecordCount() {
+        return D3_RecordCount;
     }
 }

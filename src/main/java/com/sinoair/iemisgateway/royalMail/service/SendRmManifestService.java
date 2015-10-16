@@ -95,7 +95,7 @@ public class SendRmManifestService {
      * @throws Exception
      */
     public void generateFileRoyalMail(ArrayList arrData, String app_dir, Connection conn) throws Exception {
-        int maxLine = 24500;//一个文档最多存放24500行数据，0代表没有限制
+        int maxLine = 24496;//一个文档最多存放24500行数据，0代表没有限制
         ArrayList<List> arrayListArrayList = null;
         if (arrData != null && arrData.size() > 0) {
             arrayListArrayList = new ArrayList<List>();

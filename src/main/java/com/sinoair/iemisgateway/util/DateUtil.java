@@ -16,6 +16,7 @@ import java.util.Date;
 public class DateUtil {
     public static void main(String[] args) {
         BaseLogger.info(getDateWith());
+        System.out.println("getDateStrAheadHours:"+getDateStrAheadHours(-8,"yyyy-MM-dd'T'HH:mm:ss+08:00"));
     }
     public static String getDateWith() {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss-SSS");
@@ -108,6 +109,16 @@ public class DateUtil {
 	}
     public static String getCurrentDateStrGB(String format) {
         return getDateStrAheadHours(-7, format);
+    }
+
+    public static String getStringByNow(String format) {
+        String str="";
+        if(format!=null && !"".equals(format)){
+           SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format);
+            str= simpleDateFormat.format(new Date());
+        }
+
+        return str;
     }
     public static String getDateStrAheadHours(int hours,String format){
       Calendar calendar=Calendar.getInstance();

@@ -1,12 +1,8 @@
 package com.sinoair.iemisgateway.royalMail.service;
 
-import ch.ethz.ssh2.SFTPv3Client;
-import ch.ethz.ssh2.SFTPv3DirectoryEntry;
-import com.sinoair.iemisgateway.royalMail.domain.RoyalMailItem;
-import com.sinoair.iemisgateway.royalMail.domain.RoyalMailManifest;
+import com.sinoair.iemisgateway.royalMail.domain.RoyalMailNotraceItem;
+import com.sinoair.iemisgateway.royalMail.domain.RoyalMailNotraceManifest;
 import com.sinoair.iemisgateway.util.*;
-import com.sinoair.iemisgateway.util.sftp.SftpConnection;
-import com.sinoair.iemisgateway.util.sftp.SftpUpload;
 
 import java.io.File;
 import java.sql.Connection;
@@ -16,7 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,8 +21,10 @@ import java.util.Vector;
  * To change this template use File | Settings | File Templates.
  */
 public class SendRmNotraceManifestService {
+
     /**
      * 获取需要发送预报的数据集合
+     *
      * @param conn
      * @return
      * @throws Exception
@@ -42,26 +39,23 @@ public class SendRmNotraceManifestService {
                 "eawb.EAWB_DELIVER_POSTCODE," +   //7
                 "eawb.EAWB_DECLAREGROSSWEIGHT," +  //8
                 "eawb.EAWB_DELIVER_PHONE," +
-                "eawb.EAWB_DELIVER_EMAIL," + //9
-                "case when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 4)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 4)) " +
-                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 3)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 3))" +
-                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2))" +
-                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) else '___' end SORTCODE " +
+                "eawb.EAWB_DELIVER_EMAIL"+
                 " from express_manifest em, expressairwaybill eawb" +
                 " ,expressbusinessactivity eba" +
                 " where eawb.eawb_printcode=em.eawb_printcode " +
                 " and eawb.eawb_printcode = eba.eawb_printcode " +
                 " and eba.ead_code = 'INTERNATIONAL'" +
                 " and eba.east_code = 'CP'" +
-                " and em.em_status='PENDING' and em.EM_PARTNER='"+RoyalMailManifest.PARTNER_CODE+"' order by eawb.EAWB_PRINTCODE ";
-       // System.out.println(sql);
+                " and em.em_status='PENDING' and em.EM_PARTNER='" + RoyalMailNotraceManifest.PARTNER_CODE + "' order by eawb.EAWB_PRINTCODE ";
+        // System.out.println(sql);
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
         BaseLogger.info("aaaa:" + sql);
         return arrayList;
     }
-   /* public ArrayList getInfoList(Connection conn) throws Exception {
+
+    public ArrayList getInfoListSome(Connection conn) throws Exception {
         String sql = "select distinct eawb.EAWB_PRINTCODE," + //1
                 "eawb.EAWB_REFERENCE1," +//2
                 "eawb.EAWB_REFERENCE2," + //3
@@ -71,20 +65,16 @@ public class SendRmNotraceManifestService {
                 "eawb.EAWB_DELIVER_POSTCODE," +   //7
                 "eawb.EAWB_DECLAREGROSSWEIGHT," +  //8
                 "eawb.EAWB_DELIVER_PHONE," +
-                "eawb.EAWB_DELIVER_EMAIL," + //9
-                "case when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 4)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 4)) " +
-                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 3)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 3))" +
-                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 2))" +
-                "     when (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) is not null then (select ep1.ep_value from express_property ep1 where ep1.ep_group = 'POSTCODE_SORTCODE' and ep1.ep_key = substr(eawb.EAWB_DELIVER_POSTCODE, 0, 1)) else '___' end SORTCODE " +
+                "eawb.EAWB_DELIVER_EMAIL " +
                 " from  expressairwaybill eawb" +
                 " where eawb.EAWB_PRINTCODE in('880001022245', '880001022256', '880001022260', '880001022271','880001022282')";
-       // System.out.println(sql);
+        // System.out.println(sql);
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
         //BaseLogger.info("aaaa:" + sql);
         return arrayList;
-    }*/
+    }
 
     /**
      * 根据数据集合，在本地生成报文
@@ -95,7 +85,7 @@ public class SendRmNotraceManifestService {
      * @throws Exception
      */
     public void generateFileRoyalMail(ArrayList arrData, String app_dir, Connection conn) throws Exception {
-        int maxLine = 24500;//一个文档最多存放24500行数据，0代表没有限制
+        int maxLine = 24496;//一个文档最多存放24546行数据，0代表没有限制,再加上三行的表头表尾，不能超过24500
         ArrayList<List> arrayListArrayList = null;
         if (arrData != null && arrData.size() > 0) {
             arrayListArrayList = new ArrayList<List>();
@@ -124,31 +114,28 @@ public class SendRmNotraceManifestService {
             }
         }
         if (arrayListArrayList != null && arrayListArrayList.size() > 0) {
-            RoyalMailManifest royalMailManifest = new RoyalMailManifest();
+            RoyalMailNotraceManifest royalMailNotraceManifest = new RoyalMailNotraceManifest();
             for (int i = 0; i < arrayListArrayList.size(); i++) {
-                PreparedStatement selectSeq = conn.prepareStatement("select seq_royalmail.nextval from dual ");
+                PreparedStatement selectSeq = conn.prepareStatement("select SEQ_ROYALMAILNOTRACE.nextval from dual ");
                 ResultSet rs = selectSeq.executeQuery();
                 String oneSeq = "";
                 if (rs.next()) {
                     oneSeq = rs.getString(1);
                 }
-                oneSeq =StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
-                royalMailManifest.setFileSerialNumber_A4(oneSeq);
-                royalMailManifest.setFileSubmissionDate_A5(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(0, 8));
-                royalMailManifest.setFileSubmissionTime_A6(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(8));
+                oneSeq = StringUtil.getIntFormString(9, Integer.parseInt(oneSeq));
                 List listi = arrayListArrayList.get(i);
-                List<RoyalMailItem> royalMailItemList = new ArrayList<RoyalMailItem>();
+                List<RoyalMailNotraceItem> royalMailNotraceItemList = new ArrayList<RoyalMailNotraceItem>();
                 for (int m = 0; m < listi.size(); m++) {
                     HashMap map = (HashMap) listi.get(m);
-                    RoyalMailItem royalMailItem = new RoyalMailItem(map);
-                    royalMailItemList.add(royalMailItem);
+                    RoyalMailNotraceItem royalMailNotraceItem = new RoyalMailNotraceItem(map);
+                    royalMailNotraceItemList.add(royalMailNotraceItem);
                 }
-                royalMailManifest.setRoyalMailItemList(royalMailItemList);
+                royalMailNotraceManifest.setRoyalMailNotraceItemList(royalMailNotraceItemList);
                 //System.out.println("royalMailItemList:" + royalMailItemList.size());
                 //System.out.println("royalMailManifest.getMessageContent():" + royalMailManifest.getMessageContent());
                 String strFilePath = "";
-                strFilePath = app_dir + royalMailManifest.getWireNumber_A8() + oneSeq;
-                FileUtil.generateFile(royalMailManifest.getMessageContent(), strFilePath);
+                strFilePath = app_dir + RoyalMailNotraceManifest.FILENAMEPREFIX + royalMailNotraceManifest.getA12_WireNumber() + RoyalMailNotraceManifest.PREADVICE3 + oneSeq+".csv";
+                FileUtil.generateFile(royalMailNotraceManifest.getMessageContent(), strFilePath);
             }
         }
     }
@@ -175,12 +162,17 @@ public class SendRmNotraceManifestService {
         }
     }
 
-    public void sendManifest(Connection conn, String historyRootPath) throws Exception, SQLException {
+    /**
+     * @param conn
+     * @param historyRootPath
+     * @throws Exception
+     * @throws SQLException
+     */
+    public void sendManifestNotrace(Connection conn, String historyRootPath) throws Exception, SQLException {
         //组织西邮报文数据，在本地存一份备份，然后放到西邮服务器，同时更新运单状态为发送成功
         ArrayList arrayList = null;
-        String localpfileDir = historyRootPath + "/royalMail/out/manifest/";
+        String localpfileDir = historyRootPath + "/royalMail/out/manifestNotrace/";
         try {
-
             //1.获取需要发送预报的运单数据；
             arrayList = getInfoList(conn);
             //2.更新数据状态为已发送
@@ -197,62 +189,55 @@ public class SendRmNotraceManifestService {
         ConnectionFactory.closeConnection(conn);
         //3.在本地生成西邮报文
         int sendNum = arrayList == null ? 0 : arrayList.size();
-        LogUtil.log(" 英邮发送报文-获取发预报的数据条数：" + sendNum);
-         //4.向英邮发送预报,同时备份本地文件
-       sendRmManifestAndDeleteLocateFiles(localpfileDir);
-        //5.如果发送运单数量不为0，则给一英国相关人员发送信息
-       sendEmail(sendNum);
+        LogUtil.log(" " + RoyalMailNotraceManifest.PARTNER_CODE + "发送报文-获取发预报的数据条数：" + sendNum);
+        //4.如果发送运单数量不为0，则给一英国相关人员发送信息
+        sendEmail(historyRootPath, sendNum);
 
 
     }
-    public void sendRmManifestAndDeleteLocateFiles(String historyRootPath) throws Exception{
-        String localpfileDir = historyRootPath + "/royalMail/out/manifest/";
-        String localpfileDirCopy = historyRootPath + "/royalMail/bak/out/manifest/";
+
+
+    public void sendEmail(String historyRootPath, int sendNum) throws Exception {
+        String localpfileDir = historyRootPath + "/royalMail/out/manifestNotrace/";
+        String localpfileDirCopy = historyRootPath + "/royalMail/bak/out/manifestNotrace/";
         File[] files = FileUtil.getFiles(localpfileDir);
+        ArrayList<File> fileArrayList = null;
         if (files != null && files.length > 0) {
-            ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnectionWithPassword(RoyalMailManifest.RMURL, RoyalMailManifest.USERNAME, RoyalMailManifest.PASSWORD, RoyalMailManifest.PROTNUM);
-            if (connsft != null) {
-                LogUtil.log(" 英邮发送报文-连接英邮服务器成功");
-                SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
-                SftpUpload.upload(localpfileDir, PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir"), sftPv3Client, localpfileDirCopy);
-                Vector vector=sftPv3Client.ls(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir"));
-                for (int i = 0; i < vector.size(); i++){
-                 SFTPv3DirectoryEntry aa = (SFTPv3DirectoryEntry) vector.elementAt(i);
-                 if(aa.filename.startsWith(RoyalMailManifest.WireNumber_A8)){
-                  sftPv3Client.mv(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir")+aa.filename,PropertiesUtil.readProperty("royalMail", "rmManifestDir")+aa.filename);
-                 }
-                }
-                sftPv3Client.close();
-                connsft.close();
-                LogUtil.log(" 英邮发送报文-上传英邮服务器报文成功！");
+            fileArrayList = new ArrayList<File>();
+            for (int i = 0; i < files.length; i++) {
+                fileArrayList.add(files[i]);
             }
-
         }
-    }
-
-    public  void sendEmail(int sendNum) throws Exception{
-        if(sendNum>0){
+        if (sendNum > 0 && fileArrayList != null) {
             MailUtil.postMail(
-                    PropertiesUtil.readProperty("royalMail", "rmTo"),
-                    PropertiesUtil.readProperty("royalMail", "rmCc"),
-                    PropertiesUtil.readProperty("royalMail", "rmBcc"),
-                    "pre-advice to RoyalMail has been sent successfully today.",
-                    "The total number of parcels:"+sendNum+"    "+DateUtil.getCurrentDateStrGB("yyyy-MM-dd HH:mm:ss"),
+                    "zhangmj@sinoair.com",
+                    "WangXX4@sinoair.com",
+                    "WangXF@sinoair.com",
+                    "pre-advice of RM24 has been sent successfully today.",
+                    "The total number of parcels:" + sendNum + "    " + DateUtil.getCurrentDateStrGB("yyyy-MM-dd HH:mm:ss"),
                     "iemis@sinoair.com",
-                    null,
+                    fileArrayList,
                     "iemis",
                     "SinoAiriemis");
+
+            if (files != null && files.length > 0) {
+                for (int i = 0; i < files.length; i++) {
+                    FileUtil.copyFile(files[i],localpfileDirCopy);
+                    FileUtil.deleteFile(files[i]);
+                }
+            }
         }
     }
+
     public static void main(String[] args) throws Exception {
         String historyRootPath = "D:/express/SinoairEDIServerHistory";
         SendRmNotraceManifestService generateInfo = new SendRmNotraceManifestService();
         Connection conn = ConnectionFactory.get200Connection();
 
-        /*generateInfo.sendManifest(conn, historyRootPath);*/
+        generateInfo.sendManifestNotrace(conn, historyRootPath);
 
 
-        generateInfo.sendRmManifestAndDeleteLocateFiles(historyRootPath);
+        /* generateInfo.sendRmManifestAndDeleteLocateFiles(historyRootPath);*/
 
     }
 }

@@ -110,7 +110,11 @@ public class ReceiveRmTracesService {
                     "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?,?,?,'"+RoyalMailManifest.PARTNER_CODE+"')");
             PreparedStatement selectPstm = conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=? ");
             try {
-
+             int fileNum=0;
+             if(fileList!=null){
+                fileNum=fileList.length;
+             }
+              LogUtil.log("下载轨迹反馈-成功处理轨迹文件："+fileNum);
                 for (File file : fileList) {
                     DBinsert(file, insertPstm, selectPstm);
                     //文件备份删除操作
