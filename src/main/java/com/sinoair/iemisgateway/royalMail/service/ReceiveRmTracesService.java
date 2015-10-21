@@ -56,12 +56,14 @@ public class ReceiveRmTracesService {
             }
             String EAD_CODE = "INTERNATIONAL";
             String EAST_CODE="OT";
+            String EBA_REMARK = "";//如果是派送失败，显示错误原因，properties其他显显示空；
             if(rmTrack_OK.contains(royalMailTrace.getB7_Eventcode()+",")){
              EAD_CODE = "DELIVERY";
              EAST_CODE="OK";
             }else if(rmTrack_DEF.contains(royalMailTrace.getB7_Eventcode()+",")){
              EAD_CODE = "INTERNATIONAL";
              EAST_CODE="DEF";
+             EBA_REMARK=PropertiesUtil.readProperty("royalMail", royalMailTrace.getB7_Eventcode());
             }else if(rmTrack_RM.contains(royalMailTrace.getB7_Eventcode()+",")){
              EAD_CODE = "INTERNATIONAL";
              EAST_CODE="RM";
@@ -70,7 +72,7 @@ public class ReceiveRmTracesService {
              EAST_CODE="ADPO";
             }
             String EBA_E_ID_HANDLER = "1";
-            String EBA_REMARK = "";//如果是“ES8XX”时，显示错误原因，取自，其他显显示空；
+
             String SAC_ID = "SNR";
             String EBA_SAC_CODE = "GACN";
             String EBA_OCCURTIME = royalMailTrace.getB9_Logdate().substring(0, 4) + "-" + royalMailTrace.getB9_Logdate().substring(4, 6) + "-" + royalMailTrace.getB9_Logdate().substring(6) + " " + royalMailTrace.getB10_Logtime().substring(0,2)+":"+royalMailTrace.getB10_Logtime().substring(2,4)+":"+royalMailTrace.getB10_Logtime().substring(4);

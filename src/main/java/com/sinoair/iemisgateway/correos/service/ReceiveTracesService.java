@@ -19,6 +19,10 @@ import java.util.Properties;
  */
 public class ReceiveTracesService {
     public void DBinsert(File file, PreparedStatement insertPstm, PreparedStatement selectPstm,PreparedStatement updatePstm, Properties p) throws IOException, SQLException {
+        String  correos_RM=p.getProperty("correos_RM");
+        String  correos_ADPO=p.getProperty("correos_ADPO");
+        String  correos_OK=p.getProperty("correos_OK");
+        String  correos_DEF=p.getProperty("correos_DEF");
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         //数据库插入操作
@@ -31,47 +35,54 @@ public class ReceiveTracesService {
                 continue;
             }
             //西邮运单号
-            String field3 = traceArray[2];
+            String eawb_reference1 = traceArray[2];
+            String eawb_printcode="";
             //西邮轨迹状态代码字段
-            String field5 = traceArray[4];
-            if (null == field3 || "".equals(field3) || null == field5 || "".equals(field5)) {
+            String status_code = traceArray[4];
+            if (null == eawb_reference1 || "".equals(eawb_reference1) || null == status_code || "".equals(status_code)) {
                 LogUtil.log("error " + i + " 行出现问题：shipment Code或者状态字段为空 fileName:" + file.getName());
                 continue;
             }
-            selectPstm.setString(1, field3);
+            selectPstm.setString(1, eawb_reference1);
             ResultSet rs = selectPstm.executeQuery();
             if (rs.next()) {
-                field3 = rs.getString(1);
+                eawb_printcode = rs.getString(1);
             } else {
-                field3 = null;
+                eawb_printcode = null;
             }
-            if (field3 == null || "".equals(field3)) {
-                field3 = traceArray[2];
-                LogUtil.log("error " + i + " 行出现问题：" + field3 + "无效! fileName:" + file.getName());
+            if (eawb_printcode == null || "".equals(eawb_printcode)) {
+                LogUtil.log("error " + i + " 行出现问题：" + eawb_reference1 + "无效! fileName:" + file.getName());
                 continue;
             }
-            String EAD_CODE = p.getProperty(field5 + "EC");//todo-wxx-u
-            //String EAST_CODE=traceArray[5];
-            String EAST_CODE = p.getProperty(field5); //todo-wxx-u
+            String EAD_CODE = "INTERNATIONAL";
+            String EAST_CODE="OT";
+            if(correos_RM.contains(status_code+",")){
+               EAST_CODE="RM";
+            }else if(correos_DEF.contains(status_code+",")){
+               EAST_CODE="DEF";
+            }else if(correos_OK.contains(status_code+",")){
+               EAD_CODE = "DELIVERY";
+               EAST_CODE="OK";
+            }else if(correos_ADPO.contains(status_code+",")){
+               EAST_CODE="ADPO";
+            }
             String EBA_E_ID_HANDLER = "1";
             String EBA_REMARK = "";//如果是“ES8XX”时，显示错误原因，取自，其他显显示空；
 
             //状态发生的日期  如：20140415
-            String field7 = traceArray[6];
+            String dateStr = traceArray[6];
             //状态发生时间  如：13:29
-            String field8 = traceArray[7];
+            String timeStr = traceArray[7];
             String SAC_ID = "SNR";
             String EBA_SAC_CODE = "GACN";
-            String EBA_OCCURTIME = field7.substring(0, 4) + "-" + field7.substring(4, 6) + "-" + field7.substring(6) + " " + field8;
+            String EBA_OCCURTIME = dateStr.substring(0, 4) + "-" + dateStr.substring(4, 6) + "-" + dateStr.substring(6) + " " + timeStr;
             java.util.Date EBA_OCCURTIME_date=DateUtil.getStringToDate(EBA_OCCURTIME, "yyyy-MM-dd hh:mm");
-
-            /*BaseLogger.info(EBA_OCCURTIME);*/
             String EBA_SOURCE = "CORREOS";
             String EBA_OCCURPLACE = "";
             try {
                 EBA_OCCURPLACE = "";
                 EBA_OCCURPLACE = "";
-                String indexCD = p.getProperty(field5 + "CD");
+                String indexCD = p.getProperty(status_code + "CD");
                 if (indexCD != null) {
                     Integer index = Integer.parseInt(indexCD);
                     EBA_OCCURPLACE = traceArray[index - 1];
@@ -80,7 +91,7 @@ public class ReceiveTracesService {
             } catch (Exception e) {
 
             }
-            if(field5.startsWith("ES08") && traceArray.length>9){
+            if(status_code.startsWith("ES08") && traceArray.length>9){
                 String expiryDate="";
                 try{
                    expiryDate=traceArray[Integer.parseInt(p.getProperty("ES0800XX"))-1];
@@ -98,29 +109,29 @@ public class ReceiveTracesService {
                    if(expiryDate_date!=null){
                         updatePstm.setTimestamp(2,new Timestamp(expiryDate_date.getTime()));
                    }else{
-                        LogUtil.log("截止日期错误："+expiryDate+" 文件名称："+file.getName()+" 国际运单号："+field3);
+                        LogUtil.log("截止日期错误："+expiryDate+" 文件名称："+file.getName()+" 国际运单号："+eawb_reference1);
                    }
 
                }
 
                updatePstm.setString(3,EBA_REMARK);
-               updatePstm.setString(4,field3);
+               updatePstm.setString(4,eawb_printcode);
                updatePstm.addBatch();
                 EBA_REMARK=EBA_REMARK+" expiry date:"+expiryDate;
             }
             String FLAG = "";
             String QA = "";
-            if(EAD_CODE==null || "".equals(EAD_CODE)){
+          /*  if(EAD_CODE==null || "".equals(EAD_CODE)){
                EAD_CODE="INTERNATIONAL";
             }
             if(EAST_CODE==null|| "".equals(EAST_CODE)){
                 EAST_CODE="OT";
-            }
+            }*/
             /*System.out.println("EAD_CODE:"+EAD_CODE);
             System.out.println("EAST_CODE:"+EAST_CODE);
             System.out.println("field5:"+field5);
             System.out.println("field3:"+field3);*/
-            insertPstm.setString(1, field3);
+            insertPstm.setString(1, eawb_printcode);
             insertPstm.setString(2, EAD_CODE);
             insertPstm.setString(3, EAST_CODE);
             insertPstm.setString(4, EBA_E_ID_HANDLER);
@@ -134,7 +145,7 @@ public class ReceiveTracesService {
             insertPstm.setString(10, EBA_OCCURPLACE);
             insertPstm.setString(11, FLAG);
             insertPstm.setString(12, QA);
-            insertPstm.setString(13, field5);
+            insertPstm.setString(13, status_code);
             insertPstm.setString(14, line);
             insertPstm.addBatch();
         }
