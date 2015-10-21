@@ -19,6 +19,7 @@ import java.util.Properties;
  */
 public class ReceiveTracesService {
     public void DBinsert(File file, PreparedStatement insertPstm, PreparedStatement selectPstm,PreparedStatement updatePstm, Properties p) throws IOException, SQLException {
+         LogUtil.log("开始处理轨迹文件：fileName:" + file.getName());
         String  correos_RM=p.getProperty("correos_RM");
         String  correos_ADPO=p.getProperty("correos_ADPO");
         String  correos_OK=p.getProperty("correos_OK");
@@ -81,7 +82,6 @@ public class ReceiveTracesService {
             String EBA_OCCURPLACE = "";
             try {
                 EBA_OCCURPLACE = "";
-                EBA_OCCURPLACE = "";
                 String indexCD = p.getProperty(status_code + "CD");
                 if (indexCD != null) {
                     Integer index = Integer.parseInt(indexCD);
@@ -109,8 +109,12 @@ public class ReceiveTracesService {
                    if(expiryDate_date!=null){
                         updatePstm.setTimestamp(2,new Timestamp(expiryDate_date.getTime()));
                    }else{
-                        LogUtil.log("截止日期错误："+expiryDate+" 文件名称："+file.getName()+" 国际运单号："+eawb_reference1);
+                        updatePstm.setTimestamp(2,null);
+                       LogUtil.log("截止日期错误："+expiryDate+" 文件名称："+file.getName()+" 国际运单号："+eawb_reference1);
                    }
+
+               }else{
+                   updatePstm.setTimestamp(2,null);
 
                }
 
@@ -195,7 +199,7 @@ public class ReceiveTracesService {
         ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnection(PropertiesUtil.readProperty("correos", "correosUrl"), PropertiesUtil.readProperty("correos", "pfUsernameTrace"), PropertiesUtil.readProperty("correos", "keyFileTrace"));
         String  localTraceDir = historyRootPath+"/correos/in/traces/";
         String  localTraceDirCopy = historyRootPath+"/correos/bak/in/traces/";
-        if (connsft != null) {
+       if (connsft != null) {
             LogUtil.log("下载轨迹反馈-连接西邮服务器成功！");
             SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
             //1.从西邮服务器上下载到本地，同时删除西邮服务器上的报文反馈文件，文件格式为zip
@@ -204,6 +208,7 @@ public class ReceiveTracesService {
             connsft.close();
             LogUtil.log("下载轨迹反馈-下载轨迹反馈成功！");
         }
+
         String zipPath = localTraceDir;
         File[] files = FileUtil.getFiles(zipPath);
         if (files != null && files.length > 0) {
@@ -224,7 +229,7 @@ public class ReceiveTracesService {
     }
 
     public static void main(String[] args) throws Exception {
-        Connection conn = ConnectionFactory.get194Connection();
+        Connection conn = ConnectionFactory.get200Connection();
         String historyRootPath="D:/express/SinoairEDIServerHistory";
         ReceiveTracesService receiveTracesService = new ReceiveTracesService();
         receiveTracesService.ReceiveTraces(conn,historyRootPath);

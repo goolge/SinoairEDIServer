@@ -21,28 +21,28 @@ import java.sql.*;
  * To change this template use File | Settings | File Templates.
  */
 public class ReceiveRmTracesService {
-    public void DBinsert(File file, PreparedStatement insertPstm, PreparedStatement selectPstm) throws IOException, SQLException {
+    public void DBinsert(File file, PreparedStatement insertPstm, PreparedStatement selectPstm, PreparedStatement selectPstmEba) throws IOException, SQLException {
         LogUtil.log("开始处理轨迹文件filename:" + file.getName());
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String rmTrack_OK=PropertiesUtil.readProperty("royalMail", "rmTrack_OK");
-        String rmTrack_DEF=PropertiesUtil.readProperty("royalMail", "rmTrack_DEF");
-        String rmTrack_RM=PropertiesUtil.readProperty("royalMail", "rmTrack_RM");
-        String rmTrack_ADPO=PropertiesUtil.readProperty("royalMail", "rmTrack_ADPO");
+        String rmTrack_OK = PropertiesUtil.readProperty("royalMail", "rmTrack_OK");
+        String rmTrack_DEF = PropertiesUtil.readProperty("royalMail", "rmTrack_DEF");
+        String rmTrack_RM = PropertiesUtil.readProperty("royalMail", "rmTrack_RM");
+        String rmTrack_ADPO = PropertiesUtil.readProperty("royalMail", "rmTrack_ADPO");
         //数据库插入操作
         String line = "";
         int i = 0;
         //从第二行开始读数据，第一行是表头,最后一行是表尾
         while ((line = bufferedReader.readLine()) != null) {
             i += 1;
-            String sourceStr=line;
-            line=line.replaceAll("\"","");
+            String sourceStr = line;
+            line = line.replaceAll("\"", "");
             String[] traceArray = line.split(",");
             //如果是表尾，则不再读取数据
-            if (traceArray==null ||traceArray.length<11 || !"D".equals(traceArray[0])) {
+            if (traceArray == null || traceArray.length < 11 || !"D".equals(traceArray[0])) {
                 continue;
             }
-            RoyalMailTrace royalMailTrace=new RoyalMailTrace(traceArray);
+            RoyalMailTrace royalMailTrace = new RoyalMailTrace(traceArray);
             String eawb_printcode = null;
             selectPstm.setString(1, royalMailTrace.getB3_Item_code());
             ResultSet rs = selectPstm.executeQuery();
@@ -55,27 +55,32 @@ public class ReceiveRmTracesService {
                 continue;
             }
             String EAD_CODE = "INTERNATIONAL";
-            String EAST_CODE="OT";
+            String EAST_CODE = "OT";
             String EBA_REMARK = "";//如果是派送失败，显示错误原因，properties其他显显示空；
-            if(rmTrack_OK.contains(royalMailTrace.getB7_Eventcode()+",")){
-             EAD_CODE = "DELIVERY";
-             EAST_CODE="OK";
-            }else if(rmTrack_DEF.contains(royalMailTrace.getB7_Eventcode()+",")){
-             EAD_CODE = "INTERNATIONAL";
-             EAST_CODE="DEF";
-             EBA_REMARK=PropertiesUtil.readProperty("royalMail", royalMailTrace.getB7_Eventcode());
-            }else if(rmTrack_RM.contains(royalMailTrace.getB7_Eventcode()+",")){
-             EAD_CODE = "INTERNATIONAL";
-             EAST_CODE="RM";
-            }else if(rmTrack_ADPO.contains(royalMailTrace.getB7_Eventcode()+",")){
-             EAD_CODE = "INTERNATIONAL";
-             EAST_CODE="ADPO";
+            if (rmTrack_OK.contains(royalMailTrace.getB7_Eventcode() + ",")) {
+                selectPstmEba.setString(1, eawb_printcode);
+                ResultSet rsEba = selectPstm.executeQuery();
+                if (!rsEba.next()) {
+                    EAD_CODE = "DELIVERY";
+                    EAST_CODE = "OK";
+                }
+
+            } else if (rmTrack_DEF.contains(royalMailTrace.getB7_Eventcode() + ",")) {
+                EAD_CODE = "INTERNATIONAL";
+                EAST_CODE = "DEF";
+                EBA_REMARK = PropertiesUtil.readProperty("royalMail", royalMailTrace.getB7_Eventcode());
+            } else if (rmTrack_RM.contains(royalMailTrace.getB7_Eventcode() + ",")) {
+                EAD_CODE = "INTERNATIONAL";
+                EAST_CODE = "RM";
+            } else if (rmTrack_ADPO.contains(royalMailTrace.getB7_Eventcode() + ",")) {
+                EAD_CODE = "INTERNATIONAL";
+                EAST_CODE = "ADPO";
             }
             String EBA_E_ID_HANDLER = "1";
 
             String SAC_ID = "SNR";
             String EBA_SAC_CODE = "GACN";
-            String EBA_OCCURTIME = royalMailTrace.getB9_Logdate().substring(0, 4) + "-" + royalMailTrace.getB9_Logdate().substring(4, 6) + "-" + royalMailTrace.getB9_Logdate().substring(6) + " " + royalMailTrace.getB10_Logtime().substring(0,2)+":"+royalMailTrace.getB10_Logtime().substring(2,4)+":"+royalMailTrace.getB10_Logtime().substring(4);
+            String EBA_OCCURTIME = royalMailTrace.getB9_Logdate().substring(0, 4) + "-" + royalMailTrace.getB9_Logdate().substring(4, 6) + "-" + royalMailTrace.getB9_Logdate().substring(6) + " " + royalMailTrace.getB10_Logtime().substring(0, 2) + ":" + royalMailTrace.getB10_Logtime().substring(2, 4) + ":" + royalMailTrace.getB10_Logtime().substring(4);
             /*BaseLogger.info(EBA_OCCURTIME);*/
             String EBA_OCCURPLACE = royalMailTrace.getB6_Eventlocation();
 
@@ -103,22 +108,23 @@ public class ReceiveRmTracesService {
 
     }
 
-    public void analysisData(Connection conn,String path, String backUpPath) throws Exception {
+    public void analysisData(Connection conn, String path, String backUpPath) throws Exception {
         File dir = new File(path);
         if (dir.exists()) {
             File[] fileList = dir.listFiles();
             conn.setAutoCommit(false);
             PreparedStatement insertPstm = conn.prepareStatement("insert into expressbusinessactivity(EBA_SYSCODE,EAWB_PRINTCODE,EAD_CODE,EAST_CODE,EBA_E_ID_HANDLER,EBA_HANDLETIME,EBA_REMARK,SAC_ID,EBA_SAC_CODE,EBA_OCCURTIME,EBA_SOURCE,EBA_OCCURPLACE,FLAG,QA,EAT_partner_ACTIVITY_CODE,EAT_PARTNER_ORIGIN,EAT_PARTNER_ID) values(" +
-                    "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?,?,?,'"+RoyalMailManifest.PARTNER_CODE+"')");
+                    "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?,?,?,'" + RoyalMailManifest.PARTNER_CODE + "')");
             PreparedStatement selectPstm = conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=? ");
+            PreparedStatement selectPstmEba = conn.prepareStatement("select eawb.eawb_printcode from expressbusinessactivity eba where eba.eawb_printcode=? and eba.ead_code='DELIVERY' and eba.east_code='OK' ");
             try {
-             int fileNum=0;
-             if(fileList!=null){
-                fileNum=fileList.length;
-             }
-              LogUtil.log("下载轨迹反馈-成功处理轨迹文件："+fileNum);
+                int fileNum = 0;
+                if (fileList != null) {
+                    fileNum = fileList.length;
+                }
+                LogUtil.log("下载轨迹反馈-成功处理轨迹文件：" + fileNum);
                 for (File file : fileList) {
-                    DBinsert(file, insertPstm, selectPstm);
+                    DBinsert(file, insertPstm, selectPstm, selectPstmEba);
                     //文件备份删除操作
                     FileUtil.copyFile(file, backUpPath);
                     FileUtil.deleteFile(file);
@@ -135,12 +141,12 @@ public class ReceiveRmTracesService {
         }
     }
 
-    public void ReceiveTraces(Connection conn,String historyRootPath) throws Exception {
+    public void ReceiveTraces(Connection conn, String historyRootPath) throws Exception {
 
-        String  localTraceDir =     historyRootPath+"/royalMail/in/traces/";
-        String  localTraceDirCopy = historyRootPath+"/royalMail/bak/in/traces/";
+        String localTraceDir = historyRootPath + "/royalMail/in/traces/";
+        String localTraceDirCopy = historyRootPath + "/royalMail/bak/in/traces/";
         ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnectionWithPassword(RoyalMailManifest.RMURL, RoyalMailManifest.USERNAME, RoyalMailManifest.PASSWORD, RoyalMailManifest.PROTNUM);
-        if (connsft != null) {
+         if (connsft != null) {
             LogUtil.log("下载轨迹反馈-连接英邮服务器成功！");
             SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
             //1.从英邮服务器上下载到本地，同时删除英邮服务器上的轨迹文件
@@ -150,16 +156,16 @@ public class ReceiveRmTracesService {
             LogUtil.log("下载轨迹反馈-下载英邮轨迹反馈成功！");
         }
         //在本地解析轨迹，插入轨迹信息，备份轨迹，删除本地轨迹
-        analysisData(conn,localTraceDir, localTraceDirCopy);
+        analysisData(conn, localTraceDir, localTraceDirCopy);
         LogUtil.log("下载轨迹反馈-解析英邮轨迹反馈报文、本地备份成功！");
     }
 
     public static void main(String[] args) throws Exception {
-      Connection conn = ConnectionFactory.get194Connection();
-        String historyRootPath="D:/express/SinoairEDIServerHistory";
+        Connection conn = ConnectionFactory.get200Connection();
+        String historyRootPath = "D:/express/SinoairEDIServerHistory";
         ReceiveRmTracesService receiveTracesService = new ReceiveRmTracesService();
-        receiveTracesService.ReceiveTraces(conn,historyRootPath);
-       /* String  localTraceDir =     historyRootPath+"/royalMail/in/traces/";
+        receiveTracesService.ReceiveTraces(conn, historyRootPath);
+        /* String  localTraceDir =     historyRootPath+"/royalMail/in/traces/";
         String  localTraceDirCopy = historyRootPath+"/royalMail/bak/in/traces/";
         receiveTracesService.analysisData(conn,localTraceDir,localTraceDirCopy);*/
     }
