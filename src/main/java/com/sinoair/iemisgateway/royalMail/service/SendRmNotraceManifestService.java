@@ -210,9 +210,9 @@ public class SendRmNotraceManifestService {
         }
         if (sendNum > 0 && fileArrayList != null) {
             MailUtil.postMail(
+                    "peter.lovell@royalmail.com",
+                    "xiaoyan@sinoair.com",
                     "zhangmj@sinoair.com",
-                    "WangXX4@sinoair.com",
-                    "WangXF@sinoair.com",
                     "pre-advice of RM24 has been sent successfully today.",
                     "The total number of parcels:" + sendNum + "    " + DateUtil.getCurrentDateStrGB("yyyy-MM-dd HH:mm:ss"),
                     "iemis@sinoair.com",
