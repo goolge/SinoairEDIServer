@@ -28,6 +28,7 @@ import java.util.Vector;
 public class SendRmManifestService {
     /**
      * 获取需要发送预报的数据集合
+     *
      * @param conn
      * @return
      * @throws Exception
@@ -53,15 +54,15 @@ public class SendRmManifestService {
                 " and eawb.eawb_printcode = eba.eawb_printcode " +
                 " and eba.ead_code = 'INTERNATIONAL'" +
                 " and eba.east_code = 'CP'" +
-                " and em.em_status='PENDING' and em.EM_PARTNER='"+RoyalMailManifest.PARTNER_CODE+"' order by eawb.EAWB_PRINTCODE ";
-       // System.out.println(sql);
+                " and em.em_status='PENDING' and em.EM_PARTNER='" + RoyalMailManifest.PARTNER_CODE + "' order by eawb.EAWB_PRINTCODE ";
+        // System.out.println(sql);
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
         BaseLogger.info("aaaa:" + sql);
         return arrayList;
     }
-   /* public ArrayList getInfoList(Connection conn) throws Exception {
+    /* public ArrayList getInfoList(Connection conn) throws Exception {
         String sql = "select distinct eawb.EAWB_PRINTCODE," + //1
                 "eawb.EAWB_REFERENCE1," +//2
                 "eawb.EAWB_REFERENCE2," + //3
@@ -132,7 +133,7 @@ public class SendRmManifestService {
                 if (rs.next()) {
                     oneSeq = rs.getString(1);
                 }
-                oneSeq =StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
+                oneSeq = StringUtil.getIntFormString(4, Integer.parseInt(oneSeq));
                 royalMailManifest.setFileSerialNumber_A4(oneSeq);
                 royalMailManifest.setFileSubmissionDate_A5(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(0, 8));
                 royalMailManifest.setFileSubmissionTime_A6(DateUtil.getCurrentDateStrGB("yyyyMMddHHmmss").substring(8));
@@ -164,11 +165,17 @@ public class SendRmManifestService {
 
         PreparedStatement updateStatus = conn.prepareStatement(" update express_manifest em set em.em_status='SUCCESS',em.EM_HANDLETIME=sysdate  where em.eawb_printcode=? ");
         if (arrData != null) {
+            int submitNum = 0;
             for (int i = 0; i < arrData.size(); i++) {
                 HashMap map = (HashMap) arrData.get(i);
                 String eawb_printcode = map.get("EAWB_PRINTCODE").toString();
                 updateStatus.setString(1, eawb_printcode);
                 updateStatus.addBatch();
+                submitNum = submitNum + 1;
+                if (submitNum == 1000) {
+                    submitNum = 0;
+                    updateStatus.executeBatch();
+                }
             }
             conn.setAutoCommit(false);
             updateStatus.executeBatch();
@@ -198,14 +205,15 @@ public class SendRmManifestService {
         //3.在本地生成西邮报文
         int sendNum = arrayList == null ? 0 : arrayList.size();
         LogUtil.log(" 英邮发送报文-获取发预报的数据条数：" + sendNum);
-         //4.向英邮发送预报,同时备份本地文件
-       sendRmManifestAndDeleteLocateFiles(localpfileDir);
+        //4.向英邮发送预报,同时备份本地文件
+        sendRmManifestAndDeleteLocateFiles(localpfileDir);
         //5.如果发送运单数量不为0，则给一英国相关人员发送信息
-       sendEmail(sendNum);
+        sendEmail(sendNum);
 
 
     }
-    public void sendRmManifestAndDeleteLocateFiles(String historyRootPath) throws Exception{
+
+    public void sendRmManifestAndDeleteLocateFiles(String historyRootPath) throws Exception {
         String localpfileDir = historyRootPath + "/royalMail/out/manifest/";
         String localpfileDirCopy = historyRootPath + "/royalMail/bak/out/manifest/";
         File[] files = FileUtil.getFiles(localpfileDir);
@@ -215,12 +223,12 @@ public class SendRmManifestService {
                 LogUtil.log(" 英邮发送报文-连接英邮服务器成功");
                 SFTPv3Client sftPv3Client = new SFTPv3Client(connsft);
                 SftpUpload.upload(localpfileDir, PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir"), sftPv3Client, localpfileDirCopy);
-                Vector vector=sftPv3Client.ls(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir"));
-                for (int i = 0; i < vector.size(); i++){
-                 SFTPv3DirectoryEntry aa = (SFTPv3DirectoryEntry) vector.elementAt(i);
-                 if(aa.filename.startsWith(RoyalMailManifest.WireNumber_A8)){
-                  sftPv3Client.mv(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir")+aa.filename,PropertiesUtil.readProperty("royalMail", "rmManifestDir")+aa.filename);
-                 }
+                Vector vector = sftPv3Client.ls(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir"));
+                for (int i = 0; i < vector.size(); i++) {
+                    SFTPv3DirectoryEntry aa = (SFTPv3DirectoryEntry) vector.elementAt(i);
+                    if (aa.filename.startsWith(RoyalMailManifest.WireNumber_A8)) {
+                        sftPv3Client.mv(PropertiesUtil.readProperty("royalMail", "rmManifestTmpDir") + aa.filename, PropertiesUtil.readProperty("royalMail", "rmManifestDir") + aa.filename);
+                    }
                 }
                 sftPv3Client.close();
                 connsft.close();
@@ -230,20 +238,21 @@ public class SendRmManifestService {
         }
     }
 
-    public  void sendEmail(int sendNum) throws Exception{
-        if(sendNum>0){
+    public void sendEmail(int sendNum) throws Exception {
+        if (sendNum > 0) {
             MailUtil.postMail(
                     PropertiesUtil.readProperty("royalMail", "rmTo"),
                     PropertiesUtil.readProperty("royalMail", "rmCc"),
                     PropertiesUtil.readProperty("royalMail", "rmBcc"),
                     "pre-advice to RoyalMail has been sent successfully today.",
-                    "The total number of parcels:"+sendNum+"    "+DateUtil.getCurrentDateStrGB("yyyy-MM-dd HH:mm:ss"),
+                    "The total number of parcels:" + sendNum + "    " + DateUtil.getCurrentDateStrGB("yyyy-MM-dd HH:mm:ss"),
                     "iemis@sinoair.com",
                     null,
                     "iemis",
                     "SinoAiriemis");
         }
     }
+
     public static void main(String[] args) throws Exception {
         String historyRootPath = "D:/express/SinoairEDIServerHistory";
         SendRmManifestService generateInfo = new SendRmManifestService();

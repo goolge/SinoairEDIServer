@@ -69,7 +69,7 @@ public class ReceiveRmTracesService {
             } else if (rmTrack_DEF.contains(royalMailTrace.getB7_Eventcode() + ",")) {
                 EAD_CODE = "INTERNATIONAL";
                 EAST_CODE = "DEF";
-                EBA_REMARK = PropertiesUtil.readProperty("royalMail", royalMailTrace.getB7_Eventcode());
+                EBA_REMARK = PropertiesUtil.readProperty("royalMail", royalMailTrace.getB7_Eventcode())+" wangwang:"+StringUtil.HGH_WANGWANG;
             } else if (rmTrack_RM.contains(royalMailTrace.getB7_Eventcode() + ",")) {
                 EAD_CODE = "INTERNATIONAL";
                 EAST_CODE = "RM";

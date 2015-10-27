@@ -127,4 +127,11 @@ public class DateUtil {
       SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format);
       return simpleDateFormat.format(calendar.getTime());
     }
+    public static String getDateStrAheadDays(int days,String format){
+      Calendar calendar=Calendar.getInstance();
+      calendar.setTime(new Date());
+      calendar.add(Calendar.DATE,days);
+      SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format);
+      return simpleDateFormat.format(calendar.getTime());
+    }
 }

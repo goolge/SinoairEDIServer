@@ -39,7 +39,7 @@ public class SendRmNotraceManifestService {
                 "eawb.EAWB_DELIVER_POSTCODE," +   //7
                 "eawb.EAWB_DECLAREGROSSWEIGHT," +  //8
                 "eawb.EAWB_DELIVER_PHONE," +
-                "eawb.EAWB_DELIVER_EMAIL"+
+                "eawb.EAWB_DELIVER_EMAIL" +
                 " from express_manifest em, expressairwaybill eawb" +
                 " ,expressbusinessactivity eba" +
                 " where eawb.eawb_printcode=em.eawb_printcode " +
@@ -51,7 +51,7 @@ public class SendRmNotraceManifestService {
         ExeSQL texesql = new ExeSQL();
         texesql.setConnection(conn);
         ArrayList arrayList = texesql.execSqltoArr(sql);
-        BaseLogger.info("aaaa:" + sql);
+       // BaseLogger.info("aaaa:" + sql);
         return arrayList;
     }
 
@@ -134,7 +134,7 @@ public class SendRmNotraceManifestService {
                 //System.out.println("royalMailItemList:" + royalMailItemList.size());
                 //System.out.println("royalMailManifest.getMessageContent():" + royalMailManifest.getMessageContent());
                 String strFilePath = "";
-                strFilePath = app_dir + RoyalMailNotraceManifest.FILENAMEPREFIX + royalMailNotraceManifest.getA12_WireNumber() + RoyalMailNotraceManifest.PREADVICE3 + oneSeq+".csv";
+                strFilePath = app_dir + RoyalMailNotraceManifest.FILENAMEPREFIX + royalMailNotraceManifest.getA12_WireNumber() + RoyalMailNotraceManifest.PREADVICE3 + oneSeq + ".csv";
                 FileUtil.generateFile(royalMailNotraceManifest.getMessageContent(), strFilePath);
             }
         }
@@ -151,11 +151,17 @@ public class SendRmNotraceManifestService {
 
         PreparedStatement updateStatus = conn.prepareStatement(" update express_manifest em set em.em_status='SUCCESS',em.EM_HANDLETIME=sysdate  where em.eawb_printcode=? ");
         if (arrData != null) {
+            int submitNum = 0;
             for (int i = 0; i < arrData.size(); i++) {
                 HashMap map = (HashMap) arrData.get(i);
                 String eawb_printcode = map.get("EAWB_PRINTCODE").toString();
                 updateStatus.setString(1, eawb_printcode);
                 updateStatus.addBatch();
+                submitNum = submitNum + 1;
+                if (submitNum == 1000) {
+                    submitNum = 0;
+                    updateStatus.executeBatch();
+                }
             }
             conn.setAutoCommit(false);
             updateStatus.executeBatch();
@@ -222,7 +228,7 @@ public class SendRmNotraceManifestService {
 
             if (files != null && files.length > 0) {
                 for (int i = 0; i < files.length; i++) {
-                    FileUtil.copyFile(files[i],localpfileDirCopy);
+                    FileUtil.copyFile(files[i], localpfileDirCopy);
                     FileUtil.deleteFile(files[i]);
                 }
             }

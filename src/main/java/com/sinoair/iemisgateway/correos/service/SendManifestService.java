@@ -29,7 +29,7 @@ public class SendManifestService {
      * @throws Exception
      */
     public ArrayList getInfoList(Connection conn) throws Exception {
-        String sql = "select eawb.EAWB_CONSIGNEE_ACCOUNTNAME," + //1
+        String sql = "select distinct eawb.EAWB_CONSIGNEE_ACCOUNTNAME," + //1
                 "eawb.EAWB_DELIVER_ADDRESS," +//2
                 "eawb.EAWB_DESTCITY," + //3
                 "eawb.EAWB_DESTSTATE," + //4

@@ -8,6 +8,7 @@ package com.sinoair.iemisgateway.util;
  * To change this template use File | Settings | File Templates.
  */
 public class StringUtil {
+     public static final String HGH_WANGWANG = "ROYALMAILNOTRACE";
     public static String null2EmptyString(String input) {
         if (input == null) {
             return "";

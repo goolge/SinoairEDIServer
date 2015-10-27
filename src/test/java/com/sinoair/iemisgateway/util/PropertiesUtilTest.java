@@ -5,9 +5,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.util.Properties;
-
 /**
  * Created by IntelliJ IDEA.
  * User: WangXX4
@@ -42,5 +39,23 @@ public class PropertiesUtilTest {
         BaseLogger.info("resultExcepted = " + resultExcepted);
         BaseLogger.info("resultActual = " + resultActual);
         Assert.assertEquals(resultExcepted, resultActual);
+    }
+        @Test
+    public void testReadPropertyNotExist2() throws Exception {
+        String resultExcepted = null;
+        //String resultActual = PropertiesUtil.readProperty("eeee", "erer");
+        String aaa = PropertiesUtil.readProperty("common", "wer");
+       // BaseLogger.info("resultExcepted = " + resultExcepted);
+        BaseLogger.info("aaa = " + aaa);
+
+        Assert.assertEquals(resultExcepted, aaa);
+
+    }
+      @Test
+    public void testReadPropertyNotExist3() throws Exception {
+
+         //小思绪扯淡
+        Assert.assertEquals("小思绪扯淡", PropertiesUtil.readProperty("common", "wangwang"));
+
     }
 }

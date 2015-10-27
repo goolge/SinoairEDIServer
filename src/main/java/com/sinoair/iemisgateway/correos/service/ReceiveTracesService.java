@@ -100,7 +100,7 @@ public class ReceiveTracesService {
                    expiryDate="";
                 }
 
-               EBA_REMARK=traceArray[Integer.parseInt(p.getProperty("ES0800REMARK"))-1];
+               EBA_REMARK=traceArray[Integer.parseInt(p.getProperty("ES0800REMARK"))-1]+" wangwang:"+StringUtil.HGH_WANGWANG;
                if(EBA_OCCURTIME_date!=null){
                    updatePstm.setTimestamp(1,new Timestamp(EBA_OCCURTIME_date.getTime()));
                }

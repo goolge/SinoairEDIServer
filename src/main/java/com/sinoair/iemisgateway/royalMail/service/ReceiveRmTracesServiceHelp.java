@@ -124,7 +124,7 @@ public class ReceiveRmTracesServiceHelp {
             File[] fileList = dir.listFiles();
             conn.setAutoCommit(false);
             PreparedStatement insertPstm = conn.prepareStatement("insert into expressbusinessactivity(EBA_SYSCODE,EAWB_PRINTCODE,EAD_CODE,EAST_CODE,EBA_E_ID_HANDLER,EBA_HANDLETIME,EBA_REMARK,SAC_ID,EBA_SAC_CODE,EBA_OCCURTIME,EBA_SOURCE,EBA_OCCURPLACE,FLAG,QA,EAT_partner_ACTIVITY_CODE,EAT_PARTNER_ORIGIN,EAT_PARTNER_ID) values(" +
-                    "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?,?,?,'" + RoyalMailManifest.PARTNER_CODE+"2015-10-2218" + "')");
+                    "SEQ_EXPRESSBUSINESSACTIVITY.nextval,?,?,?,?,sysdate,?,?,?,?,?,?,?,?,?,?,'" + RoyalMailManifest.PARTNER_CODE+"2015-10-2215" + "')");
             PreparedStatement selectPstm = conn.prepareStatement("select eawb.eawb_printcode from expressairwaybill eawb where eawb.eawb_reference1=? ");
             PreparedStatement selectPstmEba = conn.prepareStatement("select eawb.eawb_printcode from expressbusinessactivity eba where eba.eawb_printcode=? and eba.ead_code='DELIVERY' and eba.east_code='OK' ");
             PreparedStatement selectPstmRm = conn.prepareStatement("select eba.eawb_printcode from expressbusinessactivity eba where eba.eawb_printcode = ? and eba.eba_source = 'ROYALMAIL' and eba.eat_partner_activity_code = ?");
