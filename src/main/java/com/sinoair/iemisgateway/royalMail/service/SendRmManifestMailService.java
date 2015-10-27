@@ -37,6 +37,7 @@ public class SendRmManifestMailService {
                 " group by ed.pkg_parentcode) data" +
                 " where esa.pkg_printcode = data.pkg_parentcode " ;
         PreparedStatement selectPstm = conn.prepareStatement(sql);
+         //LogUtil.log(" 英邮标准小包发邮件："+sql);
             ResultSet rs = selectPstm.executeQuery();
            Map<String, String> map=new HashMap<String,String>();
             map.put("pkgNum","0");
@@ -44,6 +45,7 @@ public class SendRmManifestMailService {
             if (rs.next()) {
                 map.put("pkgNum",rs.getString(1)+"");
                 map.put("pkgWeight",rs.getString(2)+"");
+                 //LogUtil.log(" 英邮标准小包邮件数据--大包数量："+rs.getString(1)+" 大包重量："+rs.getString(2));
             }
          ConnectionFactory.closeConnection(conn);
         return map;
@@ -52,6 +54,7 @@ public class SendRmManifestMailService {
         Map<String,String> map=getSendMialInfo(conn);
         int pkgNum=Integer.parseInt(map.get("pkgNum"));
         double pkgWeight=Double.parseDouble(map.get("pkgWeight"));
+        //LogUtil.log(" 22英邮标准小包邮件数据--大包数量："+pkgNum+" 大包重量："+pkgWeight);
         if(pkgNum>0){
             MailUtil.postMail(
                     PropertiesUtil.readProperty("royalMail", "rmMailTo"),

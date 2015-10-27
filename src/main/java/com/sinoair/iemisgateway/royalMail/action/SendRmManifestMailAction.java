@@ -13,6 +13,6 @@ import com.sinoair.iemisgateway.util.ConnectionFactory;
 public class SendRmManifestMailAction {
         public static void main(String[] args) throws Exception{
         SendRmManifestMailService sendRmManifestMailService = new SendRmManifestMailService();
-        sendRmManifestMailService.getSendMialInfo(ConnectionFactory.getConnectionInProperties());
+        sendRmManifestMailService.sendEmail(ConnectionFactory.getConnectionInProperties());
        }
 }
