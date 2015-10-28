@@ -100,7 +100,7 @@ public class ReceiveTracesService {
                    expiryDate="";
                 }
 
-               EBA_REMARK=traceArray[Integer.parseInt(p.getProperty("ES0800REMARK"))-1]+" wangwang:"+StringUtil.HGH_WANGWANG;
+               EBA_REMARK=traceArray[Integer.parseInt(p.getProperty("ES0800REMARK"))-1];
                if(EBA_OCCURTIME_date!=null){
                    updatePstm.setTimestamp(1,new Timestamp(EBA_OCCURTIME_date.getTime()));
                }
@@ -121,7 +121,10 @@ public class ReceiveTracesService {
                updatePstm.setString(3,EBA_REMARK);
                updatePstm.setString(4,eawb_printcode);
                updatePstm.addBatch();
-                EBA_REMARK=EBA_REMARK+" expiry date:"+expiryDate;
+                if(expiryDate!=null && !"".equals(expiryDate)){
+                 EBA_REMARK=EBA_REMARK+" expiry date:"+expiryDate;
+                }
+                 EBA_REMARK=EBA_REMARK+" wangwang:"+StringUtil.HGH_WANGWANG;
             }
             String FLAG = "";
             String QA = "";
