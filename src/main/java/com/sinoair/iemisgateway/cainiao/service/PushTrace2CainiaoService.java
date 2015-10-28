@@ -160,15 +160,31 @@ public class PushTrace2CainiaoService {
 
     private static ResultSet getResultSet(Statement statement) throws SQLException {
         String date = PropertiesUtil.readProperty("cainiao", "date");
-        String sql = "SELECT EBA_SYSCODE,EP.EAWB_PRINTCODE,EAWB_SERVICETYPE,EAWB_REFERENCE1,EAWB_REFERENCE2,EBA_OCCURTIME,EBA_REMARK,EBA.EBA_OCCURPLACE,EBA.EAD_CODE,EBA.EAST_CODE,EAT.EAT_PARTNER_ACTIVITY_DESC,EAT.EAT_PARTNER_ACTIVITY_CODE\n  FROM EAWBPRE EP, EXPRESSBUSINESSACTIVITY EBA,EXPRESSACTIVITYTRANSLATE EAT\n" +
-                " WHERE EP.EAWB_PRINTCODE = EBA.EAWB_PRINTCODE\n" +
-                " AND EAT.EAD_CODE=EBA.EAD_CODE\n" +
-                " AND EAT.EAST_CODE=EBA.EAST_CODE\n" +
-                " AND EAT.EAT_PARTNER_ID='cainiao'\n" +
-                " AND (EBA.QA IS NULL OR EBA.QA <> 's')\n" +
+       String sql = "SELECT " +
+                "EBA.EBA_SYSCODE," +
+                "EP.EAWB_PRINTCODE," +
+                "EP.EAWB_SERVICETYPE," +
+                "EP.EAWB_REFERENCE1," +
+                "EP.EAWB_REFERENCE2," +
+                "EBA.EBA_OCCURTIME," +
+                "EBA.EBA_REMARK," +
+                "EBA.EBA_OCCURPLACE," +
+                "EBA.EAD_CODE," +
+                "EBA.EAST_CODE," +
+                "EAT.EAT_PARTNER_ACTIVITY_DESC," +
+                "EAT.EAT_PARTNER_ACTIVITY_CODE\n  " +
+                " FROM " +
+                " EAWBPRE EP," +
+                " EXPRESSBUSINESSACTIVITY EBA," +
+                " EXPRESSACTIVITYTRANSLATE EAT\n" +
+                " WHERE EBA.EAWB_PRINTCODE = EP.EAWB_PRINTCODE\n" +
+                " AND EBA.EAD_CODE = EAT.EAD_CODE\n" +
+                " AND EAT.EAST_CODE = EBA.EAST_CODE\n" +
                 " AND EP.EAWB_SO_CODE = '00060491'\n" +
-                " AND EP.EAWB_HANDLETIME > " + date;//todo 为了提高查询效率，只查找最近两个月处理的单子
-        BaseLogger.info("查询最近两个月所有的需要发给菜鸟的轨迹:\n" + sql);
+                " AND (EBA.QA IS NULL OR EBA.QA <> 's')\n" +
+                " AND EAT.EAT_PARTNER_ID = 'cainiao'\n" +
+                " AND EBA.EBA_HANDLETIME > " + date;
+        BaseLogger.info("查询最近 "+date+" 所有的需要发给菜鸟的轨迹:\n" + sql);
         ResultSet resultSet = statement.executeQuery(sql);
         return resultSet;
     }
