@@ -64,9 +64,9 @@ public class SendRmManifestMailService {
         //LogUtil.log(" 22英邮标准小包邮件数据--大包数量："+pkgNum+" 大包重量："+pkgWeight);
         if(pkgNum>0){
             MailUtil.postMail(
-                    "xiaoyan@sinoair.com",//PropertiesUtil.readProperty("royalMail", "rmMailTo")
-                    "zhangmj@sinoair.com",// PropertiesUtil.readProperty("royalMail", "rmMailCc")
-                    "WangXX4@sinoair.com",// PropertiesUtil.readProperty("royalMail", "rmMailBcc")
+                    PropertiesUtil.readProperty("royalMail", "rmMailTo"),//PropertiesUtil.readProperty("royalMail", "rmMailTo")
+                    PropertiesUtil.readProperty("royalMail", "rmMailCc"),// PropertiesUtil.readProperty("royalMail", "rmMailCc")
+                    PropertiesUtil.readProperty("royalMail", "rmMailBcc"),// PropertiesUtil.readProperty("royalMail", "rmMailBcc")
                     "the coming mail number to LON",
                     "Packets number: "+pkgNum+" ,Parcel number:"+pkgInnerNum+" ,Packets weight: "+pkgWeight+" kg, Expected arriving time: 24 hours later",
                     "iemis@sinoair.com",
