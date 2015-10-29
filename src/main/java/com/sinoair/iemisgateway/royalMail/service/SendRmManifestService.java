@@ -186,6 +186,7 @@ public class SendRmManifestService {
         //组织西邮报文数据，在本地存一份备份，然后放到西邮服务器，同时更新运单状态为发送成功
         ArrayList arrayList = null;
         String localpfileDir = historyRootPath + "/royalMail/out/manifest/";
+        String localpfileDirCopy = historyRootPath + "/royalMail/bak/out/manifest/";
         try {
 
             //1.获取需要发送预报的运单数据；
@@ -206,16 +207,14 @@ public class SendRmManifestService {
         int sendNum = arrayList == null ? 0 : arrayList.size();
         LogUtil.log(" 英邮发送报文-获取发预报的数据条数：" + sendNum);
         //4.向英邮发送预报,同时备份本地文件
-        sendRmManifestAndDeleteLocateFiles(localpfileDir);
+        sendRmManifestAndDeleteLocateFiles(localpfileDir,localpfileDirCopy);
         //5.如果发送运单数量不为0，则给一英国相关人员发送信息
         sendEmail(sendNum);
 
 
     }
 
-    public void sendRmManifestAndDeleteLocateFiles(String historyRootPath) throws Exception {
-        String localpfileDir = historyRootPath + "/royalMail/out/manifest/";
-        String localpfileDirCopy = historyRootPath + "/royalMail/bak/out/manifest/";
+    public void sendRmManifestAndDeleteLocateFiles(String localpfileDir,String localpfileDirCopy) throws Exception {
         File[] files = FileUtil.getFiles(localpfileDir);
         if (files != null && files.length > 0) {
             ch.ethz.ssh2.Connection connsft = SftpConnection.getSFTPConnectionWithPassword(RoyalMailManifest.RMURL, RoyalMailManifest.USERNAME, RoyalMailManifest.PASSWORD, RoyalMailManifest.PROTNUM);
@@ -241,9 +240,9 @@ public class SendRmManifestService {
     public void sendEmail(int sendNum) throws Exception {
         if (sendNum > 0) {
             MailUtil.postMail(
-                    PropertiesUtil.readProperty("royalMail", "rmTo"),
-                    PropertiesUtil.readProperty("royalMail", "rmCc"),
-                    PropertiesUtil.readProperty("royalMail", "rmBcc"),
+                    PropertiesUtil.readProperty("royalMail", "rmTo"), //PropertiesUtil.readProperty("royalMail", "rmTo")
+                    PropertiesUtil.readProperty("royalMail", "rmCc"), // PropertiesUtil.readProperty("royalMail", "rmCc")
+                    PropertiesUtil.readProperty("royalMail", "rmBcc"), // PropertiesUtil.readProperty("royalMail", "rmBcc")
                     "pre-advice to RoyalMail has been sent successfully today.",
                     "The total number of parcels:" + sendNum + "    " + DateUtil.getCurrentDateStrGB("yyyy-MM-dd HH:mm:ss"),
                     "iemis@sinoair.com",
@@ -258,10 +257,12 @@ public class SendRmManifestService {
         SendRmManifestService generateInfo = new SendRmManifestService();
         Connection conn = ConnectionFactory.get200Connection();
 
-        /*generateInfo.sendManifest(conn, historyRootPath);*/
+        generateInfo.sendManifest(conn, historyRootPath);
+        generateInfo.sendEmail(6871);
 
 
-        generateInfo.sendRmManifestAndDeleteLocateFiles(historyRootPath);
+        //generateInfo.sendRmManifestAndDeleteLocateFiles(historyRootPath);
+
 
     }
 }
